@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/snare.iml" filepath="$PROJECT_DIR$/snare.iml" />
+      <module fileurl="file://$PROJECT_DIR$/snare/snare-snare.iml" filepath="$PROJECT_DIR$/snare/snare-snare.iml" />
+      <module fileurl="file://$PROJECT_DIR$/snareDemo/snareDemo.iml" filepath="$PROJECT_DIR$/snareDemo/snareDemo.iml" />
+    </modules>
+  </component>
+</project>
