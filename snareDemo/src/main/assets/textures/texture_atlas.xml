@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:832257aa0458a29286d2eda747216d43$ -->
+<Imageset Name="texture_atlas" Imagefile="texture_atlas.png" NativeHorzRes="256" NativeVertRes="256" AutoScaled="false">
+    <Image Name="left" XPos="2" YPos="124" Width="120" Height="120"/>
+    <Image Name="right" XPos="2" YPos="2" Width="120" Height="120"/>
+</Imageset>
