@@ -557,7 +557,7 @@ public class GameObj extends PoolItem implements IPositionable3D,
         void setGameObj(GameObj obj);
     }
     
-    public static enum ComponentType {
+    public enum ComponentType {
         // order in this enum also defines order in which components
         // are initialized and updated in GameObject's onUpdate method:
         LIGHT           (true),
@@ -575,7 +575,7 @@ public class GameObj extends PoolItem implements IPositionable3D,
         SCRATCH_PAD     (true);
         
         private final boolean mUnique;
-        private ComponentType(boolean isUnique) {
+        ComponentType(boolean isUnique) {
             mUnique = isUnique;
         }
         

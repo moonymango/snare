@@ -6,6 +6,7 @@ import com.moonymango.snare.audio.LoopHandle.HandleState;
 
 import android.app.Application;
 import android.content.res.AssetFileDescriptor;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
@@ -49,6 +50,18 @@ public class SnareAudioManager implements OnLoadCompleteListener,
     }
 
     public void onResume() {
+        /*AudioAttributes attr = new AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .build();
+
+        mSoundPool = new SoundPool.Builder()
+                .setAudioAttributes(attr)
+                .setMaxStreams(mMaxStreams)
+                .build();
+                */
+
+        //noinspection deprecation
         mSoundPool = new SoundPool(mMaxStreams, AudioManager.STREAM_MUSIC, 0);
         mSoundPool.setOnLoadCompleteListener(this);
         

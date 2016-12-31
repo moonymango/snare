@@ -105,7 +105,7 @@ public class PlayLoopAndFadeProc extends BaseProcess {
         mHandle = null;
     }
 
-    private static enum State {
+    private enum State {
         FADE_IN,
         PLAYBACK,
         FADE_OUT

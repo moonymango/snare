@@ -56,10 +56,9 @@ public class LinesEffect extends BaseEffect {
     private static RenderContext createRenderContext() {
         final GLState s = new GLState();
         s.enableDepth().lock();
-        
-        final RenderContext c = new RenderContext(
+
+        return new RenderContext(
                 LinesEffect.class.getName(), VERTEX_SHADER, FRAGMENT_SHADER, s);
-        return c;
     }
     
     private final float mLineWidth;

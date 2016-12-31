@@ -120,6 +120,6 @@ public class NoiseGenerator implements ITextureChannelSource {
          * val = sin(x + |noise(x)| + 1/2*|noise(2x)| + 1/4*|noise(4x)| ... )
          * Number of octaves can be adjusted via octave parameter.      
          */
-        PERLIN_C;
+        PERLIN_C
     }
 }

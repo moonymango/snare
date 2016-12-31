@@ -63,12 +63,11 @@ public class PlainTextureEffect extends BaseEffect {
     {    
         final GLState s = new GLState();
         s.enableDepth().enableBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA).lock();
-        final RenderContext c = new RenderContext(
-                PlainTextureEffect.class.getName(), 
-                VERTEX_SHADER, 
-                FRAGMENT_SHADER, 
+        return new RenderContext(
+                PlainTextureEffect.class.getName(),
+                VERTEX_SHADER,
+                FRAGMENT_SHADER,
                 s);
-        return c;
     }
     
     /** Creates {@link Material} object matching the effect. */

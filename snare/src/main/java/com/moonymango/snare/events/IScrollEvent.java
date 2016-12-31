@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 
 
 public interface IScrollEvent extends IEvent {
-    public static final SystemEventType EVENT_TYPE = SystemEventType.UI_SCROLL;
+    SystemEventType EVENT_TYPE = SystemEventType.UI_SCROLL;
     
     /** X coordinate as delivered by {@link MotionEvent} */
     int getTouchX();

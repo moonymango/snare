@@ -176,7 +176,7 @@ public class BufferObj extends BaseGLObj {
         
     }
     
-    public static enum Target {
+    public enum Target {
         ARRAY,
         ELEMENT;    
         public int getIt() {

@@ -12,7 +12,7 @@ public abstract class BaseMeshParser {
     protected abstract ArrayList<Face> getFaces();
       
     protected String readString(InputStream stream) throws IOException {
-        String result = new String();
+        String result = "";
         byte inByte;
         while ((inByte = (byte) stream.read()) != 0)
                 result += (char) inByte;

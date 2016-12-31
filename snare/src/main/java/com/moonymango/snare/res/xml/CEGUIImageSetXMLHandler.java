@@ -146,8 +146,8 @@ public class CEGUIImageSetXMLHandler extends BaseXMLHandler<BaseTextureResource>
         
     }
     
-    private static enum ImageFileType {
+    private enum ImageFileType {
         PNG,
-        PKM;
+        PKM
     }
 }

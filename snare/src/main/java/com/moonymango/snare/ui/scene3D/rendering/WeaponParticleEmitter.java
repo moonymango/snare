@@ -76,13 +76,12 @@ public class WeaponParticleEmitter extends BaseDynamicMeshEffect {
     private static RenderContext createRenderContext() {
         final GLState s = new GLState();
         s.enableBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA).lock();
-        
-        final RenderContext c = new RenderContext(
-                WeaponParticleEmitter.class.getName(), 
-                VERTEX_SHADER, 
+
+        return new RenderContext(
+                WeaponParticleEmitter.class.getName(),
+                VERTEX_SHADER,
                 FRAGMENT_SHADER,
                 s);
-        return c;
     }
     
     private float mSize = 1;

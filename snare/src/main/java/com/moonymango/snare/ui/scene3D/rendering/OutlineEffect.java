@@ -40,14 +40,13 @@ public class OutlineEffect extends BaseEffect {
             "}                                              \n";              
     
         
-    private static final RenderContext createRenderContext() 
+    private static RenderContext createRenderContext()
     { 
         final GLState s = new GLState();
         s.enableFrontFaceCulling().enableDepth().lock();
-        final RenderContext c = new RenderContext(OutlineEffect.class.getName(), 
-                VERTEX_SHADER_OUTLINE, 
+        return new RenderContext(OutlineEffect.class.getName(),
+                VERTEX_SHADER_OUTLINE,
                 FRAGMENT_SHADER_OUTLINE, s);
-        return c;
     }
     
     private static int muViewProjTransformOutline;

@@ -99,18 +99,12 @@ public class TouchInterceptor implements IScreenElement {
 
     @Override
     public boolean onTouchEvent(ITouchEvent e) {
-        if (mListener == null) {
-            return true;
-        }
-        return mListener.onIntercept(this, e);
+        return mListener == null || mListener.onIntercept(this, e);
     }
 
     @Override
     public boolean containsCoord(int x, int y) {
-        if (mFullScreen) {
-            return true;
-        }
-        return x >= mMinX && x <= mMaxX && y >= mMinY && y <= mMaxY;
+        return mFullScreen || x >= mMinX && x <= mMaxX && y >= mMinY && y <= mMaxY;
     }
 
     public interface IOnTouchInterceptListener {

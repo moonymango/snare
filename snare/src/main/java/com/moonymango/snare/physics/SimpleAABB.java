@@ -179,11 +179,8 @@ public class SimpleAABB extends BaseSimpleBoundingVolume {
         if (mS[1] > mMax[1] || mS[1] < mMin[1]) {
             return false;
         }
-        if (mS[2] > mMax[2] || mS[2] < mMin[2]) {
-            return false;
-        }
-       
-        return true;
+        return !(mS[2] > mMax[2] || mS[2] < mMin[2]);
+
     }
 
     @Override

@@ -114,7 +114,6 @@ public abstract class BaseDynamicMeshEffect extends BaseEffect
             setup.setBuffer(mGen.getIndices());
             setup.enableAutoSize(true);
             setup.setTarget(Target.ELEMENT);
-            return;
         }
         
     }

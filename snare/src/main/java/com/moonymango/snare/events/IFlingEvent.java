@@ -4,7 +4,7 @@ import android.view.MotionEvent;
 
 public interface IFlingEvent extends IEvent {
 
-    public static final SystemEventType EVENT_TYPE = SystemEventType.UI_FLING;
+    SystemEventType EVENT_TYPE = SystemEventType.UI_FLING;
     
     /** X coordinate as delivered by {@link MotionEvent} */
     int getTouchX();

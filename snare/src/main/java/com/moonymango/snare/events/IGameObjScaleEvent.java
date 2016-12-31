@@ -6,7 +6,7 @@ package com.moonymango.snare.events;
  */
 public interface IGameObjScaleEvent extends IEvent {
     
-    public static final SystemEventType EVENT_TYPE = SystemEventType.GAMEOBJ_SCALE;
+    SystemEventType EVENT_TYPE = SystemEventType.GAMEOBJ_SCALE;
     
     int getGameObjID();
     float[] getScale();

@@ -27,7 +27,7 @@ public abstract class BaseGLObj extends CacheItem<GLObjCache, GLObjDescriptor, B
         /** Object is to be removed from GPU. */
         TO_UNLOAD,
         /** Object is removed from GPU. */
-        UNLOADED;
+        UNLOADED
     }
     
     private GLObjState mState = GLObjState.NOT_CONFIGURED;
@@ -106,9 +106,9 @@ public abstract class BaseGLObj extends CacheItem<GLObjCache, GLObjDescriptor, B
     public void onUpdate() {
         throw new UnsupportedOperationException("update not supported " +
         		"by this GL object.");
-    };
-    
- 
+    }
+
+
     @Override
     public void onAddedToCache() {}
     @Override

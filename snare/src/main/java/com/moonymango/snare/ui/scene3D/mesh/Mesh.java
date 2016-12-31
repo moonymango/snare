@@ -63,14 +63,12 @@ public class Mesh extends BaseMesh {
 
     @Override
     protected FloatBuffer getVertices() {
-        final FloatBuffer b = mHnd.getVertexAttribs();
-        return b;
+        return mHnd.getVertexAttribs();
     }
 
     @Override
     protected ShortBuffer getIndices() {
-        final ShortBuffer b = mHnd.getIndices();
-        return b;
+        return mHnd.getIndices();
     }
 
     @Override

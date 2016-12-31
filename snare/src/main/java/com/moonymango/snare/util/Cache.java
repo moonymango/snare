@@ -158,6 +158,6 @@ public abstract class Cache<C extends Cache<C, D, I>, D extends CacheItemDescrip
          * Items must be removed by derived classes via function 
          * freeLeastRecentlyUsed().
          */
-        USER_DEFINED;
+        USER_DEFINED
     }
 }

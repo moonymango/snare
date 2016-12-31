@@ -77,15 +77,14 @@ public class CircularShapeEmitter extends BaseDynamicMeshEffect {
                
             "}";
                    
-    private static final RenderContext createRenderContext() 
+    private static RenderContext createRenderContext()
     {
         final GLState s = new GLState();
         s.enableDepth().setDepthMask(false).enableBlend(GL_SRC_ALPHA, GL_ONE)
                 .lock();
-        final RenderContext c = new RenderContext(
-                CircularShapeEmitter.class.getName(), 
+        return new RenderContext(
+                CircularShapeEmitter.class.getName(),
                 VERTEX_SHADER, FRAGMENT_SHADER, s);
-        return c;
     }
     
     private static final int TEX_UNIT = 0;

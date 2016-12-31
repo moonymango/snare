@@ -30,8 +30,7 @@ public class Geometry {
      */
     public static float negPow2(int p) {
         int i0 = SHIFT2 >> p;
-        float f = (float)(i0) / SHIFT2; 
-        return f;
+        return (float)(i0) / SHIFT2;
     }
     
     /**

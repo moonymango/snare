@@ -266,9 +266,7 @@ public class GLState {
             return false;
         if (mFace != other.mFace)
             return false;
-        if (mSFactor != other.mSFactor)
-            return false;
-        return true;
+        return mSFactor == other.mSFactor;
     }
     
     

@@ -73,12 +73,11 @@ public class BlastEffect extends BaseDynamicMeshEffect {
     private static RenderContext createRenderContext() {
         final GLState s = new GLState();
         s.enableBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA).enableDepth().lock();
-        final RenderContext c = new RenderContext(
-                BlastEffect.class.getName(), 
-                VERTEX_SHADER, 
-                FRAGMENT_SHADER, 
+        return new RenderContext(
+                BlastEffect.class.getName(),
+                VERTEX_SHADER,
+                FRAGMENT_SHADER,
                 s);
-        return c;
     }
     
     private static final int TEX_UNIT = 0;

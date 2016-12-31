@@ -90,9 +90,7 @@ public class TextureObjOptions {
             return false;
         if (mWrapS != other.mWrapS)
             return false;
-        if (mWrapT != other.mWrapT)
-            return false;
-        return true;
+        return mWrapT == other.mWrapT;
     }
     
 }

@@ -464,9 +464,7 @@ public class Scene3D implements IScreenElement, IEventListener {
                     return false;
             } else if (!mDrawable.equals(other.mDrawable))
                 return false;
-            if (mOrdinal != other.mOrdinal)
-                return false;
-            return true;
+            return mOrdinal == other.mOrdinal;
         }
         
         

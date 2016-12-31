@@ -83,7 +83,7 @@ public class LoopHandle extends BaseResHandle {
         return true;
     }
     
-    public static enum HandleState {
+    public enum HandleState {
         /** loop is not loaded and not playing */
         NOT_LOADED,     
         /** MediaPlayer is preparing */

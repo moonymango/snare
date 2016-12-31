@@ -29,7 +29,7 @@ public class TextResource extends BaseResource {
         scanner = new Scanner(in);
         try {
             while (scanner.hasNextLine()){
-                text.append(scanner.nextLine() + NL);
+                text.append(scanner.nextLine()).append(NL);
             }
         } finally{
             scanner.close();

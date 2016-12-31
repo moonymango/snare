@@ -23,11 +23,7 @@ public class DelayProc extends BaseProcess {
     @Override
     public boolean onUpdate(long realTime, float realDelta, float virtualDelta) {
         mWaited += virtualDelta;
-        if (mWaited >= mDelay) {
-            return false;
-        } else {
-            return true;
-        }
+        return mWaited < mDelay;
     }
 
     @Override

@@ -72,11 +72,10 @@ public class CelShader extends BaseEffect {
         final String fs = FRAGMENT_SHADER_FILL.replaceAll(LEVELS, Float.toString(levels));
         
         final GLState s0 = new GLState();
-        s0.enableBackFaceCulling().enableDepth().lock(); 
-        final RenderContext c = new RenderContext(CelShader.class.getName(), 
+        s0.enableBackFaceCulling().enableDepth().lock();
+
+        return new RenderContext(CelShader.class.getName(),
                 vs, fs, s0);
-        
-        return c;
     }
     
     private static int muViewProjTransform;

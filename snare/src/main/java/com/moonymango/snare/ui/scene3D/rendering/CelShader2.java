@@ -75,9 +75,8 @@ public class CelShader2 extends BaseEffect {
     {
         final GLState s0 = new GLState();
         s0.enableBackFaceCulling().enableDepth().lock();
-        final RenderContext c = new RenderContext(CelShader.class.getName(), 
+        return new RenderContext(CelShader.class.getName(),
                 VERTEX_SHADER_FILL, FRAGMENT_SHADER_FILL, s0);
-        return c;
     }
     
     /** Creates {@link Material} object matching the effect. */

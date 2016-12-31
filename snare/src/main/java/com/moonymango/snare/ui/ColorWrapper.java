@@ -174,7 +174,7 @@ public class ColorWrapper extends BaseProcess {
         //(alpha << 24) | (red << 16) | (green << 8) | blue
         mNativeColor[0] = ((float) ((c & 0x00ff0000) >> 16)) / 255;
         mNativeColor[1] = ((float) ((c & 0x0000ff00) >> 8)) / 255;
-        mNativeColor[2] = ((float) ((c & 0x000000ff) >> 0)) / 255;
+        mNativeColor[2] = ((float) ((c & 0x000000ff))) / 255;
         mNativeColor[3] = a;
         updateColor();
         return this;

@@ -4,7 +4,7 @@ import com.moonymango.snare.ui.widgets.BaseTouchWidget;
 
 public interface IWidgetTouchedEndEvent extends IEvent {
 
-	public static final SystemEventType EVENT_TYPE = SystemEventType.UI_WIDGET_TOUCHED_END;
+	SystemEventType EVENT_TYPE = SystemEventType.UI_WIDGET_TOUCHED_END;
 	
 	/**
 	 * @return Widget which was touched/pressed.

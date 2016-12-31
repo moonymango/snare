@@ -113,7 +113,7 @@ public class Light implements IComponent, IColorSeqListener {
 
 
 
-    public static enum LightType {
+    public enum LightType {
         /** Light w/o position or direction. */
         AMBIENT,
         /** Light with direction only, i.e. light from an infinitely distant source */

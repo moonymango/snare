@@ -9,11 +9,11 @@ import android.opengl.GLES20;
 
 public class GLES20Trace extends GLES20 {
     
-    public static enum Mode {
+    public enum Mode {
         WRITE_THROUGH,
         FLUSH_MANUALLY,
         FLUSH_ON_ERROR,
-        FLUSH_ON_ERROR_EXCEPTION;    
+        FLUSH_ON_ERROR_EXCEPTION
     }
     
     public static Mode sMode = Mode.FLUSH_ON_ERROR_EXCEPTION;

@@ -8,7 +8,7 @@ import com.moonymango.snare.game.GameObj;
  */
 public interface IGameObjDestroyEvent extends IEvent {
 
-    public static final SystemEventType EVENT_TYPE = SystemEventType.GAMEOBJ_DESTROY;
+    SystemEventType EVENT_TYPE = SystemEventType.GAMEOBJ_DESTROY;
     
     GameObj getGameObj();
     void setGameObj(GameObj obj); 

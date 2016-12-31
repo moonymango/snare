@@ -70,7 +70,7 @@ public class TextureObj extends BaseGLObj  {
             
         } else {
             // create texture from resource
-            mTextureResHandle = (BaseTextureResHandle) mTextureResource.getHandle();
+            mTextureResHandle = mTextureResource.getHandle();
             mID = mTextureResHandle.loadToGPU(mOptions);
             checkGLError();
             mTextureResource.releaseHandle(mTextureResHandle);
@@ -161,7 +161,7 @@ public class TextureObj extends BaseGLObj  {
         
         private final int mSize;
         
-        private TextureSize(int size) {
+        TextureSize(int size) {
             mSize = size;
         }
         

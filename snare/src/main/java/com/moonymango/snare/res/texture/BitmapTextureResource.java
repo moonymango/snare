@@ -206,7 +206,7 @@ public class BitmapTextureResource extends BaseTextureResource {
      * Interface for procedural bitmap generators.
      */
     public interface ITextureChannelSource {
-        public enum Channel {R, G, B, A}
+        enum Channel {R, G, B, A}
         /** 
          * Init source. This happen prior to any calls on getPixel()
          * @return Does not matter. 

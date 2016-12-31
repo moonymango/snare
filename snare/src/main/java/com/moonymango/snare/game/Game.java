@@ -20,6 +20,8 @@ import com.moonymango.snare.ui.PlayerGameView;
 import com.moonymango.snare.util.Logger;
 import com.moonymango.snare.util.Logger.LogSource;
 import com.moonymango.snare.util.RandomString;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
@@ -65,9 +67,9 @@ public final class Game {
     public static final String ENGINE_NAME = "snare";
     public static final String DELIMITER = ".";
         
+    @SuppressLint("StaticFieldLeak")
     private static Game sInstance = null;
-    public static int sBreakpointHook;
-    
+
     /** Getter for use from the activity only */
     protected static Game get(BaseGameActivity activity) {
         // create new game instance
@@ -77,7 +79,7 @@ public final class Game {
         final IRenderer renderer = activity.onLoadRenderer(view);
         final EventManager em = activity.onLoadEventManager();
         final IPhysics physics = activity.onLoadPhysics();      
-        sInstance = new Game(name, activity.getApplication(), view, 
+        sInstance = new Game(name, activity, view,
                 physics, renderer, settings, em);
                 
         return sInstance;
@@ -94,8 +96,7 @@ public final class Game {
     private final EventManager mEventManager;
     private final ResourceCache mRessourceCache;
     private final SnareAudioManager mAudioManager;
-    private final Application mAppContext;
-    private Context mActivity;
+    private Activity mActivity;
     private final IPhysics mPhysics;
     private final PlayerGameView mPrimaryPlayerView;
     private final GameSettings mSettings;
@@ -137,30 +138,31 @@ public final class Game {
     // constructors
     // ---------------------------------------------------------
     private Game(String name,
-            Application appContext, 
+            Activity activity,
             PlayerGameView view,
             IPhysics physics,
             IRenderer renderer, 
             GameSettings settings,
             EventManager eventManager) {
-        
+
+        final Application app = activity.getApplication();
+
         mName = name;
+        mActivity = activity;
         mEventManager = eventManager;
-        mAppContext = appContext;
-        mRessourceCache = new ResourceCache(settings.RESOURCE_CACHE_THRESHOLD,
-                appContext);
+        mRessourceCache = new ResourceCache(settings.RESOURCE_CACHE_THRESHOLD, app);
         mSettings = settings;
         mPhysics = physics;
         mRenderer = renderer;
         mPrimaryPlayerView = view;
-        mAudioManager = new SnareAudioManager(settings.SOUND_MAX_STREAMS, appContext);
-        mVibrator = (Vibrator) appContext.getSystemService(Context.VIBRATOR_SERVICE);         
+        mAudioManager = new SnareAudioManager(settings.SOUND_MAX_STREAMS, app);
+        mVibrator = (Vibrator) app.getSystemService(Context.VIBRATOR_SERVICE);
         mRandomStringGen = new RandomString(16, this);
     }
     
     
-    protected GLSurfaceView prepareGLSurfaceView() {
-        mSurfaceView = new GLSurfaceView(mAppContext);
+    GLSurfaceView prepareGLSurfaceView() {
+        mSurfaceView = new GLSurfaceView(mActivity.getApplication());
         mSurfaceView.setEGLContextClientVersion(2);
         mSurfaceView.setEGLConfigChooser(mSettings.RENDER_OPTIONS.EGL_RED_SIZE, 
                 mSettings.RENDER_OPTIONS.EGL_GREEN_SIZE,
@@ -218,7 +220,7 @@ public final class Game {
     }
     
     
-    public void onResume(Context activity) {
+    public void onResume(Activity activity) {
         mLastMeasuredTime = SystemClock.elapsedRealtime();
         mActivity = activity; 
         mAudioManager.onResume();    // create new SoundPool  
@@ -283,7 +285,7 @@ public final class Game {
      * @return
      */
     public String getResourceString(int resId) {
-        return mAppContext != null ? mAppContext.getString(resId) : null; 
+        return mActivity != null ? mActivity.getApplication().getString(resId) : null;
     }
     /**
      * @return retrieves {@link SharedPreferences} from the context. 
@@ -295,11 +297,14 @@ public final class Game {
             return null;
         }
     }
+
+    public Application getApplication() {
+        return mActivity != null ? mActivity.getApplication(): null;
+    }
     
     public GLSurfaceView getSurfaceView()       {return mSurfaceView;}
     public ProcessManager getProcManager()      {return mProcessManager;}
     public GLObjCache getGLObjCache()           {return mGLObjCache;}
-    public Application getApplication()         {return mAppContext;}
     /** Returns active game state. */
     public IGameState getGameState()            {return mGameState;}
     /** Returns previous game state. */
@@ -326,10 +331,12 @@ public final class Game {
     public void vibrate(long time)          {mVibrator.vibrate(time);}
     
     public void showToast(String msg) {
+        if (mActivity == null) return;
+
         final String m = msg;
-        ((Activity) mActivity).runOnUiThread(new Runnable() { 
+        mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                Toast.makeText(mAppContext, m, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, m, Toast.LENGTH_SHORT).show();
             }
         });       
     }
@@ -433,14 +440,14 @@ public final class Game {
     }
     
     public Activity getActivity() {
-        return (Activity) mActivity;
+        return mActivity;
     }
     
     public void showMessage(String msg, String buttonText, DialogInterface.OnClickListener listener) {
         final String m = msg;
         final DialogInterface.OnClickListener l = listener;
         final String t = buttonText != null ? buttonText : "Done";
-        ((Activity) mActivity).runOnUiThread(new Runnable() {
+        mActivity.runOnUiThread(new Runnable() {
             
             public void run() {
                 AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
@@ -605,7 +612,7 @@ public final class Game {
         }
     }
     
-    public static enum ClockType {
+    public enum ClockType {
         REALTIME,
         VIRTUAL
     }

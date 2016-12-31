@@ -107,9 +107,7 @@ public class SimpleCollisionPair extends PoolItem implements ICollisionPair {
         if (getClass() != obj.getClass())
             return false;
         SimpleCollisionPair other = (SimpleCollisionPair) obj;
-        if (mHash != other.mHash)
-            return false;
-        return true;
+        return mHash == other.mHash;
     }
     
 }

@@ -62,15 +62,14 @@ public class DiffuseLightingEffect extends BaseEffect {
             "   gl_FragColor = vColor;                      \n" +
             "}                                              \n";      
      
-    private static final RenderContext createRenderContext() {
+    private static RenderContext createRenderContext() {
         final GLState s = new GLState();
         s.enableDepth().enableBackFaceCulling().lock();
-        final RenderContext c = new RenderContext(
-                DiffuseLightingEffect.class.getName(), 
-                VERTEX_SHADER, 
-                FRAGMENT_SHADER, 
+        return new RenderContext(
+                DiffuseLightingEffect.class.getName(),
+                VERTEX_SHADER,
+                FRAGMENT_SHADER,
                 s);
-        return c;
     }
     
     

@@ -47,7 +47,7 @@ public class Logger {
         }
     }
     
-    public static enum LogSource {
+    public enum LogSource {
         EVENTS          (false),
         GAME            (false),
         FPS             (true),
@@ -60,12 +60,12 @@ public class Logger {
         PROFILER        (true);
         
         public final boolean mEnabled;
-        private LogSource(boolean enabled) {
+        LogSource(boolean enabled) {
             mEnabled = enabled;
         }
     }
     
-    public static enum LogLevel {
+    public enum LogLevel {
         INFO,
         DEBUG,
         WARNING,

@@ -73,9 +73,7 @@ public abstract class BaseWidget implements IScreenElement, ILocationHolder,
         
         if (sTmpVec[0] < getLocalLeft() || sTmpVec[0] > getLocalRight()) 
             return false; // x out of rectangle area
-        if (sTmpVec[1] < getLocalBottom() || sTmpVec[1] > getLocalTop()) 
-            return false; // y out of rectangle area
-        return true;
+        return !(sTmpVec[1] < getLocalBottom() || sTmpVec[1] > getLocalTop());
     }
     
     
@@ -346,7 +344,7 @@ public abstract class BaseWidget implements IScreenElement, ILocationHolder,
     // classes + interfaces
     // ---------------------------------------------------------
     
-    public static enum BlendMode {
+    public enum BlendMode {
         OPAQUE,
         TRANSPARENT,
         REPLACE
@@ -355,7 +353,7 @@ public abstract class BaseWidget implements IScreenElement, ILocationHolder,
     /**
      * Defines alignment of widget to its position.
      */
-    public static enum PositionAlignment {
+    public enum PositionAlignment {
         CENTERED_XY, 
         LEFT_X_TOP_Y, 
         RIGHT_X_TOP_Y, 

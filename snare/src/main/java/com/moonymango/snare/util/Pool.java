@@ -59,7 +59,7 @@ public abstract class Pool<T extends PoolItem> {
             }
         }
             
-        T item = (T) mItems.remove(mItems.size()-1);
+        T item = mItems.remove(mItems.size()-1);
         item.mPool = this;
         item.mIsRecycled = false;
         mObtained++;

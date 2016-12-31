@@ -145,10 +145,8 @@ public class PyramidShapeEmitter extends BaseDynamicMeshEffect {
         
         final GLState s = new GLState();
         s.enableBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA).lock();
-        
-        final RenderContext ctx = new RenderContext(name, VERTEX_SHADER, fs, s);
-        
-        return ctx;
+
+        return new RenderContext(name, VERTEX_SHADER, fs, s);
     } 
     
     private static final int TEX_UNIT_COLOR = 0;

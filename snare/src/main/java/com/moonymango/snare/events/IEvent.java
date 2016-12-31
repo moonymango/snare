@@ -10,7 +10,7 @@ public interface IEvent {
     void recycle();
     IEventType getType();
     
-    static enum SystemEventType implements IEventType {
+    enum SystemEventType implements IEventType {
         INVALID,
         
         STATS_UPDATE,       // event to distribute FPS data

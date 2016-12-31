@@ -18,9 +18,8 @@ public class SoundResource extends BaseResource {
     @Override
     protected BaseResHandle createHandleByAsset(AssetManager am) {
         try {
-            final SoundHandle handle = new SoundHandle(this, Game.get().getAudioManager(),
+            return new SoundHandle(this, Game.get().getAudioManager(),
                     Game.get().getSettings().mDefaultSoundFXVolume);
-            return handle;
         } catch (IOException e) {
             return null;
         }

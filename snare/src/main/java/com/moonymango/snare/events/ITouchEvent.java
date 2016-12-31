@@ -8,7 +8,7 @@ import android.view.MotionEvent;
  */
 public interface ITouchEvent extends IEvent {
     
-    public static final SystemEventType EVENT_TYPE = SystemEventType.UI_TOUCH;
+    SystemEventType EVENT_TYPE = SystemEventType.UI_TOUCH;
     
     TouchAction getTouchAction();
     /** X position of touch as delivered by {@link MotionEvent}. */

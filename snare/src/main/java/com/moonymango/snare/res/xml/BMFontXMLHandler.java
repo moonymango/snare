@@ -68,8 +68,8 @@ public class BMFontXMLHandler extends BaseXMLHandler<BMFont> {
             final int bold = parseInt(attributes, "bold");
             final int italic = parseInt(attributes, "italic");
             mOutline = parseInt(attributes, "outline");
-            mBold = bold == 0 ? false : true;
-            mItalic = italic == 0 ? false : true;
+            mBold = bold != 0;
+            mItalic = italic != 0;
         }
         
         if (localName.equals("common")) {

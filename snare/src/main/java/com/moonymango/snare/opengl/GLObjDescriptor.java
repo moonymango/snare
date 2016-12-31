@@ -44,6 +44,6 @@ public class GLObjDescriptor extends CacheItemDescriptor<GLObjCache, GLObjDescri
         TEXTURE,
         PROGRAM,
         RENDERBUFFER,
-        FRAMEBUFFER;
+        FRAMEBUFFER
     }
 }

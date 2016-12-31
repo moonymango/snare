@@ -6,7 +6,7 @@ package com.moonymango.snare.events;
  */
 public interface IGameObjMoveEvent extends IEvent {
     
-    public static final SystemEventType EVENT_TYPE = SystemEventType.GAMEOBJ_MOVE;
+    SystemEventType EVENT_TYPE = SystemEventType.GAMEOBJ_MOVE;
     
     int getGameObjID();
     float[] getPosition();

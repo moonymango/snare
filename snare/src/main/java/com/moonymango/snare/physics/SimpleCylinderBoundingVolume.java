@@ -212,7 +212,7 @@ public class SimpleCylinderBoundingVolume extends BaseSimpleBoundingVolume {
         		" checking not supported.");
     }
 
-    public static enum AxisOrientation {
+    public enum AxisOrientation {
         X, Y, Z
     }
 

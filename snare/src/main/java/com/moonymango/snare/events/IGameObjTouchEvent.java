@@ -7,7 +7,7 @@ import com.moonymango.snare.ui.TouchAction;
  */
 public interface IGameObjTouchEvent extends IEvent {
     
-    public static final SystemEventType EVENT_TYPE = SystemEventType.GAMEOBJ_TOUCH;
+    SystemEventType EVENT_TYPE = SystemEventType.GAMEOBJ_TOUCH;
     
     /** Screen coordinates: x */
     int getTouchX();

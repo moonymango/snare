@@ -3,8 +3,7 @@ package com.moonymango.snare.events;
 /** Distributes status information. */
 public interface IStatsUpdateEvent extends IEvent 
 {
-    public static final SystemEventType EVENT_TYPE = 
-            SystemEventType.STATS_UPDATE;
+    SystemEventType EVENT_TYPE = SystemEventType.STATS_UPDATE;
     
     /** Returns actual measurement. */
     float getFramesPerSecond();

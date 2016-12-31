@@ -3,7 +3,7 @@ package com.moonymango.snare.events;
 
 public interface IGameObjCollisionEvent extends IEvent {
 
-public static final SystemEventType EVENT_TYPE = SystemEventType.GAMEOBJ_COLLISION;
+    SystemEventType EVENT_TYPE = SystemEventType.GAMEOBJ_COLLISION;
     /** Return id of one obj in this collision */
     int getGameObjID();
     /** Return id of other obj in this collision */

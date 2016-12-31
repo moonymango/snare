@@ -7,8 +7,6 @@ import com.moonymango.snare.opengl.TextureObj.TextureSize;
 
 public class FramebufferObj extends BaseGLObj {
 
-    private TextureSize mSize;
-    private TextureObjOptions mOptions;
     private GLObjDescriptor mColorAttachmentDescr;
     private GLObjDescriptor mDepthAttachmentDescr;
     private RenderbufferObj mDepthAttachmentR;
@@ -35,21 +33,21 @@ public class FramebufferObj extends BaseGLObj {
         if (size.value() > maxSize) {
             throw new IllegalStateException("Unsupported framebuffer size.");
         }
-        mSize = size;
-        mOptions = colorOptions != null ? colorOptions : 
+
+        TextureObjOptions options = colorOptions != null ? colorOptions :
             Game.get().getSettings().mDefaultTextureOptions;
         
         // color attachment
         mColorAttachmentDescr = new GLObjDescriptor(mDescriptor.getQName()
                 + Game.DELIMITER + "color", GLObjType.TEXTURE);
         mColorAttachment = (TextureObj) mColorAttachmentDescr.getHandle();
-        mColorAttachment.configure(mSize, mOptions);
+        mColorAttachment.configure(size, options);
         
         // depth attachment
         mDepthAttachmentDescr = new GLObjDescriptor(mDescriptor.getQName()
                 + Game.DELIMITER + "depth", GLObjType.RENDERBUFFER);
         mDepthAttachmentR = (RenderbufferObj) mDepthAttachmentDescr.getHandle();
-        mDepthAttachmentR.configureDepth(mSize.value(), mSize.value());
+        mDepthAttachmentR.configureDepth(size.value(), size.value());
         
         setState(GLObjState.TO_LOAD);
     }

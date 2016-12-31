@@ -73,8 +73,8 @@ public abstract class BaseGameActivity extends Activity {
     
     public EventManager onLoadEventManager() {
         return new EventManager(new DefaultEventPool());
-    };
-    
+    }
+
     public abstract IRenderer onLoadRenderer(PlayerGameView view);
     public abstract String getName();
     public abstract IGameState onLoadInitialGameState();

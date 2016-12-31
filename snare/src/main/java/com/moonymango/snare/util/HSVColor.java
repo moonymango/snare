@@ -12,7 +12,7 @@ public class HSVColor {
         //(alpha << 24) | (red << 16) | (green << 8) | blue
         sColor[0] = ((float) ((c & 0x00ff0000) >> 16)) / 255;
         sColor[1] = ((float) ((c & 0x0000ff00) >> 8)) / 255;
-        sColor[2] = ((float) ((c & 0x000000ff) >> 0)) / 255;
+        sColor[2] = ((float) ((c & 0x000000ff))) / 255;
         sColor[3] = alpha; // ((float) ((c & 0xff000000) >> 24)) / 255;;
         return sColor;    
     }

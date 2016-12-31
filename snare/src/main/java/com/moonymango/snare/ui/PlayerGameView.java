@@ -170,11 +170,8 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
         if (Game.get().getSettings().INPUT_EVENT_MASK.SCALE_ENABLED) {
             mSGDetector.onTouchEvent(event);
         }
-        if (mSGDetector.isInProgress()) {
-            return true;
-        }
-        
-        return mGDetector.onTouchEvent(event);
+
+        return mSGDetector.isInProgress() || mGDetector.onTouchEvent(event);
     }
 
     public boolean handleEvent(IEvent event) {
@@ -284,10 +281,11 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
             mDebugText.onAttachToScreen(this, mScreenWidth, mScreenHeight);
         }
         
-        // gesture detectors
-        mSGDetector = new ScaleGestureDetector(Game.get().getApplication(), this);
-
         final Handler h = new Handler(Game.get().getApplication().getMainLooper());
+
+        // gesture detectors
+        mSGDetector = new ScaleGestureDetector(Game.get().getApplication(), this, h);
+
         mGDetector = new GestureDetector(Game.get().getApplication(), this, h);
         mGDetector.setIsLongpressEnabled(false); // longpress not useful for games
         mGDetector.setOnDoubleTapListener(this);

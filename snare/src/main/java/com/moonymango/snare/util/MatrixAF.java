@@ -7,6 +7,7 @@ import android.opengl.Matrix;
  * Allocation free matrix operations.
  * Not thread-safe!
  */
+@SuppressWarnings("deprecation")
 public class MatrixAF extends Matrix {
 
     /** We only use 4x4 matrices */
@@ -76,7 +77,7 @@ public class MatrixAF extends Matrix {
         // Invert a 4 x 4 matrix using Cramer's Rule
         
         // transpose matrix
-        final float src0  = m[mOffset +  0];
+        final float src0  = m[mOffset];
         final float src4  = m[mOffset +  1];
         final float src8  = m[mOffset +  2];
         final float src12 = m[mOffset +  3];
@@ -213,7 +214,6 @@ public class MatrixAF extends Matrix {
      * @param mat
      */
     public static void orthoNormalize(float[] mat) {
-        final float[] left = mat; 
         final float[] up = sTmpVecA;
         final float[] forward = sTmpVecB;
         // up
@@ -227,10 +227,10 @@ public class MatrixAF extends Matrix {
         forward[2] = mat[10];
         forward[3] = mat[11];
         // get left from up and forward
-        VectorAF.cross(left, up, forward);
-        VectorAF.normalize(left);
+        VectorAF.cross(mat, up, forward);
+        VectorAF.normalize(mat);
         // get up from forward and left
-        VectorAF.cross(up, forward, left);
+        VectorAF.cross(up, forward, mat);
         VectorAF.normalize(up);
         // normalize forward
         VectorAF.normalize(forward);
