@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="stachelsau.snare.demo"
+    package="com.moonymango.snareDemo"
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="16" />
+    <uses-sdk android:targetSdkVersion="25" />
     <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
 	
@@ -13,7 +13,7 @@
         android:label="@string/app_name" >
         <activity
             android:label="@string/app_name"
-            android:name=".SnareDemoActivity" >
+            android:name="com.moonymango.snareDemo.SnareDemoActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,17 +21,17 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".widgets.WidgetDemo" />
-        <activity android:name=".text.TextDemo" />
-        <activity android:name=".procedural.ProceduralDemo" />
-        <activity android:name=".scene.SceneDemo" />
-        <activity android:name=".textures.TextureDemo" />
-        <activity android:name=".camera.CameraDemo" />
-        <activity android:name="stachelsau.snare.demo.playground.Playground" />
-        <activity android:name=".particles.ParticlesDemo" />
-        <activity android:name=".touch.SceneTouchDemo" android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name=".resolution.ResolutionDemo" />
-        <activity android:name=".physics.SimplePhysicsDemo"></activity>             
+        <activity android:name="com.moonymango.snareDemo.widgets.WidgetDemo" />
+        <activity android:name="com.moonymango.snareDemo.text.TextDemo" />
+        <activity android:name="com.moonymango.snareDemo.procedural.ProceduralDemo" />
+        <activity android:name="com.moonymango.snareDemo.scene.SceneDemo" />
+        <activity android:name="com.moonymango.snareDemo.textures.TextureDemo" />
+        <activity android:name="com.moonymango.snareDemo.camera.CameraDemo" />
+        <activity android:name="com.moonymango.snareDemo.playground.Playground" />
+        <activity android:name="com.moonymango.snareDemo.particles.ParticlesDemo" />
+        <activity android:name="com.moonymango.snareDemo.touch.SceneTouchDemo" android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name="com.moonymango.snareDemo.resolution.ResolutionDemo" />
+        <activity android:name="com.moonymango.snareDemo.physics.SimplePhysicsDemo"></activity>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.1"
 
     defaultConfig {
-        applicationId "stachelsau.snare.demo"
+        applicationId "com.moonymango.snareDemo"
         minSdkVersion 11
         targetSdkVersion 25
     }
