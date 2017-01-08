@@ -1,7 +1,18 @@
 package com.moonymango.snare.game;
 
-import java.util.ArrayList;
-import java.util.Random;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Application;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.opengl.GLSurfaceView;
+import android.os.Debug;
+import android.os.SystemClock;
+import android.os.Vibrator;
+import android.util.SparseArray;
+import android.widget.Toast;
 
 import com.moonymango.snare.audio.SnareAudioManager;
 import com.moonymango.snare.events.EventManager;
@@ -21,19 +32,8 @@ import com.moonymango.snare.util.Logger;
 import com.moonymango.snare.util.Logger.LogSource;
 import com.moonymango.snare.util.RandomString;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Application;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.opengl.GLSurfaceView;
-import android.os.Debug;
-import android.os.SystemClock;
-import android.os.Vibrator;
-import android.util.SparseArray;
-import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Container for everything that belongs to the engine.
@@ -66,12 +66,15 @@ public final class Game {
     
     public static final String ENGINE_NAME = "snare";
     public static final String DELIMITER = ".";
-        
+
+    // game instance is bound to an activity and vice versa,
+    // when activity gets destoyed the game instance gets released,
+    // static reference for easy access to game instance 
     @SuppressLint("StaticFieldLeak")
     private static Game sInstance = null;
 
     /** Getter for use from the activity only */
-    protected static Game get(BaseGameActivity activity) {
+    protected static Game create(BaseGameActivity activity) {
         // create new game instance
         final String name = activity.getName();
         final GameSettings settings = activity.onLoadGameSettings();
@@ -88,6 +91,10 @@ public final class Game {
     public static Game get() {
         return sInstance;
     }
+
+    public static void dispose() {
+        sInstance = null;
+    }
     
     // ---------------------------------------------------------
     // fields
@@ -96,7 +103,7 @@ public final class Game {
     private final EventManager mEventManager;
     private final ResourceCache mRessourceCache;
     private final SnareAudioManager mAudioManager;
-    private Activity mActivity;
+    private final BaseGameActivity mActivity;
     private final IPhysics mPhysics;
     private final PlayerGameView mPrimaryPlayerView;
     private final GameSettings mSettings;
@@ -138,7 +145,7 @@ public final class Game {
     // constructors
     // ---------------------------------------------------------
     private Game(String name,
-            Activity activity,
+            BaseGameActivity activity,
             PlayerGameView view,
             IPhysics physics,
             IRenderer renderer, 
@@ -220,19 +227,18 @@ public final class Game {
     }
     
     
-    public void onResume(Activity activity) {
+    public void onResume() {
         mLastMeasuredTime = SystemClock.elapsedRealtime();
-        mActivity = activity; 
-        mAudioManager.onResume();    // create new SoundPool  
+        mAudioManager.onResume();    // create new SoundPool
         mRessourceCache.onResume();  // load sound resources to new pool
         
-        if (!mSettings.MULTI_THREADED || mGameThread != null) {
-            return;  // not multi threaded or there is already a game thread
+        if (mSettings.MULTI_THREADED && mGameThread == null) {
+            // configured for multi threading and no game thread available
+            mGameThread = new GameThread();
+            mGameThread.setPriority(Thread.MAX_PRIORITY);
+            mGameThread.setName("SnareGameLoop");
+            mGameThread.start();
         }
-        mGameThread = new GameThread();
-        mGameThread.setPriority(Thread.MAX_PRIORITY);
-        mGameThread.setName("SnareGameLoop");
-        mGameThread.start();
     }
     
     
@@ -246,7 +252,6 @@ public final class Game {
         }
         setGameState(mPauseGameState);
         
-        mActivity = null;
         // release sound resources
         mAudioManager.onPause(); 
         mRessourceCache.onPause();

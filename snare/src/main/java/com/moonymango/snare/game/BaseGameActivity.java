@@ -1,5 +1,11 @@
 package com.moonymango.snare.game;
 
+import android.app.Activity;
+import android.media.AudioManager;
+import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
+
 import com.moonymango.snare.events.DefaultEventPool;
 import com.moonymango.snare.events.EventManager;
 import com.moonymango.snare.opengl.IRenderer;
@@ -8,11 +14,6 @@ import com.moonymango.snare.physics.SimplePhysics;
 import com.moonymango.snare.res.ResourceCache;
 import com.moonymango.snare.ui.BaseFont;
 import com.moonymango.snare.ui.PlayerGameView;
-import android.app.Activity;
-import android.media.AudioManager;
-import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 
 public abstract class BaseGameActivity extends Activity {
     
@@ -38,7 +39,7 @@ public abstract class BaseGameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Game game = Game.get(this);
+        final Game game = Game.create(this);
         applySettings(game.getSettings());
         setContentView(game.prepareGLSurfaceView());
     }
@@ -52,13 +53,19 @@ public abstract class BaseGameActivity extends Activity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Game.dispose();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        Game.get().onResume();
         Game.get().getSurfaceView().onResume();
-        Game.get().onResume(this);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
-    
+
     public GameSettings onLoadGameSettings() {
         return new GameSettings();
     }
@@ -105,7 +112,6 @@ public abstract class BaseGameActivity extends Activity {
         
 
         getWindow().setFlags(flags, mask);
-        
     }
     
     // ---------------------------------------------------------

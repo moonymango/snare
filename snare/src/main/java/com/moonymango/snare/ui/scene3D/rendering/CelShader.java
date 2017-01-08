@@ -1,5 +1,13 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
+import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.opengl.GLState;
+import com.moonymango.snare.ui.scene3D.BaseEffect;
+import com.moonymango.snare.ui.scene3D.BaseMesh;
+import com.moonymango.snare.ui.scene3D.Light;
+import com.moonymango.snare.ui.scene3D.Material;
+import com.moonymango.snare.ui.scene3D.Scene3D;
+
 import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
 import static android.opengl.GLES20.glDisableVertexAttribArray;
@@ -9,21 +17,14 @@ import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glUniform3f;
 import static android.opengl.GLES20.glUniform4f;
 import static android.opengl.GLES20.glUniformMatrix4fv;
-import com.moonymango.snare.game.GameObj;
-import com.moonymango.snare.opengl.GLState;
-import com.moonymango.snare.ui.scene3D.BaseEffect;
-import com.moonymango.snare.ui.scene3D.BaseMesh;
-import com.moonymango.snare.ui.scene3D.Light;
-import com.moonymango.snare.ui.scene3D.Material;
-import com.moonymango.snare.ui.scene3D.Scene3D;
 
 public class CelShader extends BaseEffect {
     
     private static final String LEVELS = "##LEVELS##";
     
     public static final String VERTEX_SHADER_FILL =
-            "precision mediump float;   \n" +
-            "precision lowp int;        \n" +
+            "precision highp float;   \n" +
+            "precision highp int;        \n" +
                     
             "uniform mat4 uViewProjTransform;       \n" +
             "uniform mat4 uViewTransform    ;       \n" +
@@ -53,7 +54,7 @@ public class CelShader extends BaseEffect {
     // code number of levels hard into shader for performance reasons,
     // still 2 multiplications are quite expensive!! (at least in 2013)
     public static final String FRAGMENT_SHADER_FILL = 
-            "precision lowp float;       \n" +
+            "precision highp float;       \n" +
             "varying vec4 vColor;        \n" +
             
             "void main(){                                   \n" +

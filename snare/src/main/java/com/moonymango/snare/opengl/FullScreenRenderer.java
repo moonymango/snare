@@ -1,5 +1,11 @@
 package com.moonymango.snare.opengl;
 
+import com.moonymango.snare.game.Game;
+import com.moonymango.snare.ui.PlayerGameView;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
+
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.GL_NO_ERROR;
@@ -7,12 +13,6 @@ import static android.opengl.GLES20.glGetError;
 import static com.moonymango.snare.opengl.GLES20Trace.glClear;
 import static com.moonymango.snare.opengl.GLES20Trace.glClearColor;
 import static com.moonymango.snare.opengl.GLES20Trace.glViewport;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
-import com.moonymango.snare.game.Game;
-import com.moonymango.snare.ui.PlayerGameView;
 
 
 public class FullScreenRenderer implements IRenderer {
@@ -61,7 +61,7 @@ public class FullScreenRenderer implements IRenderer {
         
         // make sure everything is in GPU before actual drawing
         game.getGLObjCache().update();
-        GLState.sync(); // FIXME do this in onSurfaceCreated?
+        GLState.sync();
         mPlayerGameView.draw();
         
         int e = glGetError();

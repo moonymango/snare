@@ -1,8 +1,5 @@
 package com.moonymango.snare.ui.scene3D;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import com.moonymango.snare.events.EventManager;
 import com.moonymango.snare.events.EventManager.IEventListener;
 import com.moonymango.snare.events.IEvent;
@@ -20,6 +17,9 @@ import com.moonymango.snare.ui.PlayerGameView;
 import com.moonymango.snare.ui.scene3D.BaseEffect.RenderContext;
 import com.moonymango.snare.util.MatrixAF;
 import com.moonymango.snare.util.MatrixStack;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * 3D scene. When the scene is attached to a view it listens to 

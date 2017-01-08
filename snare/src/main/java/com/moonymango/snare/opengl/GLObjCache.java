@@ -1,9 +1,9 @@
 package com.moonymango.snare.opengl;
 
-import java.util.ArrayList;
-
 import com.moonymango.snare.opengl.BaseGLObj.GLObjState;
 import com.moonymango.snare.util.Cache;
+
+import java.util.ArrayList;
 
 public class GLObjCache extends Cache<GLObjCache, GLObjDescriptor, BaseGLObj> {
     

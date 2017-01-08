@@ -1,13 +1,13 @@
 package com.moonymango.snare.ui.scene3D.mesh;
 
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
+import android.opengl.GLES20;
 
 import com.moonymango.snare.res.data.MeshResHandle;
 import com.moonymango.snare.res.data.MeshResource;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
 
-import android.opengl.GLES20;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 /**
  * Mesh which gets its data from the resource cache. 
@@ -24,16 +24,6 @@ public class Mesh extends BaseMesh {
         mMeshRes = res;
     }
 
-    
-    @Override
-    public void onInit() {
-        if (mHnd == null) {         
-            mHnd = mMeshRes.getHandle();
-        }
-        super.onInit();
-    }
-
-
     @Override
     public void onShutdown() {
         if (mHnd != null) {
@@ -45,6 +35,10 @@ public class Mesh extends BaseMesh {
 
 
     public boolean hasNormals() { 
+        if (mHnd == null)
+        {
+            mHnd = mMeshRes.getHandle();
+        }
         return mHnd.hasNormals();
     }
     
@@ -53,6 +47,10 @@ public class Mesh extends BaseMesh {
     }
 
     public boolean hasTexCoords() {
+        if (mHnd == null)
+        {
+            mHnd = mMeshRes.getHandle();
+        }
         return mHnd.hasTexCoords();
     }
   
@@ -63,26 +61,45 @@ public class Mesh extends BaseMesh {
 
     @Override
     protected FloatBuffer getVertices() {
+        if (mHnd == null)
+        {
+            mHnd = mMeshRes.getHandle();
+        }
         return mHnd.getVertexAttribs();
     }
 
     @Override
     protected ShortBuffer getIndices() {
+        if (mHnd == null) {
+            mHnd = mMeshRes.getHandle();
+        }
         return mHnd.getIndices();
     }
 
     @Override
     protected int getTexOffset() {
+        if (mHnd == null)
+        {
+            mHnd = mMeshRes.getHandle();
+        }
         return mHnd.getTexOffset();
     }
 
     @Override
     protected int getStride() {
+        if (mHnd == null)
+        {
+            mHnd = mMeshRes.getHandle();
+        }
         return mHnd.getStride();
     }
 
     @Override
     protected int getNormalOffset() {
+        if (mHnd == null)
+        {
+            mHnd = mMeshRes.getHandle();
+        }
         return mHnd.getNormalOffset();
     }
  
@@ -95,6 +112,10 @@ public class Mesh extends BaseMesh {
     
     @Override
     public int getIndexCount() {
+        if (mHnd == null)
+        {
+            mHnd = mMeshRes.getHandle();
+        }
         return mHnd.getIndicesCnt();
     }
 

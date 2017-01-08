@@ -1,12 +1,5 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
-import static android.opengl.GLES20.GL_TRIANGLES;
-import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
-import static android.opengl.GLES20.glDrawElements;
-import static android.opengl.GLES20.glGetAttribLocation;
-import static android.opengl.GLES20.glUniform4f;
-import static android.opengl.GLES20.glUniformMatrix4fv;
-import static com.moonymango.snare.opengl.GLES20Trace.glGetUniformLocation;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.opengl.GLState;
 import com.moonymango.snare.ui.scene3D.BaseEffect;
@@ -16,13 +9,21 @@ import com.moonymango.snare.ui.scene3D.Scene3D;
 import com.moonymango.snare.util.MatrixAF;
 import com.moonymango.snare.util.MatrixStack;
 
+import static android.opengl.GLES20.GL_TRIANGLES;
+import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
+import static android.opengl.GLES20.glDrawElements;
+import static android.opengl.GLES20.glGetAttribLocation;
+import static android.opengl.GLES20.glUniform4f;
+import static android.opengl.GLES20.glUniformMatrix4fv;
+import static com.moonymango.snare.opengl.GLES20Trace.glGetUniformLocation;
+
 /**
  * Draws the outline of an object.
  */
 public class OutlineEffect extends BaseEffect {
     
     public static final String VERTEX_SHADER_OUTLINE =
-            "precision mediump float;   \n" +
+            "precision highp float;   \n" +
                     
             "uniform mat4 uViewProjTransform;       \n" +
             "attribute vec4 aPosition;              \n" +
@@ -32,7 +33,7 @@ public class OutlineEffect extends BaseEffect {
             "}                                                  \n";                    
         
     public static final String FRAGMENT_SHADER_OUTLINE = 
-            "precision lowp float;       \n" +
+            "precision highp float;       \n" +
             "uniform vec4 uColor;        \n" +
             
             "void main(){                                   \n" +
@@ -44,6 +45,7 @@ public class OutlineEffect extends BaseEffect {
     { 
         final GLState s = new GLState();
         s.enableFrontFaceCulling().enableDepth().lock();
+
         return new RenderContext(OutlineEffect.class.getName(),
                 VERTEX_SHADER_OUTLINE,
                 FRAGMENT_SHADER_OUTLINE, s);
