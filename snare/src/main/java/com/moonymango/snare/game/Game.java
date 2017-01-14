@@ -68,8 +68,8 @@ public final class Game {
     public static final String DELIMITER = ".";
 
     // game instance is bound to an activity and vice versa,
-    // when activity gets destoyed the game instance gets released,
-    // static reference for easy access to game instance 
+    // when activity gets destroyed the game instance gets released,
+    // static reference for easy access to game instance
     @SuppressLint("StaticFieldLeak")
     private static Game sInstance = null;
 

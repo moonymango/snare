@@ -45,17 +45,17 @@ public abstract class BaseGameActivity extends Activity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Game.dispose();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         Game.get().getSurfaceView().onPause();
         Game.get().onPause();
-        
-    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Game.dispose();
     }
 
     @Override
