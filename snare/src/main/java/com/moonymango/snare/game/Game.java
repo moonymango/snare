@@ -171,7 +171,7 @@ public final class Game {
     GLSurfaceView prepareGLSurfaceView() {
         mSurfaceView = new GLSurfaceView(mActivity.getApplication());
         mSurfaceView.setEGLContextClientVersion(2);
-        mSurfaceView.setEGLConfigChooser(mSettings.RENDER_OPTIONS.EGL_RED_SIZE, 
+        mSurfaceView.setEGLConfigChooser(mSettings.RENDER_OPTIONS.EGL_RED_SIZE,
                 mSettings.RENDER_OPTIONS.EGL_GREEN_SIZE,
                 mSettings.RENDER_OPTIONS.EGL_BLUE_SIZE,
                 mSettings.RENDER_OPTIONS.EGL_ALPHA_SIZE, 

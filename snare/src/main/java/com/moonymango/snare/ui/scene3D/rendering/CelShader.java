@@ -23,8 +23,8 @@ public class CelShader extends BaseEffect {
     private static final String LEVELS = "##LEVELS##";
     
     public static final String VERTEX_SHADER_FILL =
-            "precision highp float;   \n" +
-            "precision highp int;        \n" +
+          //  "precision highp float;   \n" +
+          //  "precision highp int;        \n" +
                     
             "uniform mat4 uViewProjTransform;       \n" +
             "uniform mat4 uViewTransform    ;       \n" +

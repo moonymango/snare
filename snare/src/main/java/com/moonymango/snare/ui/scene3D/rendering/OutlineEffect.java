@@ -7,7 +7,6 @@ import com.moonymango.snare.ui.scene3D.BaseMesh;
 import com.moonymango.snare.ui.scene3D.Material;
 import com.moonymango.snare.ui.scene3D.Scene3D;
 import com.moonymango.snare.util.MatrixAF;
-import com.moonymango.snare.util.MatrixStack;
 
 import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
@@ -19,6 +18,8 @@ import static com.moonymango.snare.opengl.GLES20Trace.glGetUniformLocation;
 
 /**
  * Draws the outline of an object.
+ * The effect is achieved by scaling the object a bit larger and drawing the backside faces
+ * in a plain color.
  */
 public class OutlineEffect extends BaseEffect {
     
@@ -26,10 +27,12 @@ public class OutlineEffect extends BaseEffect {
             "precision highp float;   \n" +
                     
             "uniform mat4 uViewProjTransform;       \n" +
+            "uniform mat4 uScale;                   \n" +
             "attribute vec4 aPosition;              \n" +
-                
+
             "void main(){                                       \n" +
-            "   gl_Position = uViewProjTransform * aPosition;   \n" +
+            "   gl_Position = uScale * aPosition;               \n" +
+            "   gl_Position = uViewProjTransform * gl_Position; \n" +
             "}                                                  \n";                    
         
     public static final String FRAGMENT_SHADER_OUTLINE = 
@@ -52,21 +55,23 @@ public class OutlineEffect extends BaseEffect {
     }
     
     private static int muViewProjTransformOutline;
+    private static int muScaleOutline;
     private static int maPositionOutline;
     private static int muColorOutline;
     
     // intermediate storage
-    private float[] mMat0 = new float[16];
-    private float[] mMat1 = new float[16];
-    private float[] mVec = new float[4];
-    
+    private float[] mScale = new float[16];
+
     public OutlineEffect() {
         super(createRenderContext());
+
+        MatrixAF.setIdentityM(mScale, 0);
     }
 
     @Override
     public void extractLocations(String programName, int prog) {
         maPositionOutline           = glGetAttribLocation(prog, "aPosition");
+        muScaleOutline              = glGetUniformLocation(prog, "uScale");
         muColorOutline              = glGetUniformLocation(prog, "uColor");
         muViewProjTransformOutline  = glGetUniformLocation(prog, "uViewProjTransform");
     }
@@ -74,32 +79,16 @@ public class OutlineEffect extends BaseEffect {
     @Override
     public boolean render(Scene3D scene, BaseMesh mesh, Material material, 
             GameObj obj) {
-        
-        // Produce outline by scaling the object a bit larger and drawing
-        // in plain outline color. Scaling object requires recalculation
-        // of the stack's top matrix
-        
-        final MatrixStack stack = scene.getViewTransformStack();
-        // save copy of top matrix
-        final float[] top = stack.getTop();
-        for (int i = 0; i < 16; i++) {
-            mMat0[i] = top[i];
-        }
-        stack.popMatrix();
-        
-        // set up new scaled matrix
-        final float[] scale = obj.getScale();
+
+        // copy scale value from material to matrix
         final float[] outlineScale = material.getOutlineScale();
-        mVec[0] = scale[0] * outlineScale[0];
-        mVec[1] = scale[1] * outlineScale[1];
-        mVec[2] = scale[2] * outlineScale[2];
-        mVec[3] = scale[3];
-        MatrixAF.local2World(mMat1, obj.getPosition(), mVec, obj.getRotation());
-        stack.pushMatrix(mMat1);
-                
-        //useProgram(1);
+        mScale[0] = outlineScale[0];
+        mScale[5] = outlineScale[1];
+        mScale[10] = outlineScale[2];
+
         mesh.bindBuffers(maPositionOutline, -1, -1, -1);
-        
+
+        glUniformMatrix4fv(muScaleOutline, 1, false, mScale, 0);
         final float[] viewProjTransform = scene.getModelViewProjMatrix();
         glUniformMatrix4fv(muViewProjTransformOutline, 1, false, viewProjTransform, 0);
         final float[] outlineColor = material.getColor(Material.OUTLINE_COLOR_IDX);
@@ -109,10 +98,7 @@ public class OutlineEffect extends BaseEffect {
         glDrawElements(GL_TRIANGLES, mesh.getIndexCount(), GL_UNSIGNED_SHORT, 
                 mesh.getIndexOffset()*Short.SIZE/8);
     
-        // restore matrix stack
-        stack.popMatrix();
-        stack.pushMatrix(mMat0);    
-        
+
         return true;
     }
     
