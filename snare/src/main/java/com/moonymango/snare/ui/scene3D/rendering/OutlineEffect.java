@@ -33,6 +33,8 @@ public class OutlineEffect extends BaseEffect {
             "void main(){                                       \n" +
             "   gl_Position = uScale * aPosition;               \n" +
             "   gl_Position = uViewProjTransform * gl_Position; \n" +
+            "   // increase depth a lil bit to prevent z fighting with frontside faces \n" +
+            "   gl_Position.z = gl_Position.z + 1.0/1024.0 * abs(gl_Position.w); \n" +
             "}                                                  \n";                    
         
     public static final String FRAGMENT_SHADER_OUTLINE = 

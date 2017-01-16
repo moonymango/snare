@@ -1,12 +1,13 @@
 package com.moonymango.snare.game;
 
+import android.content.pm.ActivityInfo;
+import android.media.SoundPool;
+
 import com.moonymango.snare.events.IKeyEvent;
 import com.moonymango.snare.opengl.RenderOptions;
 import com.moonymango.snare.opengl.TextureObjOptions;
 import com.moonymango.snare.ui.InputEventMask;
 import com.moonymango.snare.ui.scene3D.Scene3DOptions;
-import android.content.pm.ActivityInfo;
-import android.media.SoundPool;
 
 /**
  * Settings. Field names named upper case indicate a constant setting,
@@ -39,7 +40,7 @@ public class GameSettings {
     
     /** Max. delta between frames. When actual delta is greater than this, 
      * it will be clamped. */
-    public long mRealtimeDeltaThreshold = 50;
+    public long mRealtimeDeltaThreshold = 30;
     /** Delta between frames when debugger is connected. */
     public long mRealtimeDeltaWhenDebuggerConnected = 20;
     /** Creates additional load in game loop. Debugging puposes. */

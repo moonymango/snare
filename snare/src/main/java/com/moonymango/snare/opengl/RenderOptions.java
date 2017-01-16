@@ -20,7 +20,7 @@ public class RenderOptions implements EGLConfigChooser{
     public int EGL_GREEN_SIZE = 6;
     public int EGL_BLUE_SIZE = 5;
     public int EGL_ALPHA_SIZE = 0;
-    public int EGL_DEPTH_SIZE = 24;
+    public int EGL_DEPTH_SIZE = 16;
     public int EGL_STENCIL_SIZE = 0;
     
     public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {

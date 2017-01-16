@@ -486,7 +486,7 @@ public final class Game {
             
             // init game state logic last, so that renderer and physics will be ready to
             // catch newly created game objects
-            setGameState(((BaseGameActivity) mActivity).onLoadInitialGameState());
+            setGameState(mActivity.onLoadInitialGameState());
             
             mInitDone = true;
         }
