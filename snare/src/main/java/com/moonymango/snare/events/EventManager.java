@@ -13,11 +13,10 @@ import com.moonymango.snare.util.Pool;
 public class EventManager {
     
     private int mListenerCnt;
-    private final HashMap<IEventType, ArrayList<IEventListener>> mEventListenerMap = new HashMap<IEventType, ArrayList<IEventListener>>();
-    private final ArrayList<IEventListener> mGlobalListeners = new ArrayList<IEventListener>();
+    private final HashMap<IEventType, ArrayList<IEventListener>> mEventListenerMap = new HashMap<>();
     
-    private final ArrayList<DefaultEvent> mEventQueueA = new ArrayList<DefaultEvent>();
-    private final ArrayList<DefaultEvent> mEventQueueB = new ArrayList<DefaultEvent>();
+    private final ArrayList<DefaultEvent> mEventQueueA = new ArrayList<>();
+    private final ArrayList<DefaultEvent> mEventQueueB = new ArrayList<>();
     private ArrayList<DefaultEvent> mFrontQueue = mEventQueueA;
     private ArrayList<DefaultEvent> mBackQueue = mEventQueueB;
     
@@ -69,11 +68,7 @@ public class EventManager {
         return true;
     }
     
-        
-    public boolean addGlobalListener(IEventListener listener) {
-        return false;
-    }
-    
+
     /**
      * Removes an event listener.
      * @param evtType Type of event.
@@ -96,10 +91,7 @@ public class EventManager {
         }
     }
     
-    public boolean removeGlobalListener(IEventListener listener) {
-        return false;
-    }
-    
+
     public int getListenerCnt() {
         return mListenerCnt;
     }
@@ -128,11 +120,7 @@ public class EventManager {
         }
         return true;
     }
-    
-    
-    public boolean abortEvent(DefaultEvent event) {
-        return false;
-    }
+
     
     /**
      * Trigger immediate handling for an event. 
@@ -140,21 +128,10 @@ public class EventManager {
      */
     public void triggerEvent(IEvent evt) {
         final ArrayList<IEventListener> list = mEventListenerMap.get(evt.getType());
-        boolean doDedicated = true;
-        //Logger.i(LogSource.EVENTS, "trigger event " + evt.getType().getName());   
         synchronized (mLockListeners) {
-            // first we process global listeners
-            int len = mGlobalListeners.size();
-            for (int i = 0; i < len; i++) {
-                if (mGlobalListeners.get(i).handleEvent(evt)) {
-                    doDedicated = false;
-                    break;
-                }
-            }
-            
-            // now the dedicated listeners
-            if (list != null && doDedicated) {
-                len = list.size();
+
+            if (list != null) {
+                final int len = list.size();
                 for (int i = 0; i < len; i++) {
                     if (list.get(i).handleEvent(evt)) {
                         break;
