@@ -1,6 +1,8 @@
 package com.moonymango.snare.util;
 
 
+import static android.R.attr.y;
+
 /**
  * Allocation free vector functions. Vectors always have 4 elements.
  * Vectors that represent points:       {x, y, z, 1}
@@ -34,7 +36,8 @@ public class VectorAF {
         }
         return mag;
     }
-    
+
+
     /**
      * Convenience function to calculate a normalized direction based
      * on coordinates. 
