@@ -1,5 +1,8 @@
 package com.moonymango.snareDemo.playground;
 
+import com.moonymango.snare.res.texture.ETC1TextureResource;
+import com.moonymango.snare.ui.scene3D.mesh.SquareMesh;
+import com.moonymango.snare.ui.scene3D.rendering.PlainTextureEffect;
 import com.moonymango.snareDemo.Asset;
 import com.moonymango.snare.events.EventManager.IEventListener;
 import com.moonymango.snare.events.IEvent;
@@ -153,7 +156,18 @@ class GameState extends SimpleGameState implements IEventListener {
         mObj3.addComponent(new SceneDrawable(RenderPass.ALPHA));
         mObj3.setPosition(-1, 0, -2).rotate(1, 0, 0, 90);
         Game.get().addGameObj(mObj3);
-        
+
+
+        // add square with logo texture
+        ETC1TextureResource etc = new ETC1TextureResource(Asset.NO_PARKING__PKM);
+        mat = PlainTextureEffect.makeMaterial(etc, TextureObjOptions.LINEAR_CLAMP);
+        obj = new GameObj("square");
+        obj.addComponent(mat);
+        obj.addComponent(new SquareMesh());
+        obj.addComponent(new PlainTextureEffect());
+        obj.addComponent(new SceneDrawable(RenderPass.ALPHA));
+        Game.get().addGameObj(obj);
+
         Game.get().getEventManager().addListener(ITouchEvent.EVENT_TYPE, 
                 this);
     }

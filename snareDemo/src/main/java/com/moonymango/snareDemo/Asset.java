@@ -45,10 +45,7 @@ public enum Asset implements IAssetName {
     
     MONKEY3DS_MESH      ("mesh/monkey.3ds",             "Monkey",   MeshResource.class),
     SKULL_MESH          ("mesh/skull.3ds",              "Skull",    MeshResource.class),
-    PAWN_MESH           ("mesh/chess_set.3ds",          "Pawn",   MeshResource.class),
-    KING_MESH           ("mesh/chess_set.3ds",          "King",   MeshResource.class),
-    ROOK_MESH           ("mesh/rook.3ds",               "Rook",   MeshResource.class),
-    
+
     BLASTER_SOUND       ("sounds/blaster.mp3",          null, SoundResource.class),
     LASER_SOUND         ("sounds/laserrocket.ogg",      null, SoundResource.class),
     DRIP_SOUND          ("sounds/drip.ogg",             null, SoundResource.class),
