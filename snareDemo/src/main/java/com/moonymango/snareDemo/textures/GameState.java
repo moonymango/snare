@@ -106,7 +106,7 @@ class GameState implements IGameState, IGameStateLogic,
         mat.setColor(Material.LINE_COLOR_IDX, 1, 1, 1, 1);
         grid.setPosition(0, -1, 0);
         grid.addComponent(mat);
-        //Game.get().addGameObj(grid);
+        Game.get().addGameObj(grid);
         
         // ++++ cube ++++
         // load shape from asset file
@@ -115,8 +115,8 @@ class GameState implements IGameState, IGameStateLogic,
         MeshResource meshRes = new MeshResource(Asset.SPHERE_UV_MESH, 
                 new ImportTransformBlender());
         
-        BitmapTextureResource texMoon = new BitmapTextureResource(Asset.NEPTUNE_TEX);
-        BitmapTextureResource texEarth = new BitmapTextureResource(Asset.SUN_TEX);
+        BitmapTextureResource texMoon = new BitmapTextureResource(Asset.MOON_TEX);
+        BitmapTextureResource texEarth = new BitmapTextureResource(Asset.EARTH_TEX);
         BitmapTextureResource texSpace = new BitmapTextureResource(Asset.SPACE2_TEX);
         
         
@@ -124,13 +124,8 @@ class GameState implements IGameState, IGameStateLogic,
         
         mEarth.addComponent(new PlainTextureEffect());
         mEarth.addComponent(new Mesh(meshRes));
-        //mObj.addComponent(new SphereMesh(3, 5));
         mEarth.addComponent(new SceneDrawable(RenderPass.DYNAMIC));
-        mat = new Material();
-        mat.setColor(Material.DIFFUSE_COLOR_IDX, 1, 1, 1, 1);
-        mat.setColor(Material.AMBIENT_COLOR_IDX, 1, 1, 1, 1);
-        mat.setColor(Material.OUTLINE_COLOR_IDX, 0, 0, 0, 1);
-        mat.addTextureUnit(new TextureUnit(0, texEarth, TextureObjOptions.LINEAR_REPEAT));
+        mat = PlainTextureEffect.makeMaterial(texEarth, TextureObjOptions.LINEAR_REPEAT);
         mEarth.addComponent(mat);
         //mEarth.setScale(0.75f, 0.75f, 0.75f);		// set size 
         mEarth.setPosition(0, 0, 0);				// put obj to origin
@@ -142,11 +137,7 @@ class GameState implements IGameState, IGameStateLogic,
         mMoon.addComponent(new PlainTextureEffect());
         mMoon.addComponent(new Mesh(meshRes));
         mMoon.addComponent(new SceneDrawable(RenderPass.DYNAMIC));
-        mat = new Material();
-        mat.setColor(Material.DIFFUSE_COLOR_IDX, 1, 1, 1, 1);
-        mat.setColor(Material.AMBIENT_COLOR_IDX, 1, 1, 1, 1);
-        mat.setColor(Material.OUTLINE_COLOR_IDX, 0, 0, 0, 1);
-        mat.addTextureUnit(new TextureUnit(0, texMoon, TextureObjOptions.LINEAR_REPEAT));
+        mat = PlainTextureEffect.makeMaterial(texMoon, TextureObjOptions.LINEAR_REPEAT);
         mMoon.addComponent(mat);
         mMoon.setScale(0.75f, 0.75f, 0.75f);       // set size 
         mMoon.setPosition(-4, 0, 0);              

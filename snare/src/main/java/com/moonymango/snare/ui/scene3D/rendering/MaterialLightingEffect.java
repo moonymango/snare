@@ -19,6 +19,7 @@ import com.moonymango.snare.res.texture.BaseTextureResource;
 import com.moonymango.snare.ui.scene3D.BaseEffect;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
 import com.moonymango.snare.ui.scene3D.Material;
+import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Scene3D;
 
 /**
@@ -95,8 +96,8 @@ public class MaterialLightingEffect extends BaseEffect {
     }
 
     @Override
-    public boolean render(Scene3D scene, BaseMesh mesh, Material material, 
-            GameObj obj) {
+    public boolean render(Scene3D scene, BaseMesh mesh, Material material,
+                          GameObj obj, RenderPass pass) {
         final float[] viewProjTransform = scene.getModelViewProjMatrix();
         
         //useProgram(0);

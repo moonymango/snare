@@ -16,6 +16,7 @@ import com.moonymango.snare.opengl.BufferObj.AttribPointer;
 import com.moonymango.snare.opengl.GLState;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
 import com.moonymango.snare.ui.scene3D.Material;
+import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Scene3D;
 
 public class WeaponParticleEmitter extends BaseDynamicMeshEffect {
@@ -118,8 +119,8 @@ public class WeaponParticleEmitter extends BaseDynamicMeshEffect {
     }
 
     @Override
-    public boolean render(Scene3D scene, BaseMesh mesh, Material material, 
-            GameObj obj) {
+    public boolean render(Scene3D scene, BaseMesh mesh, Material material,
+                          GameObj obj, RenderPass pass) {
         
         if (mTime > 1) mTime = 0;
         

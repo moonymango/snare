@@ -1,5 +1,17 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
+import com.moonymango.snare.game.Game.ClockType;
+import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.opengl.BufferObj.AttribPointer;
+import com.moonymango.snare.opengl.GLState;
+import com.moonymango.snare.opengl.TextureObj.TextureUnit;
+import com.moonymango.snare.opengl.TextureObjOptions;
+import com.moonymango.snare.res.texture.BaseTextureResource;
+import com.moonymango.snare.ui.scene3D.BaseMesh;
+import com.moonymango.snare.ui.scene3D.Material;
+import com.moonymango.snare.ui.scene3D.RenderPass;
+import com.moonymango.snare.ui.scene3D.Scene3D;
+
 import static android.opengl.GLES20.GL_ONE;
 import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
@@ -11,16 +23,6 @@ import static android.opengl.GLES20.glUniform1f;
 import static android.opengl.GLES20.glUniform1i;
 import static android.opengl.GLES20.glUniform4f;
 import static android.opengl.GLES20.glUniformMatrix4fv;
-import com.moonymango.snare.game.Game.ClockType;
-import com.moonymango.snare.game.GameObj;
-import com.moonymango.snare.opengl.BufferObj.AttribPointer;
-import com.moonymango.snare.opengl.TextureObj.TextureUnit;
-import com.moonymango.snare.opengl.GLState;
-import com.moonymango.snare.opengl.TextureObjOptions;
-import com.moonymango.snare.res.texture.BaseTextureResource;
-import com.moonymango.snare.ui.scene3D.BaseMesh;
-import com.moonymango.snare.ui.scene3D.Material;
-import com.moonymango.snare.ui.scene3D.Scene3D;
 
 //TODO prioC: add texture handling like in PyramidShapeEmitter
 public class CircularShapeEmitter extends BaseDynamicMeshEffect {
@@ -80,7 +82,7 @@ public class CircularShapeEmitter extends BaseDynamicMeshEffect {
     private static RenderContext createRenderContext()
     {
         final GLState s = new GLState();
-        s.enableDepth().setDepthMask(false).enableBlend(GL_SRC_ALPHA, GL_ONE)
+        s.enableDepth().enableDepthMask(false).enableBlend(GL_SRC_ALPHA, GL_ONE)
                 .lock();
         return new RenderContext(
                 CircularShapeEmitter.class.getName(),
@@ -159,8 +161,8 @@ public class CircularShapeEmitter extends BaseDynamicMeshEffect {
     }
 
     @Override
-    public boolean render(Scene3D scene, BaseMesh mesh, Material material, 
-            GameObj obj) 
+    public boolean render(Scene3D scene, BaseMesh mesh, Material material,
+                          GameObj obj, RenderPass pass)
     {    
         // note: ignore delivered mesh!!   
         final float progress = mTime * mSpeed;

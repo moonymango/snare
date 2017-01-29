@@ -71,10 +71,11 @@ public abstract class BaseEffect extends BaseComponent
      * {@link RenderContext} is already in place (see getContext()) and
      * also the textures have already been bound to their tex unit. 
      * @param scene
+     * @param pass
      * @return False, if the effect does not want to be rendered again, true otherwise.
      */
-    public abstract boolean render(Scene3D scene, BaseMesh mesh, 
-            Material material, GameObj obj);
+    public abstract boolean render(Scene3D scene, BaseMesh mesh,
+                                   Material material, GameObj obj, RenderPass pass);
     
     /**
      * Check if effect can be applied using a specified mesh and material.

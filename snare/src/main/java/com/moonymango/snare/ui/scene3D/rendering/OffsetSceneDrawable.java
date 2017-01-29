@@ -51,7 +51,7 @@ public class OffsetSceneDrawable extends BaseSceneDrawable {
         MatrixAF.scaleM(mRotScaleMatrix, 0, mScale[0], mScale[1], mScale[2]);
     }
 
-    public void draw(Scene3D scene, DrawBundle bundle) {
+    public void draw(Scene3D scene, DrawBundle bundle, RenderPass pass) {
         
         final float[] pos = mGameObj.getPosition();
         for (int i = 0; i < 3; i++) {
@@ -70,7 +70,7 @@ public class OffsetSceneDrawable extends BaseSceneDrawable {
             // in actual scene
             mIsFinished = true;
         }
-        mIsFinished &= !mEffects[o].render(scene, mMesh, mMat, mGameObj);
+        mIsFinished &= !mEffects[o].render(scene, mMesh, mMat, mGameObj, pass);
         
         ms.popMatrix();
     } 

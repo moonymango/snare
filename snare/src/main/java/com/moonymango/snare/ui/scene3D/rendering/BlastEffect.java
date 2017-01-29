@@ -25,6 +25,7 @@ import com.moonymango.snare.opengl.TextureObjOptions;
 import com.moonymango.snare.res.texture.BaseTextureResource;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
 import com.moonymango.snare.ui.scene3D.Material;
+import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Scene3D;
 import com.moonymango.snare.util.EasingProfile;
 import com.moonymango.snare.util.VectorAF;
@@ -137,7 +138,7 @@ public class BlastEffect extends BaseDynamicMeshEffect {
 
     @Override
     public boolean render(Scene3D scene, BaseMesh mesh, Material material,
-            GameObj obj) {
+                          GameObj obj, RenderPass pass) {
         final float t = mTime * mSpeed;
         final float frac = (float) (t - Math.floor(t));
         if (t > 1)

@@ -17,7 +17,7 @@ public class SceneDrawable extends BaseSceneDrawable {
         super(rp);
     }
 
-    public void draw(Scene3D scene, DrawBundle bundle) 
+    public void draw(Scene3D scene, DrawBundle bundle, RenderPass pass)
     {
         if (isFinished())
             return;
@@ -41,7 +41,7 @@ public class SceneDrawable extends BaseSceneDrawable {
             // in actual scene
             mIsFinished = true;
         }
-        mIsFinished &= !mEffects[o].render(scene, mMesh, mMat, mGameObj);
+        mIsFinished &= !mEffects[o].render(scene, mMesh, mMat, mGameObj, pass);
         
         ms.popMatrix();
     }

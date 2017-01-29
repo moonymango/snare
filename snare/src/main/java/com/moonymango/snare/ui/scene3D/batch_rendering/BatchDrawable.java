@@ -25,7 +25,7 @@ public class BatchDrawable extends BaseSceneDrawable {
     }
 
     @Override
-    public void draw(Scene3D scene, DrawBundle bundle) {
+    public void draw(Scene3D scene, DrawBundle bundle, RenderPass pass) {
         // TODO Auto-generated method stub
 
     }

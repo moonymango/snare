@@ -8,12 +8,14 @@ import com.moonymango.snare.res.texture.BaseTextureResource;
 import com.moonymango.snare.ui.scene3D.BaseEffect;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
 import com.moonymango.snare.ui.scene3D.Material;
+import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Scene3D;
 
 import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
 import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
+import static android.opengl.GLES20.glDepthMask;
 import static android.opengl.GLES20.glDisableVertexAttribArray;
 import static android.opengl.GLES20.glDrawElements;
 import static android.opengl.GLES20.glUniform1i;
@@ -94,11 +96,15 @@ public class PlainTextureEffect extends BaseEffect {
     }
 
     @Override
-    public boolean render(Scene3D scene, BaseMesh mesh, Material material, 
-            GameObj obj) {
+    public boolean render(Scene3D scene, BaseMesh mesh, Material material,
+                          GameObj obj, RenderPass pass) {
         final float[] viewProjTransform = scene.getModelViewProjMatrix();
         
-        //useProgram(0);
+        // TODO this shouldn't be handled locally in effects but as part of render pass concept
+        if (pass == RenderPass.ALPHA) {
+            glDepthMask(false);  // when in alpha pass disable depth mask
+        }
+
         mesh.bindBuffers(maPosition, -1, maTexCoord, -1);
         
         glUniformMatrix4fv(muMatrix, 1, false, viewProjTransform, 0);
@@ -113,6 +119,8 @@ public class PlainTextureEffect extends BaseEffect {
                 mesh.getIndexOffset()*Short.SIZE/8);
         glDisableVertexAttribArray(maPosition);
         glDisableVertexAttribArray(maTexCoord);
+
+        glDepthMask(true); // TODO remove (see above)
         return true;
     }
 

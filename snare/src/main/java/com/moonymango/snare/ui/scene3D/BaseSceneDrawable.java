@@ -67,9 +67,10 @@ public abstract class BaseSceneDrawable implements IComponent {
 
     /**
      * Draw it.
-     * @param scene  
+     * @param scene
+     * @param pass
      */
-    public abstract void draw(Scene3D scene, DrawBundle bundle);
+    public abstract void draw(Scene3D scene, DrawBundle bundle, RenderPass pass);
     
     public void reset() {
         // reset one-time effects so that it can be played again.

@@ -81,14 +81,14 @@ public class GLState {
         return this;
     }
     
-    public GLState setDepthMask(boolean enable) {
+    public GLState enableDepthMask(boolean enable) {
         if (mLocked)
             throw new IllegalStateException("Cannot modify locked state.");
         mDepthMask = enable;
         return this;
     }
     
-    public GLState setColorMask(boolean r, boolean g, boolean b, boolean a)
+    public GLState enableColorMask(boolean r, boolean g, boolean b, boolean a)
     {
         if (mLocked)
             throw new IllegalStateException("Cannot modify locked state.");

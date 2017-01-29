@@ -6,6 +6,7 @@ import com.moonymango.snare.ui.scene3D.BaseEffect;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
 import com.moonymango.snare.ui.scene3D.Light;
 import com.moonymango.snare.ui.scene3D.Material;
+import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Scene3D;
 
 import static android.opengl.GLES20.GL_TRIANGLES;
@@ -113,8 +114,8 @@ public class CelShader extends BaseEffect {
     }
 
     @Override
-    public boolean render(Scene3D scene, BaseMesh mesh, Material material, 
-            GameObj obj) 
+    public boolean render(Scene3D scene, BaseMesh mesh, Material material,
+                          GameObj obj, RenderPass pass)
     {    
         float[] viewProjTransform = scene.getModelViewProjMatrix();
         final float[] normalTransform = scene.getViewTransformStack().getInvTranspose();

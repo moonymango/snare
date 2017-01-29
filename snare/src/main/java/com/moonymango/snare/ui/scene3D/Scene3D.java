@@ -283,15 +283,18 @@ public class Scene3D implements IScreenElement, IEventListener {
         // (e.g. for correct alpha pass)
         RenderContext actualCtx = null;
         Material actualMat = null;
-        for (int rp = 0; rp < RenderPass.COUNT; rp ++) 
+
+        RenderPass pass = RenderPass.getFirst();
+        do
         {
-            final ArrayList<DrawBundle> l = mPasses.get(rp);
+            final int po = pass.ordinal();
+            final ArrayList<DrawBundle> l = mPasses.get(po);
             // group drawables by render context and material if list is dirty
-            if (mListDirty[rp]) {
+            if (mListDirty[po]) {
                 Collections.sort(l);
-                mListDirty[rp] = false;
+                mListDirty[po] = false;
             }
-            
+
             final int dcnt = l.size();
             for (int i = 0; i < dcnt; i++) {
                 final DrawBundle db = l.get(i);
@@ -305,17 +308,17 @@ public class Scene3D implements IScreenElement, IEventListener {
                     }
                     actualCtx = db.mContext;
                     actualCtx.begin();
-                    //Log.e(Game.ENGINE_NAME, actualCtx.getName());
                 }
                 // check for material change
                 if (db.mMaterial != null && !db.mMaterial.equals(actualMat)) {
                     actualMat = db.mMaterial;
                     actualMat.bindTextures();
-                    //Log.e(Game.ENGINE_NAME, "mat change");
                 }
-                db.mDrawable.draw(this, db);
+                db.mDrawable.draw(this, db, pass);
             }
-        }
+
+            pass = pass.getNext();
+        } while (pass != null);
     }
 
     private boolean mIsVisible = true;
