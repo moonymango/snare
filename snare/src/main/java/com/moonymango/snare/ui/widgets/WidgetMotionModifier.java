@@ -106,7 +106,7 @@ public class WidgetMotionModifier extends BaseProcess {
      * doesn't keep a reference to this, so a single instance can be used to
      * configure multiple modifiers.
      */
-    public static class MotionSettings implements Cloneable {
+    public static class MotionSettings {
         /** Widget to move */
         public IPositionable2D widget;
         /** Easing function used for motion (Default = LINEAR) */
