@@ -4,7 +4,6 @@ import android.graphics.Color;
 
 import com.moonymango.snare.game.Game.ClockType;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
-import com.moonymango.snare.proc.ProcessManager.ProcState;
 
 import java.util.ArrayList;
 
@@ -16,41 +15,33 @@ public class ColorWrapper extends BaseProcess
 {
     private ArrayList<IColorSeqListener> mListeners = new ArrayList<>();
 
-    private final ClockType mClockType;
+    /** Native color which is base for all following color modifications. */
     private final float[] mNativeColor = {0, 0, 0, 1};
+    /** Color which is result of all color modifications. */
     private final float[] mActualColor = new float[4];
+    /** Enable flag for inversion. */
     private boolean mIsInverted;
+    /** Enable flag for conversion to greyscale. */
     private boolean mIsGreyscale;
 
+    /** Color for temporary overlay. */
+    private final float[] mOverlayColor = new float[4];
+    private boolean mHasOverlay;
+    /** Parameters for Overlay fading. */
     private float mTimeScale;
-    private float mPos;
-    private float[] mColorDiff = new float[4];
+    private float mLocalTime;
+    private ClockType mClockType;
 
-    private final float[] mOffsetDirection = new float[4];
-    private float mOffset = 0;
-    private TransientOffsetMode mOffsetMode = TransientOffsetMode.INSTANT;
 
     public ColorWrapper()
     {
-        this(ClockType.REALTIME);
-    }
-
-    public ColorWrapper(ClockType clock)
-    {
-        mClockType = clock;
     }
 
     public ColorWrapper(float[] rgba)
     {
-        this(ClockType.REALTIME);
         setColor(rgba);
     }
 
-    public ColorWrapper(float[] rgba, ClockType clock)
-    {
-        mClockType = clock;
-        setColor(rgba);
-    }
 
     @Override
     protected void onInit()
@@ -64,16 +55,29 @@ public class ColorWrapper extends BaseProcess
     @Override
     protected boolean onUpdate(long realTime, float realDelta, float virtualDelta)
     {
-        final float delta = mClockType == ClockType.REALTIME ? realDelta : virtualDelta;
-        mPos += delta * mTimeScale;
-        boolean running = true;
-        if (mPos > 1.0f)
+        if (mClockType == null)
         {
-            mPos = 1.0f;
+            return false;
+        }
+
+        final float delta = mClockType == ClockType.REALTIME ? realDelta : virtualDelta;
+        mLocalTime += delta * mTimeScale;
+        boolean running = true;
+        if (mLocalTime > 1.0f)
+        {
+            // overlay has been vanished, stop process
+            mLocalTime = 1.0f;
             running = false;
         }
         updateColor();
+        mHasOverlay = running;
         return running;
+    }
+
+
+    @Override
+    protected void onKill()
+    {
     }
 
     @Override
@@ -83,45 +87,47 @@ public class ColorWrapper extends BaseProcess
     }
 
     /**
-     * Sets color to start color and interpolates back to native color.
-     *
-     * @param millis Time to reach native color in milliseconds.
-     * @param startColor   start color
+     * Enables color overlay.
+     * @param overlayColor Color to overlay.
+     * @return this
      */
-    public void offsetTransiently(float millis, float[] startColor, TransientOffsetMode mode)
+    public ColorWrapper enableOverlay(float[] overlayColor)
     {
-        for (int i = 0; i < 4; i++)
-        {
-            mColorDiff[i] = mNativeColor[i] - startColor[i];
-        }
+        System.arraycopy(overlayColor, 0, mOverlayColor, 0, 4);
+        mHasOverlay = true;
+        mLocalTime = 0;
+        updateColor();
+        kill();  // stop any ongoing overlay transition
+        return this;
+    }
+
+    /**
+     * Disables color overlay immediately.
+     * @return this
+     */
+    public ColorWrapper disableOverlay()
+    {
+        if (!mHasOverlay) throw new IllegalStateException("color overlay was not enabled.");
+        mHasOverlay = false;
+        kill();
+        updateColor();
+        return this;
+    }
+
+    /**
+     * Starts fading of overlay color.
+     * @param millis  Duration until overlay is faded completely.
+     * @param clock Clock base to use.
+     * @return
+     */
+    public ColorWrapper disableOverlay(int millis, ClockType clock)
+    {
+        if (!mHasOverlay) throw new IllegalStateException("color overlay was not enabled.");
+        mClockType = clock;
         mTimeScale = 1.0f / millis;
-        mPos = 0;
-        mOffsetMode = mode;
-
-        switch (mode)
-        {
-            case INSTANT:
-                super.run();
-                break;
-
-            default:
-                kill();
-                updateColor();
-                break;
-        }
-    }
-
-    public void triggerDeferredOffset()
-    {
-        mOffsetMode = TransientOffsetMode.INSTANT;
         super.run();
+        return this;
     }
-
-    @Override
-    protected void onKill()
-    {
-    }
-
 
     public ColorWrapper addListener(IColorSeqListener listener)
     {
@@ -136,27 +142,6 @@ public class ColorWrapper extends BaseProcess
         return this;
     }
 
-    /**
-     * Offsets the palettes output color towards a target color. Offset factor is
-     * a value in range [0..1], that defines how much the color should be pulled towards the target.
-     * @param offset        Offset value.
-     * @param offsetColor   Offset color
-     * @return
-     */
-    public ColorWrapper enableColorOffset(float offset, float[] offsetColor)
-    {
-        System.arraycopy(mOffsetDirection, 0, offsetColor, 0, 4);
-        mOffset = offset;
-        updateColor();
-        return this;
-    }
-
-    public ColorWrapper disableColorOffset()
-    {
-        mOffset = 0;
-        updateColor();
-        return this;
-    }
 
     public ColorWrapper invert(boolean enable)
     {
@@ -244,20 +229,15 @@ public class ColorWrapper extends BaseProcess
     private void updateColor()
     {
 
-        if (getState() != ProcState.DEAD || mOffsetMode == TransientOffsetMode.DEFERRED)
+        if (mHasOverlay)
         {
-            final float f = 1 - mPos;
             for (int i = 0; i < 4; i++)
-                mActualColor[i] = mNativeColor[i] - f * mColorDiff[i];
+                mActualColor[i] = mNativeColor[i]*mLocalTime + mOverlayColor[i]*(1-mLocalTime);
         }
         else
         {
             System.arraycopy(mNativeColor, 0, mActualColor, 0 , 4);
         }
-
-        // offset
-        for (int i = 0; i < 4; i++)
-            mActualColor[i] = mActualColor[i] * (1 - mOffset) + mOffsetDirection[i] * mOffset;
 
         // inversion
         if (mIsInverted)
@@ -294,17 +274,6 @@ public class ColorWrapper extends BaseProcess
          * Called when new color available
          */
         void onColorChange(ColorWrapper cp);
-    }
-
-    public enum TransientOffsetMode
-    {
-        /** transition starts immediately */
-        INSTANT,
-        /**
-         * offset color is set but transition back to native color happens only after
-         * call to triggerDeferredOffset().
-         */
-        DEFERRED,
     }
 
 }
