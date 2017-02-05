@@ -42,12 +42,5 @@ public interface IGameStateLogic {
      * won't invoke calls to this.
      */
     void onShutdown();
-    
-    /**
-     * Tells logic what the next state is. Intended for simple transient states
-     * that do not decide the next game state on their own. The engine itself 
-     * won't invoke calls to this.
-     * @param next
-     */
-    void setNextState(IGameState next);
+
 }

@@ -92,11 +92,6 @@ class GameState implements IGameState, IGameStateLogic,
     public void onShutdown() {
         
     }
-    
-    @Override
-    public void setNextState(IGameState next) {
-                
-    }
 
     @Override
     public IGameStateLogic getGameStateLogic() {

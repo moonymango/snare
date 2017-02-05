@@ -195,11 +195,6 @@ class GameState implements IGameState, IGameStateLogic,
     }
 
     @Override
-    public void setNextState(IGameState next) {
-                
-    }
-    
-    @Override
     public IGameStateLogic getGameStateLogic() {
         return this;
     }

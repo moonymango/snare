@@ -161,10 +161,6 @@ class GameState implements IGameState, IGameStateLogic {
     public String getName() {
         return GameState.class.getName();
     }
-    
-    @Override
-    public void setNextState(IGameState next) {
-                
-    }
+
 }
 

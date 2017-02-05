@@ -37,9 +37,4 @@ public class NullGameStateLogic implements IGameStateLogic {
                 
     }
 
-    @Override
-    public void setNextState(IGameState next) {
-        mNext = next;
-    }
-
 }

@@ -12,8 +12,6 @@ public abstract class SimpleGameState implements IGameState, IGameStateLogic {
     @Override
     public void onShutdown() {}
 
-    @Override
-    public void setNextState(IGameState next) {}
 
     @Override
     public void onDeactivate(IGameState next) {

@@ -192,11 +192,6 @@ class GameState implements IGameState, IGameStateLogic, IEventListener {
     public String getName() {
         return GameState.class.getName();
     }
-    
-    @Override
-    public void setNextState(IGameState next) {
-                
-    }
 
     @Override
     public boolean handleEvent(IEvent event) {

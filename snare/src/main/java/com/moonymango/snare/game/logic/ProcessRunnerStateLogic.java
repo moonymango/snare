@@ -54,10 +54,6 @@ public class ProcessRunnerStateLogic implements IGameStateLogic {
     @Override
     public void onShutdown() {}
 
-    @Override
-    public void setNextState(IGameState next) {
-        mNext = next;
-    }
 
     /**
      * Set processes to run. Each process chain must be wrapped in 
