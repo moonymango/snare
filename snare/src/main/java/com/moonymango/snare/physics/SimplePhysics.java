@@ -1,6 +1,6 @@
 package com.moonymango.snare.physics;
 
-import java.util.ArrayList;
+import android.util.SparseArray;
 
 import com.moonymango.snare.events.EventManager;
 import com.moonymango.snare.events.IEvent;
@@ -14,7 +14,8 @@ import com.moonymango.snare.game.GameObj.GameObjLayer;
 import com.moonymango.snare.physics.BaseBoundingVolume.IntersectionDistance;
 import com.moonymango.snare.physics.BaseBoundingVolume.VolumeType;
 import com.moonymango.snare.util.Pool;
-import android.util.SparseArray;
+
+import java.util.ArrayList;
 
 /**
  * Provides raycasting and collision detection.
@@ -138,7 +139,10 @@ public class SimplePhysics implements IPhysics {
             }
             
             final IntersectionDistance d = bv.getRayDistance(s, v);
-            if (d != null) {
+            // only consider object that are completely in front of the ray origin, i.e.
+            // ignore object, if the ray origin is within the bounding volume and also ignore
+            // if object is behind ray origin
+            if (d != null && d.MIN > 0) {
                 r.addIntersection(d.MIN, bv.getGameObj());
             }
         }
