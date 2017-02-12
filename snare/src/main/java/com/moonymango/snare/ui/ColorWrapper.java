@@ -37,6 +37,11 @@ public class ColorWrapper extends BaseProcess
     {
     }
 
+    public ColorWrapper(float[] hsv, float a)
+    {
+        setColorHSV(hsv, a);
+    }
+
     public ColorWrapper(float[] rgba)
     {
         setColor(rgba);

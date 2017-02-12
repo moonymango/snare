@@ -3,7 +3,7 @@ package com.moonymango.snare.game.logic;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.Game.ClockType;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
-import com.moonymango.snare.util.EasingProfile;
+import com.moonymango.snare.util.IEasingProfile;
 import com.moonymango.snare.util.QuaternionAF;
 
 /**
@@ -18,7 +18,7 @@ public class ObjRotationTransition extends BaseProcess {
     private final float[] mStartRotQ = new float[4];
     private final float[] mEndRotQ = new float[4];
     private final float mDuration;
-    private final EasingProfile mProfile;
+    private final IEasingProfile mProfile;
     private ClockType mClock = ClockType.VIRTUAL;
     
     private float mTime;
@@ -31,7 +31,7 @@ public class ObjRotationTransition extends BaseProcess {
      * @param time time in milliseconds
      */
     public ObjRotationTransition(GameObj obj, GameObj start, GameObj end, 
-            float time, EasingProfile profile) {
+            float time, IEasingProfile profile) {
         mObj = obj;
         mStart = start;
         mEnd = end;
@@ -40,7 +40,7 @@ public class ObjRotationTransition extends BaseProcess {
     }
     
     public ObjRotationTransition(GameObj obj, GameObj end, float time, 
-            EasingProfile profile) {
+            IEasingProfile profile) {
         this(obj, obj, end, time, profile);
     }
     

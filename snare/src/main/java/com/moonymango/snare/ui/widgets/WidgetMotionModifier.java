@@ -7,6 +7,7 @@ import com.moonymango.snare.proc.ProcessManager.IOnProcessKilledListener;
 import com.moonymango.snare.proc.ProcessManager.ProcState;
 import com.moonymango.snare.ui.IScreenElement;
 import com.moonymango.snare.ui.PlayerGameView;
+import com.moonymango.snare.util.IEasingProfile;
 import com.moonymango.snare.util.EasingProfile;
 
 /**
@@ -110,7 +111,7 @@ public class WidgetMotionModifier extends BaseProcess {
         /** Widget to move */
         public IPositionable2D widget;
         /** Easing function used for motion (Default = LINEAR) */
-        public EasingProfile profile = EasingProfile.LINEAR;
+        public IEasingProfile profile = EasingProfile.LINEAR;
         /** 
          * Duration of motion in milliseconds. This will define the speed.
          * Default = 500 ms.

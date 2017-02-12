@@ -154,9 +154,10 @@ public abstract class BaseWidget implements IScreenElement, ILocationHolder,
     }
 
     /** Sets scale transformation. */
-    public BaseWidget setScale(float x, float y) {
-        mScaleX = x;
-        mScaleY = y;
+    public BaseWidget setScale(float x, float y)
+    {
+        mScaleX = (x == 0) ? 0.0001f : x;  // avoid 0 to make sure that transformation matrix is invertable
+        mScaleY = (y == 0) ? 0.0001f : y;
         updateTransformation();
         return this;
     }

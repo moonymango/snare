@@ -4,7 +4,7 @@ import com.moonymango.snare.game.Game.ClockType;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.proc.ProcessManager.ProcState;
-import com.moonymango.snare.util.EasingProfile;
+import com.moonymango.snare.util.IEasingProfile;
 
 public class ObjScaleTransition extends BaseProcess {
 
@@ -16,7 +16,7 @@ public class ObjScaleTransition extends BaseProcess {
     private final float[] mDelta = {0, 0, 0, 0};
     private final float[] mEndScale = {1, 1, 1, 1};
     private float mDuration;
-    private EasingProfile mProfile;
+    private IEasingProfile mProfile;
     private ClockType mClock = ClockType.VIRTUAL;
     
     private float mTime;
@@ -42,7 +42,7 @@ public class ObjScaleTransition extends BaseProcess {
      * @param profile
      */
     public ObjScaleTransition(GameObj obj, float[] start, float[] end,
-            float time, EasingProfile profile) {
+            float time, IEasingProfile profile) {
         
         mStart = null;
         mEnd = null;
@@ -57,7 +57,7 @@ public class ObjScaleTransition extends BaseProcess {
      * @param time time in milliseconds
      */
     public ObjScaleTransition(GameObj obj, GameObj start, GameObj end, 
-            float time, EasingProfile profile) {
+            float time, IEasingProfile profile) {
         mObj = obj;
         mStart = start;
         mEnd = end;
@@ -74,12 +74,12 @@ public class ObjScaleTransition extends BaseProcess {
      * @param profile
      */
     public ObjScaleTransition(GameObj obj, GameObj end, float time, 
-            EasingProfile profile) {
+            IEasingProfile profile) {
         this(obj, obj, end, time, profile);
     }
     
     public ObjScaleTransition configure (GameObj obj, float[] start, float[] end, 
-            float time, EasingProfile profile) 
+            float time, IEasingProfile profile)
     {
         if (getState() != ProcState.DEAD) {
             throw new IllegalArgumentException("Cannot change a running " +

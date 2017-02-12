@@ -27,7 +27,7 @@ import com.moonymango.snare.ui.scene3D.BaseMesh;
 import com.moonymango.snare.ui.scene3D.Material;
 import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Scene3D;
-import com.moonymango.snare.util.EasingProfile;
+import com.moonymango.snare.util.IEasingProfile;
 import com.moonymango.snare.util.VectorAF;
 
 /** 
@@ -102,8 +102,8 @@ public class BlastEffect extends BaseDynamicMeshEffect {
     private static final AttribPointer[] maPointers = {maVertex, maTexCoord};
         
     private final int mNumSegments;
-    private final EasingProfile mInnerEdgeProfile;
-    private final EasingProfile mOuterEdgeProfile;
+    private final IEasingProfile mInnerEdgeProfile;
+    private final IEasingProfile mOuterEdgeProfile;
     private final float mSpeed;
     
 
@@ -115,8 +115,8 @@ public class BlastEffect extends BaseDynamicMeshEffect {
      * @param speed Effect speed.
      * @param clock Clock to use.
      */
-    public BlastEffect(int segments, EasingProfile inner, EasingProfile outer,
-            float speed, ClockType clock) {
+    public BlastEffect(int segments, IEasingProfile inner, IEasingProfile outer,
+                       float speed, ClockType clock) {
         super(createRenderContext(), 
                 new BlastVertexGenerator(segments), clock);
         mNumSegments = segments;

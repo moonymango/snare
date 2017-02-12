@@ -3,7 +3,7 @@ package com.moonymango.snare.game.logic;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.Game.ClockType;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
-import com.moonymango.snare.util.EasingProfile;
+import com.moonymango.snare.util.IEasingProfile;
 
 public class ObjPosTransition extends BaseProcess {
 
@@ -15,7 +15,7 @@ public class ObjPosTransition extends BaseProcess {
     private final float[] mDelta = new float[4];
     private final float[] mEndPos = new float[4];
     private final float mDuration;
-    private final EasingProfile mProfile;
+    private final IEasingProfile mProfile;
     private ClockType mClock = ClockType.VIRTUAL;
     
     private float mTime;
@@ -28,7 +28,7 @@ public class ObjPosTransition extends BaseProcess {
      * @param time time in milliseconds
      */
     public ObjPosTransition(GameObj obj, GameObj start, GameObj end, 
-            float time, EasingProfile profile) {
+            float time, IEasingProfile profile) {
         mObj = obj;
         mStart = start;
         mEnd = end;
@@ -37,7 +37,7 @@ public class ObjPosTransition extends BaseProcess {
     }
     
     public ObjPosTransition(GameObj obj, GameObj end, float time, 
-            EasingProfile profile) {
+            IEasingProfile profile) {
         this(obj, obj, end, time, profile);
     }
     
