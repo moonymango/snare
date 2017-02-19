@@ -52,15 +52,15 @@ public class PlainTextureEffect extends BaseEffect {
             "}";
     
     /** Attribute location of vertex position. */
-    protected static int maPosition;
+    private static int maPosition;
     /** Attribute location of texture coordinates. */
-    protected static int maTexCoord;
+    private static int maTexCoord;
     /** Uniform location of texture */
-    protected static int muTex;
+    private static int muTex;
     /** Uniform location of view/projection matrix. */
-    protected static int muMatrix;
+    private static int muMatrix;
     /** Uniform location of color. */
-    protected static int muColor;
+    private static int muColor;
     
     private static RenderContext createRenderContext() 
     {    
