@@ -2,11 +2,14 @@ package com.moonymango.snare.opengl;
 
 import com.moonymango.snare.opengl.BaseGLObj.GLObjState;
 import com.moonymango.snare.util.Cache;
+import com.moonymango.snare.util.Logger;
 
 import java.util.ArrayList;
 
 public class GLObjCache extends Cache<GLObjCache, GLObjDescriptor, BaseGLObj> {
-    
+
+    public static boolean DEBUG = false;
+
     /** Stores GL objects in same order they were created. */
     private final ArrayList<BaseGLObj> mGLObjects = new ArrayList<BaseGLObj>();
     
@@ -65,7 +68,20 @@ public class GLObjCache extends Cache<GLObjCache, GLObjDescriptor, BaseGLObj> {
                 break;
             default:
             }
-        }   
+        }
+
+        // debug: print content of gl cache
+        if (DEBUG)
+        {
+            Logger.d(Logger.LogSource.OPENGL, "========================================");
+            for (int i = mGLObjects.size() - 1 ; i >= 0; i--)
+            {
+                BaseGLObj obj = mGLObjects.get(i);
+                Logger.d(Logger.LogSource.OPENGL, obj.getDescriptor().getQName() + " -- refcnt " + obj.getRefCnt());
+            }
+            Logger.d(Logger.LogSource.OPENGL, "========================================");
+            DEBUG = false;
+        }
     }
       
     /**

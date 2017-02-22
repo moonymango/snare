@@ -1,8 +1,10 @@
 package com.moonymango.snare.opengl;
 
-import static android.opengl.GLES20.GL_NO_ERROR;
 import android.opengl.GLES20;
+
 import com.moonymango.snare.util.CacheItem;
+
+import static android.opengl.GLES20.GL_NO_ERROR;
 
 public abstract class BaseGLObj extends CacheItem<GLObjCache, GLObjDescriptor, BaseGLObj> {
 
@@ -42,6 +44,8 @@ public abstract class BaseGLObj extends CacheItem<GLObjCache, GLObjDescriptor, B
     public GLObjState getState() {
         return mState;
     }
+
+    public GLObjDescriptor getDescriptor() { return mDescriptor; }
     
     /**
      * Sets the GLObjects state, e.g. mark it to have it loaded to GPU by 
@@ -51,6 +55,11 @@ public abstract class BaseGLObj extends CacheItem<GLObjCache, GLObjDescriptor, B
     public void setState(GLObjState state) {
         mPrevState = mState;
         mState = state;
+        if (mState == GLObjState.TO_LOAD && state == GLObjState.TO_UNLOAD)
+            throw new IllegalStateException("load and unload request for gl object in a single frame, " +
+                    "i.e. game object was added and removed from game logic in same frame. " +
+                    "Check lifecycle of the game object!");
+
         if (state == GLObjState.TO_LOAD) {
             mID = INVALID_ID;
         }
@@ -119,7 +128,7 @@ public abstract class BaseGLObj extends CacheItem<GLObjCache, GLObjDescriptor, B
         // someone got a new reference to this object, so it must be loaded to
         // the GPU
         if (mState != GLObjState.LOADED && mState != GLObjState.NOT_CONFIGURED) {
-            mState = GLObjState.TO_LOAD;
+            setState(GLObjState.TO_LOAD);
         }   
     }
     
@@ -130,7 +139,7 @@ public abstract class BaseGLObj extends CacheItem<GLObjCache, GLObjDescriptor, B
         // just mark the object for removal but keep it in the cache. On next
         // switch to GL thread it will be unloaded from GPU and removed from
         // cache.
-        mState = GLObjState.TO_UNLOAD;
+        setState(GLObjState.TO_UNLOAD);
         return false;
     }
     

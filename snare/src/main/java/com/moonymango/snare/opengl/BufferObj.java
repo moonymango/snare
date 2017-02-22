@@ -1,12 +1,25 @@
 package com.moonymango.snare.opengl;
 
-import static android.opengl.GLES20.*;
-
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+
+import static android.opengl.GLES20.GL_ARRAY_BUFFER;
+import static android.opengl.GLES20.GL_DYNAMIC_DRAW;
+import static android.opengl.GLES20.GL_ELEMENT_ARRAY_BUFFER;
+import static android.opengl.GLES20.GL_FLOAT;
+import static android.opengl.GLES20.GL_STATIC_DRAW;
+import static android.opengl.GLES20.GL_STREAM_DRAW;
+import static android.opengl.GLES20.glBindBuffer;
+import static android.opengl.GLES20.glBufferData;
+import static android.opengl.GLES20.glBufferSubData;
+import static android.opengl.GLES20.glDeleteBuffers;
+import static android.opengl.GLES20.glDisableVertexAttribArray;
+import static android.opengl.GLES20.glEnableVertexAttribArray;
+import static android.opengl.GLES20.glGenBuffers;
+import static android.opengl.GLES20.glVertexAttribPointer;
 
 /**
  * Represents a vertex buffer object (GL_ARRAY_BUFFER or

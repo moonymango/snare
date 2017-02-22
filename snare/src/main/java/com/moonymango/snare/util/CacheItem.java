@@ -23,6 +23,8 @@ public abstract class CacheItem<C extends Cache<C,D,I>, D extends CacheItemDescr
     // methods
     // ---------------------------------------------------------
 
+    public long getRefCnt() { return mRefCnt; }
+
     /**
      * Called when item was newly created and added to the cache.
      */

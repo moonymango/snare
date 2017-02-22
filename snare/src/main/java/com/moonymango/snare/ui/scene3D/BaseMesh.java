@@ -1,17 +1,5 @@
 package com.moonymango.snare.ui.scene3D;
 
-import static android.opengl.GLES20.GL_ARRAY_BUFFER;
-import static android.opengl.GLES20.GL_DYNAMIC_DRAW;
-import static android.opengl.GLES20.GL_ELEMENT_ARRAY_BUFFER;
-import static android.opengl.GLES20.GL_FLOAT;
-import static android.opengl.GLES20.GL_STATIC_DRAW;
-import static android.opengl.GLES20.glBindBuffer;
-import static android.opengl.GLES20.glEnableVertexAttribArray;
-import static android.opengl.GLES20.glVertexAttribPointer;
-
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
 import com.moonymango.snare.game.GameObj.ComponentType;
 import com.moonymango.snare.game.logic.BaseComponent;
 import com.moonymango.snare.opengl.BufferObj;
@@ -21,6 +9,18 @@ import com.moonymango.snare.opengl.BufferObj.IBufferUpdateSetup;
 import com.moonymango.snare.opengl.BufferObj.Target;
 import com.moonymango.snare.opengl.GLObjDescriptor;
 import com.moonymango.snare.opengl.GLObjDescriptor.GLObjType;
+
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+
+import static android.opengl.GLES20.GL_ARRAY_BUFFER;
+import static android.opengl.GLES20.GL_DYNAMIC_DRAW;
+import static android.opengl.GLES20.GL_ELEMENT_ARRAY_BUFFER;
+import static android.opengl.GLES20.GL_FLOAT;
+import static android.opengl.GLES20.GL_STATIC_DRAW;
+import static android.opengl.GLES20.glBindBuffer;
+import static android.opengl.GLES20.glEnableVertexAttribArray;
+import static android.opengl.GLES20.glVertexAttribPointer;
 
 public abstract class BaseMesh extends BaseComponent 
         implements IBufferDataProvider {
@@ -102,8 +102,8 @@ public abstract class BaseMesh extends BaseComponent
         // calc hash based on vertex attributes
         final int prime = 31;
         mHash = 1;
-        final String q = mVertexBufferDescr.getQName();
-        mHash = prime * mHash + q.hashCode();   
+        mHash = prime * mHash + mVertexBufferDescr.getQName().hashCode();
+        mHash = prime * mHash + mIndexBufferDescr.getQName().hashCode();
         
     }
 
