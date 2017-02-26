@@ -55,7 +55,7 @@ public abstract class BaseSceneDrawable implements IComponent {
     {
         if (!mIsInitialized)
             throw new IllegalStateException("No render context information " +
-            		"available (non-initialized drawable component)");
+            		"available - non-initialized drawable component for " + getGameObj().getName() );
         
         return mBundle;
     }

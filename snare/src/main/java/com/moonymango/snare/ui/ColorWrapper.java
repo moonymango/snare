@@ -47,6 +47,14 @@ public class ColorWrapper extends BaseProcess
         setColor(rgba);
     }
 
+    public ColorWrapper(ColorWrapper other)
+    {
+        System.arraycopy(other.mNativeColor, 0, mNativeColor, 0, 4);
+        System.arraycopy(other.mOverlayColor, 0, mOverlayColor, 0, 4);
+        mHasOverlay = other.mHasOverlay;
+        mIsInverted = other.mIsInverted;
+        mIsGreyscale = other.mIsGreyscale;
+    }
 
     @Override
     protected void onInit()
