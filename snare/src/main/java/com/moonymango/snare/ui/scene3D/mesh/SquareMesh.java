@@ -2,6 +2,7 @@ package com.moonymango.snare.ui.scene3D.mesh;
 
 import android.opengl.GLES20;
 
+import com.moonymango.snare.physics.IBoundingVolumeProvider;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
 
 import java.nio.ByteBuffer;
@@ -14,8 +15,8 @@ import java.nio.ShortBuffer;
  * Normal vector is (0, 1, 0).
  */
 
-public class SquareMesh extends BaseMesh {
-
+public class SquareMesh extends BaseMesh implements IBoundingVolumeProvider
+{
     public SquareMesh() {
         super(SquareMesh.class.getName(), false, false);
     }
@@ -134,5 +135,41 @@ public class SquareMesh extends BaseMesh {
     @Override
     public boolean hasTexCoords() {
         return true;
+    }
+
+    @Override
+    public float getMaxX()
+    {
+        return 1;
+    }
+
+    @Override
+    public float getMinX()
+    {
+        return -1;
+    }
+
+    @Override
+    public float getMaxY()
+    {
+        return 0;
+    }
+
+    @Override
+    public float getMinY()
+    {
+        return 0;
+    }
+
+    @Override
+    public float getMaxZ()
+    {
+        return 1;
+    }
+
+    @Override
+    public float getMinZ()
+    {
+        return -1;
     }
 }

@@ -108,7 +108,8 @@ public abstract class BaseBoundingVolume implements IComponent {
     public enum VolumeType {
         BOX,
         SPHERE,
-        CYLINDER
+        CYLINDER,
+        SQUARE,
     }
     
 }

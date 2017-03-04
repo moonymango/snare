@@ -27,6 +27,70 @@ public class GeometryTest  {
     }
 
     @Test
+    public void testPlaneIntersection()
+    {
+        final float[] p = new float[4];
+        final float[] s = new float[4];
+        final float[] v = new float[4];
+        final float[] result = new float[4];
+        final float[] exp = new float[4];
+
+        // plane in xz plane and line parallel but not within plane
+        p[0] = 0;
+        p[1] = 1;
+        p[2] = 0;
+        p[3] = 0;
+
+        s[0] = 5;
+        s[1] = 1;
+        s[2] = 8;
+        s[3] = 1;
+
+        v[0] = 1;
+        v[1] = 0;
+        v[2] = 0;
+        float t = Geometry.planeIntersection(p, s, v, result);
+        assertTrue(Float.isNaN(t));
+
+        // plane is parallel to zy plane, distance to s == 2, line perpendicular
+        p[0] = 1;
+        p[1] = 0;
+        p[2] = 0;
+        p[3] = -3;
+        t = Geometry.planeIntersection(p, s, v, result);
+        assertEquals(-2, t, Geometry.PRECISION);
+        exp[0] = 3;
+        exp[1] = 1;
+        exp[2] = 8;
+        exp[3] = result[3];  // don't compare because function only affects first 3 elements
+        assertArrayEquals(exp, result, Geometry.PRECISION);
+
+        // line within plane
+        v[0] = 0;
+        v[1] = 1;
+        v[2] = 0;
+
+        s[0] = 3;
+        t = Geometry.planeIntersection(p, s, v, result);
+        assertEquals(0, t, Geometry.PRECISION);
+        assertArrayEquals(s, result, Geometry.PRECISION);
+
+        // plane in xz plane, line perpendicular
+        p[0] = 0;
+        p[1] = 1;
+        p[2] = 0;
+        p[3] = 0;
+        t = Geometry.planeIntersection(p, s, v, result);
+        assertEquals(-1, t, Geometry.PRECISION);
+        exp[0] = 3;
+        exp[1] = 0;
+        exp[2] = 8;
+        exp[3] = result[3];  // don't compare because function only affects first 3 elements
+        assertArrayEquals(exp, result, Geometry.PRECISION);
+
+    }
+
+    @Test
     public void testToPlane() 
     {
         // plane parallel to y-z 

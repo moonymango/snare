@@ -159,6 +159,8 @@ public class SimplePhysics implements IPhysics {
             return new SimpleSphereBoundingVolume(true);
         case CYLINDER:
             return new SimpleCylinderBoundingVolume(true);
+        case SQUARE:
+            return new SimpleSquareBoundingVolume();
         default:
             throw new IllegalArgumentException("Unsupported bounding volume type.");
         }

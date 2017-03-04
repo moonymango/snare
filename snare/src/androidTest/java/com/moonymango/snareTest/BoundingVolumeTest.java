@@ -5,22 +5,26 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.physics.BaseBoundingVolume;
-import com.moonymango.snare.physics.BaseBoundingVolume.*;
+import com.moonymango.snare.physics.BaseBoundingVolume.IntersectionDistance;
+import com.moonymango.snare.physics.BaseBoundingVolume.VolumeType;
 import com.moonymango.snare.physics.BaseSimpleBoundingVolume;
 import com.moonymango.snare.physics.IPhysics;
 import com.moonymango.snare.physics.SimpleAABB;
 import com.moonymango.snare.physics.SimpleCollisionPair;
 import com.moonymango.snare.physics.SimpleCylinderBoundingVolume;
-import com.moonymango.snare.physics.SimpleCylinderBoundingVolume.*;
+import com.moonymango.snare.physics.SimpleCylinderBoundingVolume.AxisOrientation;
 import com.moonymango.snare.physics.SimplePhysics;
 import com.moonymango.snare.physics.SimpleSphereBoundingVolume;
+import com.moonymango.snare.physics.SimpleSquareBoundingVolume;
+import com.moonymango.snare.ui.scene3D.mesh.SquareMesh;
 import com.moonymango.snare.util.Geometry;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(AndroidJUnit4.class)
 public class BoundingVolumeTest {
@@ -509,4 +513,51 @@ public class BoundingVolumeTest {
         assertEquals(8, d.MAX, Geometry.PRECISION);
         
     }
+
+    @Test
+    public void testSquareIntersection()
+    {
+        SimpleSquareBoundingVolume bv = (SimpleSquareBoundingVolume) mPhysics.createBoundingVolume(VolumeType.SQUARE);
+        SquareMesh m = new SquareMesh();
+        bv.setDimensions(m);
+
+        GameObj obj = new GameObj("bv");
+        obj.addComponent(bv);
+        obj.setPosition(10, 0, 0);
+        obj.setScale(1, 1, 2);
+        obj.onUpdateTransform(0, 0, 0);
+        obj.onUpdateComponents(0, 0, 0);
+
+        // vertical ray outside of square
+        mS[0] = 8;
+        mS[1] = 1;
+        mS[2] = -1.5f;
+        mS[3] = 1;
+        mV[0] = 0;
+        mV[1] = 1;
+        mV[2] = 0;
+        mV[3] = 0;
+
+        IntersectionDistance d = bv.getRayDistance(mS, mV);
+        assertNull(d);
+
+        // move s so that ray hits square
+        mS[0] = 9.1f;
+        d = bv.getRayDistance(mS, mV);
+        assertEquals(-1, d.MIN, Geometry.PRECISION);
+
+        // move s to another point with hit but different distance
+        mS[0] = 10.9f;
+        mS[1] = -5;
+        mS[2] = 1.9f;
+        d = bv.getRayDistance(mS, mV);
+        assertEquals(5, d.MIN, Geometry.PRECISION);
+
+        // change ray direction so that there is no hit
+        mV[0] = 1;
+        mV[1] = 0;
+        d = bv.getRayDistance(mS, mV);
+        assertNull(d);
+    }
+
 }
