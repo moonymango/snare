@@ -20,7 +20,7 @@ public class SimpleSquareBoundingVolume extends BaseSimpleBoundingVolume
     private float mMinZ;
     private float mMaxZ;
 
-    public SimpleSquareBoundingVolume()
+    SimpleSquareBoundingVolume()
     {
         super(false);  // no collision checking
     }
@@ -32,6 +32,8 @@ public class SimpleSquareBoundingVolume extends BaseSimpleBoundingVolume
         mMinX = provider.getMinX();
         mMaxZ = provider.getMaxZ();
         mMinZ = provider.getMinZ();
+        if (provider.getMaxY() != 0 || provider.getMinY() != 0)
+            throw new UnsupportedOperationException("only squares in xz plane supported.");
     }
 
     @Override

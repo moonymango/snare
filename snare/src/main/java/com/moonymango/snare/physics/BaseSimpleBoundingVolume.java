@@ -6,6 +6,7 @@ import com.moonymango.snare.util.VectorAF;
 public abstract class BaseSimpleBoundingVolume extends BaseBoundingVolume {
 
     private boolean mCheckCollisions;
+    private boolean mRcEnable = true;  // enable raycast by default
     private boolean centerWorldValid;
     private final float[] mCenterWorld = new float[4];
     private final float[] mCollisionPoint = new float[4];
@@ -34,6 +35,12 @@ public abstract class BaseSimpleBoundingVolume extends BaseBoundingVolume {
     public void setCollisionCheck(boolean enable) {
         mCheckCollisions = enable;
     }
+
+    @Override
+    public void enableRaycast(boolean enable) { mRcEnable = enable; }
+
+    @Override
+    public boolean isRaycastEnabled() { return mRcEnable; }
 
     /**
      * Tests wether or not a point is within the bounding volume.

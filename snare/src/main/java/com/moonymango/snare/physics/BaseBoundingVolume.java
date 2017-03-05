@@ -17,14 +17,20 @@ public abstract class BaseBoundingVolume implements IComponent {
      * @param provider
      */
     public abstract void setDimensions(IBoundingVolumeProvider provider);
-        
+
+    /**
+     * Enables/disables the volumes reaction to raycasts.
+     * @param enable False to ignore the volume in raycasts, true otherwise.
+     */
+    public abstract void enableRaycast(boolean enable);
+    public abstract boolean isRaycastEnabled();
     /**
      * Indicates if this bounding volume wants to be checked for
      * collisions with others.
      * @return
      */
     public abstract boolean isCollisionChecker();
-    
+
     /**
      * Enables or disables collision checking.
      * @param enable

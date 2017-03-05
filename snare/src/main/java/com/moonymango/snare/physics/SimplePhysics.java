@@ -133,7 +133,8 @@ public class SimplePhysics implements IPhysics {
         
         for (int i = mBoundingVolumes.size() - 1; i >= 0; i--) {
             final BaseSimpleBoundingVolume bv = mBoundingVolumes.get(i);
-            if (!layerMask.covers(bv.getGameObj().getLayer())) {
+            final boolean covered = layerMask.covers(bv.getGameObj().getLayer());
+            if (!covered || !bv.isRaycastEnabled()) {
                 // object is not in a layer of interest
                 continue;
             }
