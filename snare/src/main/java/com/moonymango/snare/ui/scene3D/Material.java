@@ -1,12 +1,13 @@
 package com.moonymango.snare.ui.scene3D;
 
+import android.util.SparseArray;
+
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
 import com.moonymango.snare.game.logic.BaseComponent;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
 import com.moonymango.snare.ui.ColorWrapper;
 import com.moonymango.snare.ui.ColorWrapper.IColorSeqListener;
-import android.util.SparseArray;
 
 /**
  * Container for all material related information (colors and textures).
@@ -20,8 +21,8 @@ public class Material extends BaseComponent implements IColorSeqListener {
     public static final int OUTLINE_COLOR_IDX = 3;
     public static final int LINE_COLOR_IDX = 4;
     
-    private SparseArray<float[]> mColors = new SparseArray<float[]>();
-    private SparseArray<ColorWrapper> mPalettes = new SparseArray<ColorWrapper>();
+    private SparseArray<float[]> mColors = new SparseArray<>();
+    private SparseArray<ColorWrapper> mPalettes = new SparseArray<>();
     private final float[] mOutlineScale = {1.05f, 1.05f, 1.05f, 0};
     private float mTexCoord;
     

@@ -26,7 +26,7 @@ public class ColorWrapper extends BaseProcess
 
     /** Color for temporary overlay. */
     private final float[] mOverlayColor = new float[4];
-    private boolean mHasOverlay;
+    private float mOverlayFactor = -1;
     /** Parameters for Overlay fading. */
     private float mTimeScale;
     private float mLocalTime;
@@ -51,7 +51,7 @@ public class ColorWrapper extends BaseProcess
     {
         System.arraycopy(other.mNativeColor, 0, mNativeColor, 0, 4);
         System.arraycopy(other.mOverlayColor, 0, mOverlayColor, 0, 4);
-        mHasOverlay = other.mHasOverlay;
+        mOverlayFactor = other.mOverlayFactor;
         mIsInverted = other.mIsInverted;
         mIsGreyscale = other.mIsGreyscale;
     }
@@ -83,7 +83,7 @@ public class ColorWrapper extends BaseProcess
             running = false;
         }
         updateColor();
-        mHasOverlay = running;
+        mOverlayFactor = running ? mOverlayFactor : -1;
         return running;
     }
 
@@ -104,10 +104,11 @@ public class ColorWrapper extends BaseProcess
      * @param overlayColor Color to overlay.
      * @return this
      */
-    public ColorWrapper enableOverlay(float[] overlayColor)
+    public ColorWrapper enableOverlay(float[] overlayColor, float factor)
     {
+        if (factor > 1 && factor < 0) throw new IllegalArgumentException("factor must be in [0..1]");
         System.arraycopy(overlayColor, 0, mOverlayColor, 0, 4);
-        mHasOverlay = true;
+        mOverlayFactor = factor;
         mLocalTime = 0;
         updateColor();
         kill();  // stop any ongoing overlay transition
@@ -120,8 +121,8 @@ public class ColorWrapper extends BaseProcess
      */
     public ColorWrapper disableOverlay()
     {
-        if (!mHasOverlay) throw new IllegalStateException("color overlay was not enabled.");
-        mHasOverlay = false;
+        if (mOverlayFactor < 0) throw new IllegalStateException("color overlay was not enabled.");
+        mOverlayFactor = -1;
         kill();
         updateColor();
         return this;
@@ -131,11 +132,11 @@ public class ColorWrapper extends BaseProcess
      * Starts fading of overlay color.
      * @param millis  Duration until overlay is faded completely.
      * @param clock Clock base to use.
-     * @return
+     * @return this
      */
     public ColorWrapper disableOverlay(int millis, ClockType clock)
     {
-        if (!mHasOverlay) throw new IllegalStateException("color overlay was not enabled.");
+        if (mOverlayFactor < 0) throw new IllegalStateException("color overlay was not enabled.");
         mClockType = clock;
         mTimeScale = 1.0f / millis;
         super.run();
@@ -242,10 +243,10 @@ public class ColorWrapper extends BaseProcess
     private void updateColor()
     {
 
-        if (mHasOverlay)
+        if (mOverlayFactor > 0)
         {
             for (int i = 0; i < 4; i++)
-                mActualColor[i] = mNativeColor[i]*mLocalTime + mOverlayColor[i]*(1-mLocalTime);
+                mActualColor[i] = mNativeColor[i]*mLocalTime + mOverlayColor[i]*mOverlayFactor*(1-mLocalTime);
         }
         else
         {
