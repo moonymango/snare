@@ -1,15 +1,5 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
-import static android.opengl.GLES20.GL_TRIANGLES;
-import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
-import static android.opengl.GLES20.glDisableVertexAttribArray;
-import static android.opengl.GLES20.glDrawElements;
-import static android.opengl.GLES20.glGetAttribLocation;
-import static android.opengl.GLES20.glUniform1f;
-import static android.opengl.GLES20.glUniform1i;
-import static android.opengl.GLES20.glUniform3f;
-import static android.opengl.GLES20.glUniformMatrix4fv;
-import static com.moonymango.snare.opengl.GLES20Trace.glGetUniformLocation;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.opengl.GLState;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
@@ -21,6 +11,17 @@ import com.moonymango.snare.ui.scene3D.Light;
 import com.moonymango.snare.ui.scene3D.Material;
 import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Scene3D;
+
+import static android.opengl.GLES20.GL_TRIANGLES;
+import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
+import static android.opengl.GLES20.glDisableVertexAttribArray;
+import static android.opengl.GLES20.glDrawElements;
+import static android.opengl.GLES20.glGetAttribLocation;
+import static android.opengl.GLES20.glUniform1f;
+import static android.opengl.GLES20.glUniform1i;
+import static android.opengl.GLES20.glUniform3f;
+import static android.opengl.GLES20.glUniformMatrix4fv;
+import static com.moonymango.snare.opengl.GLES20Trace.glGetUniformLocation;
 
 /**
  * Similar like {@link CelShader} but fragment shader uses a faster texture 
@@ -36,7 +37,7 @@ import com.moonymango.snare.ui.scene3D.Scene3D;
  */
 public class CelShader2 extends BaseEffect {
     
-    public static final String VERTEX_SHADER_FILL =
+    private static final String VERTEX_SHADER_FILL =
             "precision lowp float;   \n" +
             "precision lowp int;        \n" +
                     
@@ -56,12 +57,12 @@ public class CelShader2 extends BaseEffect {
             "void main(){                                                                   \n" +
             "   vec3 normal = normalize(vec3(uNormalTransform * vec4(aNormal, ZERO)));       \n" +
             "   vec3 lightDir = normalize(vec3(uViewTransform * vec4(uLightDirection, ZERO)));     \n" +
-            "   float fetchS  = max(dot(normal, lightDir), ZERO);                            \n" +
+            "   float fetchS  = 0.5 * (dot(normal, lightDir) + 1.0);                            \n" +
             "   vTexCoord = vec2(fetchS, uFetchT);                                          \n" +
             "   gl_Position = uViewProjTransform * aPosition;                               \n" +
             "}                                                                              \n";                         
     
-    public static final String FRAGMENT_SHADER_FILL = 
+    private static final String FRAGMENT_SHADER_FILL =
             "precision lowp float;                          \n" +
             "uniform sampler2D uTex;                        \n" +
             
