@@ -1,14 +1,21 @@
 package com.moonymango.snare.opengl;
 
-import java.nio.Buffer;
+import android.opengl.GLES20;
 
 import com.moonymango.snare.util.Logger;
 import com.moonymango.snare.util.Logger.LogSource;
 
-import android.opengl.GLES20;
+import java.nio.Buffer;
 
-public class GLES20Trace extends GLES20 {
-    
+public class GLES20Trace extends GLES20
+{
+    public static void checkError()
+    {
+        int e = glGetError();
+        if (e != GL_NO_ERROR)
+            throw new IllegalStateException("GL error: 0x" + Integer.toHexString(e));
+    }
+
     public enum Mode {
         WRITE_THROUGH,
         FLUSH_MANUALLY,
