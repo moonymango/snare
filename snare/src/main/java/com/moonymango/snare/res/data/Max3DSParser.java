@@ -5,8 +5,17 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
- * This is heavily inspired by and partly stolen from the min3d loader classes.
- * (http://code.google.com/p/min3d/)
+ * This file is heavily inspired by the min3d loader classes.
+ *****************************************************************
+ * Project homepage: 	http://code.google.com/p/min3d
+ * License:				MIT
+ * 
+ * Author: 				Lee Felarca
+ * Website:				http://www.zeropointnine.com/blog
+ *
+ * Author: 				Dennis Ippel
+ * Author blog:			http://www.rozengain.com/blog/
+ *****************************************************************
  * 
  * FIXME prioD: handle multiple objects in one file (see mEnabled)
  * TODO prioD: handle materials
