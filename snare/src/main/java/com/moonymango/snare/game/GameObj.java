@@ -1,9 +1,5 @@
-/**
- * 
- */
-package com.moonymango.snare.game;
 
-import java.util.ArrayList;
+package com.moonymango.snare.game;
 
 import com.moonymango.snare.events.EventManager;
 import com.moonymango.snare.events.IGameObjMoveEvent;
@@ -16,6 +12,8 @@ import com.moonymango.snare.util.IMimic;
 import com.moonymango.snare.util.MatrixAF;
 import com.moonymango.snare.util.PoolItem;
 import com.moonymango.snare.util.QuaternionAF;
+
+import java.util.ArrayList;
 
 /**
  *  Represents a game object with position, rotation and scale. Also
@@ -535,13 +533,13 @@ public class GameObj extends PoolItem implements IPositionable3D,
     /**
      * Game object components.
      */
-    public interface IComponent {
+    public interface IComponent
+    {
         ComponentType getComponentType();
         void onUpdate(long realTime, float realDelta, float virtualDelta);
         /**
          * General purpose method callback intended for operations that perform traversals 
-         * over all game objects. 
-         * @param time Timestamp.
+         * over all game objects.
          * @param userData Arbitrary user data.
          */
         void onTraverse(Object userData);

@@ -44,11 +44,30 @@ public class MatrixAF extends Matrix {
      * @param y
      * @param z
      */
-    public static void lhsRotateM(float[] m, int offset, float a, float x, 
-            float y, float z) {
+    public static void lhsRotateM(float[] m, int offset, float a, float x, float y, float z)
+    {
         setRotateM(sTmpMatA, 0, a, x, y, z);
         multiplyMM(sTmpMatB, 0, sTmpMatA, 0, m, offset);
         for (int i = 0; i < MATRIX_ELEM_CNT; i++) m[i + offset] = sTmpMatB[i];
+    }
+
+    /**
+     * Returns rotated matrix in a tmp array.
+     * In contrast to rotateM() the new rotation is used as
+     * left hand side operator for the multiplication. That means this rotation is
+     * the last of all transformations represented by matrix m.
+     * @param m
+     * @param offset
+     * @param a angle in degrees.
+     * @param x
+     * @param y
+     * @param z
+     */
+    public static float[] lhsRotateM2(float[] m, int offset, float a, float x, float y, float z)
+    {
+        setRotateM(sTmpMatA, 0, a, x, y, z);
+        multiplyMM(sTmpMatB, 0, sTmpMatA, 0, m, offset);
+        return sTmpMatB;
     }
 
     /**
