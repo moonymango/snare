@@ -213,11 +213,11 @@ public abstract class BaseWidget implements IScreenElement, ILocationHolder,
             mColorPalette.removeListener(this);
         }
         mColorPalette = cp;
-        cp.addListener(this);
+        cp.addListener(this, 0);
         return this;
     }
 
-    public void onColorChange(ColorWrapper cp) {
+    public void onColorChange(int colorIdx, ColorWrapper cp) {
         final float[] c = cp.getActualColor();
         mColor[0] = c[0];
         mColor[1] = c[1];

@@ -1,12 +1,13 @@
 package com.moonymango.snare.ui.scene3D;
 
+import android.util.SparseArray;
+
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
 import com.moonymango.snare.game.logic.BaseComponent;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
 import com.moonymango.snare.ui.ColorWrapper;
 import com.moonymango.snare.ui.ColorWrapper.IColorSeqListener;
-import android.util.SparseArray;
 
 public class MaterialManager 
 {
@@ -19,7 +20,7 @@ public class MaterialManager
     
     /**
      * Adds {@link Material} to manager and loads material textures to Gpu. 
-     * @param mat Material
+     * @param m Material
      * @param key Key which may used for later reference to the material.
      */
     public void load(Material m, int key)
@@ -126,7 +127,6 @@ public class MaterialManager
         public static final int LINE_COLOR_IDX = 4;
         
         private SparseArray<float[]> mColors = new SparseArray<float[]>();
-        private SparseArray<ColorWrapper> mPalettes = new SparseArray<ColorWrapper>();
         private final float[] mOutlineScale = {1.05f, 1.05f, 1.05f, 0};
         private float mTexCoord;
         
@@ -204,30 +204,21 @@ public class MaterialManager
          * ATTENTION: A single color wrapper must not be registered to multiple
          *              color indices.
          */
-        public Material registerPalette(int colorIdx, ColorWrapper cp) {
+        public Material registerPalette(int colorIdx, ColorWrapper cp)
+        {
             if (mColors.get(colorIdx) == null) {
                 final float[] c = new float[4];
                 mColors.append(colorIdx, c);
             }
-            final ColorWrapper old = mPalettes.get(colorIdx);
-            if (old != null) {
-                old.removeListener(this);
-            }
-            mPalettes.append(colorIdx, cp);
-            cp.addListener(this);
+            cp.addListener(this, colorIdx);
             return this;
         }
         
         @Override
-        public void onColorChange(ColorWrapper cp) {
-             
-            final int idx = mPalettes.indexOfValue(cp);
-            if (idx < 0) {
-                return;
-            }
-                 
+        public void onColorChange(int colorIdx, ColorWrapper cp)
+        {
             final float[] c = cp.getActualColor();
-            final float[] color = mColors.get(idx);
+            final float[] color = mColors.get(colorIdx);
             for (int i = 0; i < 4; i++) {
                 color[i] = c[i];
             }

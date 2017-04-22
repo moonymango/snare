@@ -82,7 +82,7 @@ public class Light implements IComponent, IColorSeqListener {
     public void onDetachFromScene() {}
     
     @Override
-    public void onColorChange(ColorWrapper cp) {
+    public void onColorChange(int colorIdx, ColorWrapper cp) {
         final float[] c = cp.getActualColor();
         setColor(c[0], c[1], c[2], c[3]);
     }

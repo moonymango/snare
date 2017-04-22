@@ -1,5 +1,28 @@
 package com.moonymango.snare.ui.widgets;
 
+import com.moonymango.snare.game.Game;
+import com.moonymango.snare.opengl.BufferObj;
+import com.moonymango.snare.opengl.BufferObj.IBufferConfigurationSetup;
+import com.moonymango.snare.opengl.BufferObj.IBufferDataProvider;
+import com.moonymango.snare.opengl.BufferObj.IBufferUpdateSetup;
+import com.moonymango.snare.opengl.BufferObj.Target;
+import com.moonymango.snare.opengl.GLObjDescriptor;
+import com.moonymango.snare.opengl.GLObjDescriptor.GLObjType;
+import com.moonymango.snare.opengl.GLState;
+import com.moonymango.snare.opengl.ProgramObj;
+import com.moonymango.snare.opengl.TextureObj;
+import com.moonymango.snare.opengl.TextureObjOptions;
+import com.moonymango.snare.res.texture.BaseTextureResource;
+import com.moonymango.snare.ui.BaseFont;
+import com.moonymango.snare.ui.ColorWrapper;
+import com.moonymango.snare.ui.PlayerGameView;
+
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+
 import static android.opengl.GLES20.GL_ARRAY_BUFFER;
 import static android.opengl.GLES20.GL_ELEMENT_ARRAY_BUFFER;
 import static android.opengl.GLES20.GL_FLOAT;
@@ -21,29 +44,6 @@ import static android.opengl.GLES20.glUniform1i;
 import static android.opengl.GLES20.glUniform4f;
 import static android.opengl.GLES20.glUniformMatrix4fv;
 import static android.opengl.GLES20.glVertexAttribPointer;
-
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
-import com.moonymango.snare.game.Game;
-import com.moonymango.snare.opengl.BufferObj;
-import com.moonymango.snare.opengl.BufferObj.IBufferConfigurationSetup;
-import com.moonymango.snare.opengl.BufferObj.IBufferDataProvider;
-import com.moonymango.snare.opengl.BufferObj.IBufferUpdateSetup;
-import com.moonymango.snare.opengl.BufferObj.Target;
-import com.moonymango.snare.opengl.GLObjDescriptor;
-import com.moonymango.snare.opengl.GLObjDescriptor.GLObjType;
-import com.moonymango.snare.opengl.GLState;
-import com.moonymango.snare.opengl.ProgramObj;
-import com.moonymango.snare.opengl.TextureObj;
-import com.moonymango.snare.opengl.TextureObjOptions;
-import com.moonymango.snare.res.texture.BaseTextureResource;
-import com.moonymango.snare.ui.BaseFont;
-import com.moonymango.snare.ui.ColorWrapper;
-import com.moonymango.snare.ui.PlayerGameView;
 
 /**
  * Widget that displays a character sequence using bitmap font textures. The
@@ -153,13 +153,12 @@ public class Text extends BaseTouchWidget implements IBufferDataProvider {
      * @param font Bitmap font
      * @param text
      * @param alignment Widget alignment
-     * @param listener Touch event listener (null to make text "untouchable")
      * @param maxChars Buffer size. If less than text length, then the text
      *              will be truncated.
      * 
      */
-    public Text(BaseFont font, String text, PositionAlignment alignment, 
-    		TouchSetting setting, int maxChars) {
+    public Text(BaseFont font, String text, PositionAlignment alignment, TouchSetting setting, int maxChars)
+    {
         super(setting);
         mTextureResource = font;
         mTextureOptions = TextureObjOptions.LINEAR_CLAMP;
@@ -202,12 +201,11 @@ public class Text extends BaseTouchWidget implements IBufferDataProvider {
      * Create text widget.
      * @param font Font.
      * @param text Text to display.
-     * @param listener Touch listener.
      * @param maxChars Buffer size. If less than text length, then the text
      *              will be truncated.
      */
-    public Text(BaseFont font, String text, TouchSetting setting, 
-            int maxChars) {
+    public Text(BaseFont font, String text, TouchSetting setting, int maxChars)
+    {
         this(font, text, PositionAlignment.CENTERED_XY, setting, maxChars);
     }
     
@@ -215,11 +213,10 @@ public class Text extends BaseTouchWidget implements IBufferDataProvider {
      * Creates text widget. Buffer size is set to number of characters in text.
      * @param font Bitmap font.
      * @param text Text to display.
-     * @param listener Touch event listener (null to make text "untouchable")
      */
-    public Text(BaseFont font, String text, TouchSetting setting) {
-        this(font, text, PositionAlignment.CENTERED_XY, setting, 
-                text.length());
+    public Text(BaseFont font, String text, TouchSetting setting)
+    {
+        this(font, text, PositionAlignment.CENTERED_XY, setting, text.length());
     }
 
     // ---------------------------------------------------------
@@ -336,7 +333,7 @@ public class Text extends BaseTouchWidget implements IBufferDataProvider {
             mOutlineColorPalette.removeListener(this);
         }
         mOutlineColorPalette = cp;
-        cp.addListener(this);
+        cp.addListener(this, 0);
         return this;
     }
 
@@ -353,7 +350,7 @@ public class Text extends BaseTouchWidget implements IBufferDataProvider {
     }
     
     @Override
-    public void onColorChange(ColorWrapper cp) {
+    public void onColorChange(int colorIdx, ColorWrapper cp) {
         if (cp == mOutlineColorPalette) {
             final float[] c = cp.getActualColor();
             mOutlineColor[0] = c[0];
@@ -361,7 +358,7 @@ public class Text extends BaseTouchWidget implements IBufferDataProvider {
             mOutlineColor[2] = c[2];
             mOutlineColor[3] = c[3];
         } else {
-            super.onColorChange(cp);
+            super.onColorChange(colorIdx, cp);
         }
     }
     

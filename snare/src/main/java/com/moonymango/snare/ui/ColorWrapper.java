@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class ColorWrapper extends BaseProcess
 {
-    private ArrayList<IColorSeqListener> mListeners = new ArrayList<>();
+    private ArrayList<ListenerData> mListeners = new ArrayList<>();
 
     /** Native color which is base for all following color modifications. */
     private final float[] mNativeColor = {0, 0, 0, 1};
@@ -59,9 +59,10 @@ public class ColorWrapper extends BaseProcess
     @Override
     protected void onInit()
     {
-        for (int l = mListeners.size() - 1; l >= 0; l--)
+        for (int i = mListeners.size() - 1; i >= 0; i--)
         {
-            mListeners.get(l).onColorChange(this);
+            final ListenerData l = mListeners.get(i);
+            l.listener.onColorChange(l.colorIdx, this);
         }
     }
 
@@ -143,16 +144,24 @@ public class ColorWrapper extends BaseProcess
         return this;
     }
 
-    public ColorWrapper addListener(IColorSeqListener listener)
+    public ColorWrapper addListener(IColorSeqListener listener, int colorIdx)
     {
-        mListeners.add(listener);
-        listener.onColorChange(this);
+        final ListenerData l = new ListenerData();
+        l.listener = listener;
+        l.colorIdx = colorIdx;
+        mListeners.add(l);
+        listener.onColorChange(colorIdx, this);
         return this;
     }
 
     public ColorWrapper removeListener(IColorSeqListener listener)
     {
-        mListeners.remove(listener);
+        final int len = mListeners.size();
+        for (int i = 0; i < len; i++)
+        {
+            final ListenerData l = mListeners.get(i);
+            if (l == listener) mListeners.remove(l);
+        }
         return this;
     }
 
@@ -276,9 +285,10 @@ public class ColorWrapper extends BaseProcess
         }
 
         // notify listeners
-        for (int l = mListeners.size() - 1; l >= 0; l--)
+        for (int i = mListeners.size() - 1; i >= 0; i--)
         {
-            mListeners.get(l).onColorChange(this);
+            final ListenerData l = mListeners.get(i);
+            l.listener.onColorChange(l.colorIdx, this);
         }
     }
 
@@ -287,7 +297,12 @@ public class ColorWrapper extends BaseProcess
         /**
          * Called when new color available
          */
-        void onColorChange(ColorWrapper cp);
+        void onColorChange(int colorIdx, ColorWrapper cp);
     }
 
+    private static class ListenerData
+    {
+        IColorSeqListener listener;
+        int colorIdx;
+    }
 }

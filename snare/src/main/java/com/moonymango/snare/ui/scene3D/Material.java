@@ -22,7 +22,6 @@ public class Material extends BaseComponent implements IColorSeqListener {
     public static final int LINE_COLOR_IDX = 4;
     
     private SparseArray<float[]> mColors = new SparseArray<>();
-    private SparseArray<ColorWrapper> mPalettes = new SparseArray<>();
     private final float[] mOutlineScale = {1.05f, 1.05f, 1.05f, 0};
     private float mTexCoord;
     
@@ -107,7 +106,9 @@ public class Material extends BaseComponent implements IColorSeqListener {
     }
      
     public float[] getColor(int idx) {
-        return mColors.get(idx);
+        final float[] c = mColors.get(idx);
+        if (c == null) throw new IllegalArgumentException("unkown color idx");
+        return c;
     }
     
     /** 
@@ -120,25 +121,16 @@ public class Material extends BaseComponent implements IColorSeqListener {
             final float[] c = new float[4];
             mColors.append(colorIdx, c);
         }
-        final ColorWrapper old = mPalettes.get(colorIdx);
-        if (old != null) {
-            old.removeListener(this);
-        }
-        mPalettes.append(colorIdx, cp);
-        cp.addListener(this);
+
+        cp.addListener(this, colorIdx);
         return this;
     }
     
     @Override
-    public void onColorChange(ColorWrapper cp) {
-         
-        final int idx = mPalettes.indexOfValue(cp);
-        if (idx < 0) {
-            return;
-        }
-             
+    public void onColorChange(int colorIdx, ColorWrapper cp)
+    {
         final float[] c = cp.getActualColor();
-        final float[] color = mColors.get(idx);
+        final float[] color = mColors.get(colorIdx);
         for (int i = 0; i < 4; i++) {
             color[i] = c[i];
         }
