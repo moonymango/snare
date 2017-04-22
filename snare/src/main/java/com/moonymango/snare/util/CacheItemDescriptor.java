@@ -44,7 +44,8 @@ public abstract class CacheItemDescriptor<C extends Cache<C,D,I>, D extends Cach
             throw new IllegalArgumentException("Missing cache.");
         }
         if (mCache != null && mCache != cache) {
-            throw new IllegalStateException("Cache item descriptor already bound to another cache.");
+            throw new IllegalStateException("Cache item descriptor already bound to another cache. "
+                    + mCache.toString() + " / " + cache.toString());
         }
         mCache = cache;
         return mCache.getHandle(this);
