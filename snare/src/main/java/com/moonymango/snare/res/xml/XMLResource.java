@@ -3,7 +3,6 @@ package com.moonymango.snare.res.xml;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.res.BaseResHandle;
 import com.moonymango.snare.res.BaseResource;
 import com.moonymango.snare.res.IAssetName;
@@ -51,7 +50,7 @@ public class XMLResource<T> extends BaseResource {
 
     @SuppressWarnings("unchecked")
     public XMLResHandle<T> getHandle() {
-        return (XMLResHandle<T>) super.getHandle(SnareGame.get().getResourceCache());
+        return (XMLResHandle<T>) super.getHandle(mGame.getResourceCache());
     }
     
     private XMLResHandle<T> parse(InputStream in) {

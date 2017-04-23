@@ -3,7 +3,6 @@ package com.moonymango.snare.res.texture;
 import android.content.res.Resources;
 
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.res.BaseResHandle;
 import com.moonymango.snare.res.BaseResource;
 import com.moonymango.snare.res.IAssetName;
@@ -45,7 +44,7 @@ public abstract class BaseTextureResource extends BaseResource
     }
     
     public BaseTextureResHandle getHandle() {
-        return (BaseTextureResHandle) getHandle(SnareGame.get().getResourceCache());
+        return (BaseTextureResHandle) getHandle(mGame.getResourceCache());
     }
 
     /**

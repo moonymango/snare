@@ -1,5 +1,6 @@
 package com.moonymango.snare.ui.scene3D.batch_rendering;
 
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.ui.scene3D.BaseSceneDrawable;
 import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Scene3D;
@@ -20,8 +21,9 @@ import com.moonymango.snare.ui.scene3D.Scene3D.DrawBundle;
 public class BatchDrawable extends BaseSceneDrawable {
 
 
-    public BatchDrawable(RenderPass pass) {
-        super(pass);
+    public BatchDrawable(IGame game, RenderPass pass)
+    {
+        super(game, pass);
     }
 
     @Override

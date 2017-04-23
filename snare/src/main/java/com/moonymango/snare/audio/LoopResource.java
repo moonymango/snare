@@ -4,7 +4,6 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.res.BaseResHandle;
 import com.moonymango.snare.res.BaseResource;
 import com.moonymango.snare.res.IAssetName;
@@ -17,8 +16,7 @@ public class LoopResource extends BaseResource {
 
     @Override
     protected BaseResHandle createHandleByAsset(AssetManager am) {
-        return new LoopHandle(this, SnareGame.get().getAudioManager(),
-                SnareGame.get().getSettings().mDefaultLoopVolume);
+        return new LoopHandle(this, mGame.getAudioManager(), mGame.getSettings().mDefaultLoopVolume);
     }
 
     @Override
@@ -28,7 +26,7 @@ public class LoopResource extends BaseResource {
     }
     
     public LoopHandle getHandle() {
-        return (LoopHandle) getHandle(SnareGame.get().getResourceCache());
+        return (LoopHandle) getHandle(mGame.getResourceCache());
     }
 
 }

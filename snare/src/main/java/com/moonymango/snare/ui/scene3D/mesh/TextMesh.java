@@ -2,7 +2,7 @@ package com.moonymango.snare.ui.scene3D.mesh;
 
 import android.opengl.GLES20;
 
-import com.moonymango.snare.game.SnareGame;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
 import com.moonymango.snare.opengl.TextureObjOptions;
 import com.moonymango.snare.ui.BaseFont;
@@ -21,7 +21,7 @@ public class TextMesh extends BaseMesh {
     private final Material mMat;
     
     public TextMesh(BaseFont font, String text) {
-        super(font.mGame, TextMesh.class.getName() + SnareGame.DELIMITER + SnareGame.get().getRandomString(), false, false);
+        super(font.mGame, TextMesh.class.getName() + IGame.DELIMITER + font.mGame.getRandomString(), false, false);
         mFont = font;
         mText = text;
         mMat = new Material(font.mGame);

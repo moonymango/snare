@@ -444,8 +444,7 @@ public class GameObj extends PoolItem implements IPositionable3D,
     public float getLastModTime() {
         // if object is dirty then last mod was in current frame,
         // otherwise return time of last transform update
-        return mMoved || mRotated || mScaled ? SnareGame.get().getRealTime()
-                : mLastModTime;
+        return mMoved || mRotated || mScaled ? mGame.getRealTime() : mLastModTime;
     }
     
     /** Indicates if this object is currently active in the engine. */
@@ -463,26 +462,26 @@ public class GameObj extends PoolItem implements IPositionable3D,
         return mMoved || mRotated || mScaled;
     }
     
-    private void updateTransform() { 
+    private void updateTransform()
+    {
         MatrixAF.local2World(mToWorld, mPosition, mScale, mRotation);
         mFromWorldValid = false; 
        
         // send events
-        final IGame game = SnareGame.get();
-        if (mMoved && mSendMoveEvent && game != null) {
-            final EventManager em = game.getEventManager();
+        if (mMoved && mSendMoveEvent) {
+            final EventManager em = mGame.getEventManager();
             final IGameObjMoveEvent e = em.obtain(IGameObjMoveEvent.EVENT_TYPE);
             e.setGameObjData(mID, mPosition[0], mPosition[1], mPosition[2]);
             em.queueEvent(e);  
         }
-        if (mScaled && mSendScaleEvent && game != null) {
-            final EventManager em = game.getEventManager();
+        if (mScaled && mSendScaleEvent) {
+            final EventManager em = mGame.getEventManager();
             final IGameObjScaleEvent e = em.obtain(IGameObjScaleEvent.EVENT_TYPE);
             e.setGameObjData(mID, mScale[0], mScale[1], mScale[2]);
             em.queueEvent(e);
         }
-        if (mRotated && mSendRotateEvent && game != null) {
-            final EventManager em = game.getEventManager();
+        if (mRotated && mSendRotateEvent) {
+            final EventManager em = mGame.getEventManager();
             final IGameObjRotateEvent e = em.obtain(IGameObjRotateEvent.EVENT_TYPE);
             e.setGameObjData(mID);
             em.queueEvent(e);

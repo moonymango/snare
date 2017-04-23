@@ -139,7 +139,7 @@ public class CircularShapeEmitter extends BaseDynamicMeshEffect {
     
     public CircularShapeEmitter(IGame game, int paricleCnt, boolean runOnce, IGame.ClockType clock)
     {
-        super(createRenderContext(game), new DefaultParticleGenerator(paricleCnt), clock);
+        super(createRenderContext(game), new DefaultParticleGenerator(game, paricleCnt), clock);
         mRunOnce = runOnce;
         
         // use default buffer and pointer

@@ -1,5 +1,6 @@
 package com.moonymango.snare.audio;
 
+import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
 import com.moonymango.snare.game.GameObj.IComponent;
@@ -7,13 +8,15 @@ import com.moonymango.snare.game.GameObj.IComponent;
 /**
  * Class that allows annotation of game objects with a sound resource
  */
-public class AudioComponent implements IComponent {
+public class AudioComponent extends BaseSnareClass implements IComponent {
 
     private final SoundResource mDescr;
     private SoundHandle mSoundHnd;
     private GameObj mGameObj;
     
-    public AudioComponent(SoundResource descr) {
+    public AudioComponent(SoundResource descr)
+    {
+        super(descr.mGame);
         mDescr = descr;
     }
 

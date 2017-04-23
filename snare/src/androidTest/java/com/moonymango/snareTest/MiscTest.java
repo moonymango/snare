@@ -3,7 +3,7 @@ package com.moonymango.snareTest;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
-import com.moonymango.snare.game.SnareGame;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.opengl.TextureObj.TextureSize;
 import com.moonymango.snare.ui.ColorWrapper;
 import com.moonymango.snare.util.Bresenham;
@@ -13,7 +13,8 @@ import com.moonymango.snare.util.MatrixAF;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class MiscTest  {
@@ -63,10 +64,10 @@ public class MiscTest  {
         final ColorWrapper cw = new ColorWrapper(new GameStub());
         cw.setColorHSV(0, 1, 1, 1);
         float[] c = cw.getActualColor();
-        Log.e(SnareGame.ENGINE_NAME, "r " + c[0] + " g " + c[1] + " b " + c[2] + " a " + c[3]);
+        Log.e(IGame.ENGINE_NAME, "r " + c[0] + " g " + c[1] + " b " + c[2] + " a " + c[3]);
         cw.setColorHSV(243, 1, 1, 1);
         c = cw.getActualColor();
-        Log.e(SnareGame.ENGINE_NAME, "r " + c[0] + " g " + c[1] + " b " + c[2] + " a " + c[3]);
+        Log.e(IGame.ENGINE_NAME, "r " + c[0] + " g " + c[1] + " b " + c[2] + " a " + c[3]);
 
     }
 

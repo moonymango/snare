@@ -95,7 +95,7 @@ public class WeaponParticleEmitter extends BaseDynamicMeshEffect {
     public WeaponParticleEmitter(IGame game, int particleCnt, float particleSize,
                                  float speed, float length)
     {
-        super(createRenderContext(game), new DefaultParticleGenerator(particleCnt), IGame.ClockType.VIRTUAL);
+        super(createRenderContext(game), new DefaultParticleGenerator(game, particleCnt), IGame.ClockType.VIRTUAL);
         
         mSize = particleSize;
         mSpeed = speed;

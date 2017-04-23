@@ -1,7 +1,6 @@
 package com.moonymango.snare.ui.widgets;
 
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.BufferObj;
 import com.moonymango.snare.opengl.BufferObj.IBufferConfigurationSetup;
 import com.moonymango.snare.opengl.BufferObj.IBufferDataProvider;
@@ -145,11 +144,11 @@ public class Rectangle extends BaseTouchWidget implements IBufferDataProvider {
      * @param alignment
      */
     public Rectangle(IGame game, BaseTextureResource texture, TextureObjOptions options,
-            String regionName, PositionAlignment alignment, TouchSetting setting) {
+            String regionName, PositionAlignment alignment, TouchSetting setting)
+    {
         super(game, setting);
         mTextureResource = texture;
-        mTextureOptions = options != null ? options 
-                : SnareGame.get().getSettings().mDefaultTextureOptions;
+        mTextureOptions = options != null ? options : mGame.getSettings().mDefaultTextureOptions;
         
         if (mTextureResource != null) {
             // texture
@@ -161,8 +160,7 @@ public class Rectangle extends BaseTouchWidget implements IBufferDataProvider {
             
             // when using textures, then each rectangle needs it's own
             // VBO due to texture regions, so chose random name
-            final String s = Rectangle.class.getName() + ".vertices_" + 
-                    SnareGame.get().getRandomString();
+            final String s = Rectangle.class.getName() + ".vertices_" + mGame.getRandomString();
             mVertexAttrBufferObjDescr = new GLObjDescriptor(game, s, GLObjType.BUFFER);
             
         } else {
@@ -186,8 +184,7 @@ public class Rectangle extends BaseTouchWidget implements IBufferDataProvider {
      */
     public Rectangle(IGame game, BaseTextureResource texture, TouchSetting setting)
     {
-        this(game, texture, SnareGame.get().getSettings().mDefaultTextureOptions, null,
-                PositionAlignment.CENTERED_XY, setting);
+        this(game, texture, game.getSettings().mDefaultTextureOptions, null, PositionAlignment.CENTERED_XY, setting);
     }
     
     /**

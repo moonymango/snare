@@ -4,7 +4,6 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,7 +60,7 @@ public class TextResource extends BaseResource {
     }
 
     public TextResHandle getHandle() {
-        return (TextResHandle) getHandle(SnareGame.get().getResourceCache());
+        return (TextResHandle) getHandle(mGame.getResourceCache());
     }
     
     

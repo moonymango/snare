@@ -1,19 +1,18 @@
 package com.moonymango.snare.proc;
 
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.util.Geometry;
 
 /**
  * Varies the game's virtual time sinusoidally.
  */
-public class ClockOscillatorProc extends BaseProcess{
-
-    final long mPeriod;
-    final float mAmplitude;
-    float mOriginalTimeFactor;
-    float mProgress;
+public class ClockOscillatorProc extends BaseProcess
+{
+    private final long mPeriod;
+    private final float mAmplitude;
+    private float mOriginalTimeFactor;
+    private float mProgress;
     
     /**
      * @param period Period based on realtime.
@@ -28,7 +27,7 @@ public class ClockOscillatorProc extends BaseProcess{
     
     @Override
     protected void onInit() {
-        mOriginalTimeFactor = SnareGame.get().getVirtualTimeFactor();
+        mOriginalTimeFactor = mGame.getVirtualTimeFactor();
         if (mOriginalTimeFactor - mAmplitude < 0) {
             throw new IllegalStateException("Oscillation will result in negative virtual time.");
         }
@@ -41,7 +40,7 @@ public class ClockOscillatorProc extends BaseProcess{
         mProgress += realDelta;
         final float t = (float) (mAmplitude * Math.sin(Geometry.RAD360 * mProgress / mPeriod)
                 + mOriginalTimeFactor);
-        SnareGame.get().setVirtualTimeFactor(t);
+        mGame.setVirtualTimeFactor(t);
         return true;
     }
 

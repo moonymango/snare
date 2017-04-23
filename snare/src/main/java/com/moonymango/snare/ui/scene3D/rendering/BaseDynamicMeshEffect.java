@@ -1,7 +1,7 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
+import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.BufferObj;
 import com.moonymango.snare.opengl.BufferObj.AttribPointer;
 import com.moonymango.snare.opengl.BufferObj.IBufferConfigurationSetup;
@@ -153,13 +153,13 @@ public abstract class BaseDynamicMeshEffect extends BaseEffect
     }
     
     
-    public static class DefaultParticleGenerator 
-            implements IVertexGenerator
+    public static class DefaultParticleGenerator extends BaseSnareClass implements IVertexGenerator
     {
         private final int mParticleCnt;
-        
-        public DefaultParticleGenerator(int particleCnt) 
+
+        public DefaultParticleGenerator(IGame game, int particleCnt)
         {
+            super(game);
             if (particleCnt < 1) 
                 throw new IllegalArgumentException("Need at least one particle.");
             mParticleCnt = particleCnt;
@@ -181,8 +181,8 @@ public abstract class BaseDynamicMeshEffect extends BaseEffect
             
             for (int i = 0; i < mParticleCnt; i++) {
                 // get z,w for the quads
-                final float z = SnareGame.get().getRandomFloat(0, 1);
-                final float w = SnareGame.get().getRandomFloat(0, 1);
+                final float z = mGame.getRandomFloat(0, 1);
+                final float w = mGame.getRandomFloat(0, 1);
                 
                 // upper left
                 vertexAttribs.put(-1);

@@ -4,7 +4,6 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.res.BaseResHandle;
 import com.moonymango.snare.res.BaseResource;
 import com.moonymango.snare.res.IAssetName;
@@ -71,7 +70,7 @@ public class MeshResource extends BaseResource {
     }
 
     public MeshResHandle getHandle() {
-        return (MeshResHandle) getHandle(SnareGame.get().getResourceCache());
+        return (MeshResHandle) getHandle(mGame.getResourceCache());
     }
     
     /** Transformation operation performed during mesh import. */

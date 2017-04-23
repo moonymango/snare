@@ -47,12 +47,6 @@ public abstract class BaseGameActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        SnareGame.dispose();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         mGame.getSurfaceView().onPause();

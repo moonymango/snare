@@ -26,7 +26,6 @@ import com.moonymango.snare.events.ITouchEvent;
 import com.moonymango.snare.game.BaseGameView;
 import com.moonymango.snare.game.GameSettings;
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.ui.widgets.BaseTouchWidget.TouchSetting;
 import com.moonymango.snare.ui.widgets.BaseWidget.PositionAlignment;
 import com.moonymango.snare.ui.widgets.Text;
@@ -174,7 +173,7 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
         if (!mIsInitialized) {
             return false;
         }
-        if (SnareGame.get().getSettings().INPUT_EVENT_MASK.SCALE_ENABLED) {
+        if (mGame.getSettings().INPUT_EVENT_MASK.SCALE_ENABLED) {
             mSGDetector.onTouchEvent(event);
         }
 
@@ -274,10 +273,10 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
         }
         
         // register events
-        SnareGame.get().getEventManager().addListener(ITouchEvent.EVENT_TYPE, this);
+        mGame.getEventManager().addListener(ITouchEvent.EVENT_TYPE, this);
         
         // load system font and set up debug text field
-        final BaseFont font = SnareGame.get().getSystemFont();
+        final BaseFont font = mGame.getSystemFont();
         if (font != null) {
             mDebugStrings = new RingBuffer<String>(DEBUG_PRINT_LINES);
             mDebugText = new Text(font, null, PositionAlignment.LEFT_X_TOP_Y, TouchSetting.NOT_TOUCHABLE, 256);
@@ -287,12 +286,12 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
             mDebugText.onAttachToScreen(this, mScreenWidth, mScreenHeight);
         }
         
-        final Handler h = new Handler(SnareGame.get().getApplication().getMainLooper());
+        final Handler h = new Handler(mGame.getApplication().getMainLooper());
 
         // gesture detectors
-        mSGDetector = new ScaleGestureDetector(SnareGame.get().getApplication(), this, h);
+        mSGDetector = new ScaleGestureDetector(mGame.getApplication(), this, h);
 
-        mGDetector = new GestureDetector(SnareGame.get().getApplication(), this, h);
+        mGDetector = new GestureDetector(mGame.getApplication(), this, h);
         mGDetector.setIsLongpressEnabled(false); // longpress not useful for games
         mGDetector.setOnDoubleTapListener(this);
         
@@ -307,7 +306,7 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
             mScreenElems.get(i).onDetachFromScreen();
         }
     
-        SnareGame.get().getEventManager().removeListener(ITouchEvent.EVENT_TYPE, this);
+        mGame.getEventManager().removeListener(ITouchEvent.EVENT_TYPE, this);
                 
         if (mDebugText != null) {
             mDebugStrings = null;
@@ -349,7 +348,7 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
             return false;
         }*/
         
-        final GameSettings s = SnareGame.get().getSettings();
+        final GameSettings s = mGame.getSettings();
         if (keyCode == KeyEvent.KEYCODE_BACK 
                 && !s.mCustomBackButton) {
             // let activity do default action
@@ -366,7 +365,7 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
             return false;
         }
         
-        final EventManager em = SnareGame.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         final IKeyEvent e = em.obtain(IKeyEvent.EVENT_TYPE);
         e.setKeyData(keyCode, event.getAction());
         em.queueEvent(e);
@@ -380,10 +379,10 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
      */
     public boolean onScale(ScaleGestureDetector detector) {
         
-        if (!SnareGame.get().getSettings().INPUT_EVENT_MASK.SCALE_ENABLED) {
+        if (!mGame.getSettings().INPUT_EVENT_MASK.SCALE_ENABLED) {
             return true;
         }
-        final EventManager em = SnareGame.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         final IScaleEvent ev = em.obtain(IScaleEvent.EVENT_TYPE);
         ev.setScaleData(detector.getScaleFactor(), !mScaleInProgress);
         em.queueEvent(ev);
@@ -393,7 +392,7 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
     }
     
     public boolean onScaleBegin(ScaleGestureDetector detector) {
-        return SnareGame.get().getSettings().INPUT_EVENT_MASK.SCALE_ENABLED;
+        return mGame.getSettings().INPUT_EVENT_MASK.SCALE_ENABLED;
     }
 
     public void onScaleEnd(ScaleGestureDetector detector) {
@@ -405,11 +404,11 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
      * {@link ITouchEvent}.
      */
     public boolean onDown(MotionEvent e) {
-        if (!SnareGame.get().getSettings().INPUT_EVENT_MASK.DOWN_ENABLED) {
+        if (!mGame.getSettings().INPUT_EVENT_MASK.DOWN_ENABLED) {
             // other GestureListener callbacks don't fire, if we return false here
             return true;
         }
-        final EventManager em = SnareGame.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         final ITouchEvent ev = em.obtain(ITouchEvent.EVENT_TYPE);
         ev.setTouchData(TouchAction.DOWN, (int) e.getX(), 
                 mScreenHeight - (int) e.getY());
@@ -425,10 +424,10 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
      */
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
             float velocityY) {
-        if (!SnareGame.get().getSettings().INPUT_EVENT_MASK.FLING_ENABLED) {
+        if (!mGame.getSettings().INPUT_EVENT_MASK.FLING_ENABLED) {
             return false;
         }
-        final EventManager em = SnareGame.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         final IFlingEvent ev = em.obtain(IFlingEvent.EVENT_TYPE);
         ev.setFlingData((int) e1.getX(), mScreenHeight - (int) e1.getY(), 
                 velocityX, velocityY);
@@ -447,10 +446,10 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
      */
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
             float distanceY) {
-        if (!SnareGame.get().getSettings().INPUT_EVENT_MASK.SCROLL_ENABLED) {
+        if (!mGame.getSettings().INPUT_EVENT_MASK.SCROLL_ENABLED) {
             return false;
         }
-        final EventManager em = SnareGame.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         final IScrollEvent ev = em.obtain(IScrollEvent.EVENT_TYPE);
         ev.setScrollData((int) e1.getX(), mScreenHeight - (int) e1.getY(), 
                 distanceX, distanceY);
@@ -464,10 +463,10 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
      * {@link ITouchEvent}.
      */
     public void onShowPress(MotionEvent e) {
-        if (!SnareGame.get().getSettings().INPUT_EVENT_MASK.SHOW_PRESS_ENABLED) {
+        if (!mGame.getSettings().INPUT_EVENT_MASK.SHOW_PRESS_ENABLED) {
             return;
         }
-        final EventManager em = SnareGame.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         final ITouchEvent ev = em.obtain(ITouchEvent.EVENT_TYPE);
         ev.setTouchData(TouchAction.SHOW_PRESS, (int) e.getX(), 
                 mScreenHeight - (int) e.getY());
@@ -479,10 +478,10 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
      * {@link ITouchEvent}.
      */
     public boolean onSingleTapUp(MotionEvent e) {
-        if (!SnareGame.get().getSettings().INPUT_EVENT_MASK.SINGLE_TAP_UP_ENABLED) {
+        if (!mGame.getSettings().INPUT_EVENT_MASK.SINGLE_TAP_UP_ENABLED) {
             return false;
         }
-        final EventManager em = SnareGame.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         final ITouchEvent ev = em.obtain(ITouchEvent.EVENT_TYPE);
         ev.setTouchData(TouchAction.SINGLE_TAB_UP, (int) e.getX(), 
                 mScreenHeight - (int) e.getY());
@@ -496,10 +495,10 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
      * {@link ITouchEvent}.
      */
     public boolean onDoubleTap(MotionEvent e) {
-        if (!SnareGame.get().getSettings().INPUT_EVENT_MASK.DOUBLE_TAP_ENABLED) {
+        if (!mGame.getSettings().INPUT_EVENT_MASK.DOUBLE_TAP_ENABLED) {
             return false;
         }
-        final EventManager em = SnareGame.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         final ITouchEvent ev = em.obtain(ITouchEvent.EVENT_TYPE); 
         ev.setTouchData(TouchAction.DOUBLE_TAB, (int) e.getX(), 
                 mScreenHeight - (int) e.getY());
@@ -517,10 +516,10 @@ public class PlayerGameView extends BaseGameView implements IEventListener,
      * {@link ITouchEvent}.
      */
     public boolean onSingleTapConfirmed(MotionEvent e) {
-        if (!SnareGame.get().getSettings().INPUT_EVENT_MASK.SINGLE_TAP_ENABLED) {
+        if (!mGame.getSettings().INPUT_EVENT_MASK.SINGLE_TAP_ENABLED) {
             return false;
         }
-        final EventManager em = SnareGame.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         final ITouchEvent ev = em.obtain(ITouchEvent.EVENT_TYPE); 
         ev.setTouchData(TouchAction.SINGLE_TAB, (int) e.getX(), 
                 mScreenHeight - (int) e.getY());

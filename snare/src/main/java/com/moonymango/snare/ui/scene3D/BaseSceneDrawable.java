@@ -1,8 +1,10 @@
 package com.moonymango.snare.ui.scene3D;
 
+import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
 import com.moonymango.snare.game.GameObj.IComponent;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.ui.scene3D.BaseEffect.RenderContext;
 import com.moonymango.snare.ui.scene3D.Scene3D.DrawBundle;
 
@@ -16,7 +18,7 @@ import com.moonymango.snare.ui.scene3D.Scene3D.DrawBundle;
  * will be used by the scene to group everything by {@link RenderPass} and 
  * {@link RenderContext}. 
  */
-public abstract class BaseSceneDrawable implements IComponent {
+public abstract class BaseSceneDrawable extends BaseSnareClass implements IComponent {
 
     protected GameObj mGameObj;
     protected boolean mIsVisible = true;
@@ -30,7 +32,9 @@ public abstract class BaseSceneDrawable implements IComponent {
     
     private DrawBundle[] mBundle = new DrawBundle[Scene3D.MAX_CTX_PER_DRAWABLE];
 
-    public BaseSceneDrawable(RenderPass pass) {
+    public BaseSceneDrawable(IGame game, RenderPass pass)
+    {
+        super(game);
         mRenderPass = pass;
         // create bundles
         for (int i = 0; i < mBundle.length; i++) {

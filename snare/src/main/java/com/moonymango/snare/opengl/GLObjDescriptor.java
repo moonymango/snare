@@ -1,7 +1,6 @@
 package com.moonymango.snare.opengl;
 
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.util.CacheItemDescriptor;
 import com.moonymango.snare.util.Logger;
 import com.moonymango.snare.util.Logger.LogSource;
@@ -19,7 +18,7 @@ public class GLObjDescriptor extends CacheItemDescriptor<GLObjCache, GLObjDescri
     }
 
     public BaseGLObj getHandle() {
-        return getHandle(SnareGame.get().getGLObjCache());
+        return getHandle(mGame.getGLObjCache());
     }
    
     @Override

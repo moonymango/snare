@@ -1,8 +1,8 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
+import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.BufferObj.AttribPointer;
 import com.moonymango.snare.opengl.GLState;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
@@ -136,7 +136,7 @@ public class LightningBolt extends BaseDynamicMeshEffect {
      */
     public LightningBolt(IGame game, IBoltPointGenerator gen, int shrinkF)
     {
-        super(createRenderContext(game), new BoltVertexGenerator(gen),
+        super(createRenderContext(game), new BoltVertexGenerator(game, gen),
                 IGame.ClockType.VIRTUAL);
         mGen = gen;   
         mSegEnd = getNumSegments()-1;
@@ -346,11 +346,13 @@ public class LightningBolt extends BaseDynamicMeshEffect {
      * bolt's base points is given by an implementation of
      * {@link IBoltPointGenerator}.
      */
-    private static class BoltVertexGenerator implements IVertexGenerator
+    private static class BoltVertexGenerator extends BaseSnareClass implements IVertexGenerator
     {
         private final IBoltPointGenerator mGen;
         
-        private BoltVertexGenerator(IBoltPointGenerator gen) {
+        private BoltVertexGenerator(IGame game, IBoltPointGenerator gen)
+        {
+            super(game);
             mGen = gen;
         }
         
@@ -393,7 +395,7 @@ public class LightningBolt extends BaseDynamicMeshEffect {
             for (int i = 0; i < bp; i++)
             {
                 mGen.getPointData(i, coords);
-                final float rand = SnareGame.get().getRandomFloat(Geometry.RAD90,
+                final float rand = mGame.getRandomFloat(Geometry.RAD90,
                         Geometry.RAD360);
                 // positive offset
                 vertexAttribs.put(coords[0]);

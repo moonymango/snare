@@ -1,6 +1,5 @@
 package com.moonymango.snare.game;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
@@ -54,42 +53,14 @@ import java.util.Random;
  * 
  * TODO prioB: set UncaughtExceptionHandler
  */
-public final class SnareGame implements IGame
+final class SnareGame implements IGame
 {
-    
-    //---------------------------------------------------------
-    // static
-    //---------------------------------------------------------
-    
-    /*static {    
-        System.loadLibrary("snare");
-    }*/
-    
-    public static final String ENGINE_NAME = "snare";
-    public static final String DELIMITER = ".";
-
-    // game instance is bound to an activity and vice versa,
-    // when activity gets destroyed the game instance gets released,
-    // static reference for easy access to game instance
-    @SuppressLint("StaticFieldLeak")
-    private static SnareGame sInstance = null;
-
-
-    
-    public static IGame get() {
-        return sInstance;
-    }
-
-    public static void dispose() {
-        sInstance = null;
-    }
-    
     // ---------------------------------------------------------
     // fields
     // ---------------------------------------------------------
     private final String mName;
     private final EventManager mEventManager;
-    private final ResourceCache mRessourceCache;
+    private final ResourceCache mResourceCache;
     private final SnareAudioManager mAudioManager;
     private final BaseGameActivity mActivity;
     private final IPhysics mPhysics;
@@ -103,10 +74,10 @@ public final class SnareGame implements IGame
     private final Random mRandom = new Random();
     private final RandomString mRandomStringGen;
     
-    private final ArrayList<GameObj> mObjectsList = new ArrayList<GameObj>();
-    private final SparseArray<GameObj> mObjects = new SparseArray<GameObj>();
-    private final ArrayList<BaseGameView> mViewsList = new ArrayList<BaseGameView>();
-    private final SparseArray<BaseGameView> mViews = new SparseArray<BaseGameView>();
+    private final ArrayList<GameObj> mObjectsList = new ArrayList<>();
+    private final SparseArray<GameObj> mObjects = new SparseArray<>();
+    private final ArrayList<BaseGameView> mViewsList = new ArrayList<>();
+    private final SparseArray<BaseGameView> mViews = new SparseArray<>();
     
     private IGameState mGameState;
     private IGameState mPrevGameState;
@@ -127,19 +98,12 @@ public final class SnareGame implements IGame
     private GameThread mGameThread;
     private boolean mInitDone = false;
     private boolean mIsDrawing;
-    protected float mDummy;
-    
+
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
-    public SnareGame(BaseGameActivity activity) {
-
-        final Application app = activity.getApplication();
-
-
-        sInstance = this;
-
-
+    SnareGame(BaseGameActivity activity)
+    {
         mName =  activity.getName();
         mActivity = activity;
         mSettings = activity.onLoadGameSettings(this);
@@ -148,7 +112,8 @@ public final class SnareGame implements IGame
         mEventManager =  activity.onLoadEventManager(this);
         mPhysics = activity.onLoadPhysics(this);
 
-        mRessourceCache = new ResourceCache(this, mSettings.RESOURCE_CACHE_THRESHOLD, app);
+        final Application app = activity.getApplication();
+        mResourceCache = new ResourceCache(this, mSettings.RESOURCE_CACHE_THRESHOLD, app);
         mGLObjCache = new GLObjCache(this);
         mAudioManager = new SnareAudioManager(mSettings.SOUND_MAX_STREAMS, app);
         mVibrator = (Vibrator) app.getSystemService(Context.VIBRATOR_SERVICE);
@@ -221,7 +186,7 @@ public final class SnareGame implements IGame
     public void onResume() {
         mLastMeasuredTime = SystemClock.elapsedRealtime();
         mAudioManager.onResume();    // create new SoundPool
-        mRessourceCache.onResume();  // load sound resources to new pool
+        mResourceCache.onResume();  // load sound resources to new pool
         
         if (mSettings.MULTI_THREADED && mGameThread == null) {
             // configured for multi threading and no game thread available
@@ -246,7 +211,7 @@ public final class SnareGame implements IGame
         
         // release sound resources
         mAudioManager.onPause(); 
-        mRessourceCache.onPause();
+        mResourceCache.onPause();
     }
     
     @Override
@@ -254,7 +219,7 @@ public final class SnareGame implements IGame
     @Override
     public EventManager getEventManager()       {return mEventManager;}
     @Override
-    public ResourceCache getResourceCache()     {return mRessourceCache;}
+    public ResourceCache getResourceCache()     {return mResourceCache;}
     @Override
     public SnareAudioManager getAudioManager()  {return mAudioManager;}
     @Override
@@ -573,9 +538,9 @@ public final class SnareGame implements IGame
     
     private void dummyLoad() {
         // artificial processor load for debugging purposes
-        mDummy = getRandomFloat(0, 10000);
+        float mDummy = getRandomFloat(0, 10000);
         for (int i = mSettings.mDummyLoops; i >= 0; i--) {
-            mDummy = (int) (mDummy < 200000 ? mDummy*3.5f : mDummy/2.78f);
+            mDummy = (int) (mDummy < 200000 ? mDummy *3.5f : mDummy /2.78f);
         }
     }
     
@@ -583,8 +548,8 @@ public final class SnareGame implements IGame
         final float fps = mRenderer.getFPS();
         
         if (fps != mLastFPS) {
-            final int resCacheHandles = mRessourceCache.getHandlesCnt();
-            final int resCacheItems = mRessourceCache.getItemCnt();
+            final int resCacheHandles = mResourceCache.getHandlesCnt();
+            final int resCacheItems = mResourceCache.getItemCnt();
             final int glCacheHandles = mGLObjCache.getHandlesCnt();
             final int glCacheItems = mGLObjCache.getItemCnt();
             final int gameObjCnt = mObjectsList.size();

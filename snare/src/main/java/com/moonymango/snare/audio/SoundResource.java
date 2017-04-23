@@ -4,7 +4,6 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.res.BaseResHandle;
 import com.moonymango.snare.res.BaseResource;
 import com.moonymango.snare.res.IAssetName;
@@ -20,8 +19,8 @@ public class SoundResource extends BaseResource {
     @Override
     protected BaseResHandle createHandleByAsset(AssetManager am) {
         try {
-            return new SoundHandle(this, SnareGame.get().getAudioManager(),
-                    SnareGame.get().getSettings().mDefaultSoundFXVolume);
+            return new SoundHandle(this, mGame.getAudioManager(),
+                    mGame.getSettings().mDefaultSoundFXVolume);
         } catch (IOException e) {
             return null;
         }
@@ -34,7 +33,7 @@ public class SoundResource extends BaseResource {
     }
     
     public SoundHandle getHandle() {
-        return (SoundHandle) getHandle(SnareGame.get().getResourceCache());
+        return (SoundHandle) getHandle(mGame.getResourceCache());
     }
 
 }

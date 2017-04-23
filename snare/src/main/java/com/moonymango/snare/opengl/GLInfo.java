@@ -1,35 +1,29 @@
 package com.moonymango.snare.opengl;
 
-import static android.opengl.GLES20.*;
 import android.opengl.ETC1Util;
 
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.util.Logger;
 import com.moonymango.snare.util.Logger.LogSource;
 
+import static android.opengl.GLES20.GL_ALIASED_LINE_WIDTH_RANGE;
+import static android.opengl.GLES20.GL_ALIASED_POINT_SIZE_RANGE;
+import static android.opengl.GLES20.GL_EXTENSIONS;
+import static android.opengl.GLES20.GL_MAX_FRAGMENT_UNIFORM_VECTORS;
+import static android.opengl.GLES20.GL_MAX_RENDERBUFFER_SIZE;
+import static android.opengl.GLES20.GL_MAX_TEXTURE_IMAGE_UNITS;
+import static android.opengl.GLES20.GL_MAX_TEXTURE_SIZE;
+import static android.opengl.GLES20.GL_MAX_VARYING_VECTORS;
+import static android.opengl.GLES20.GL_MAX_VERTEX_ATTRIBS;
+import static android.opengl.GLES20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS;
+import static android.opengl.GLES20.GL_MAX_VERTEX_UNIFORM_VECTORS;
+import static android.opengl.GLES20.GL_SHADING_LANGUAGE_VERSION;
+import static android.opengl.GLES20.glGetFloatv;
+import static android.opengl.GLES20.glGetIntegerv;
+import static android.opengl.GLES20.glGetString;
 
-public class GLInfo {
-    
-    public static void checkGlErrors()
-    {
-        final RenderOptions ro = SnareGame.get().getSettings().RENDER_OPTIONS;
-        int e = glGetError();
-        if (e != GL_NO_ERROR && ro.THROW_ON_GL_ERROR) {
-            throw new IllegalStateException("GL error: 0x" 
-                    + Integer.toHexString(e));
-        }
-    }
-    
-    public static void checkGlErrors(int parameter)
-    {
-        final RenderOptions ro = SnareGame.get().getSettings().RENDER_OPTIONS;
-        int e = glGetError();
-        if (e != GL_NO_ERROR && ro.THROW_ON_GL_ERROR) {
-            throw new IllegalStateException("GL error: 0x" 
-                    + Integer.toHexString(e) + " for parameter " + parameter);
-        }
-    }
-    
+
+public class GLInfo
+{
     private int MAX_VERTEX_ATTRIBUTES;
     private int MAX_VERTEX_UNIFORM_VECTORS;
     private int MAX_VARYING_VECTORS;

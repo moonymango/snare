@@ -6,7 +6,6 @@ import com.moonymango.snare.events.IScrollEvent;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 
 public class ScrollLogicComponent extends BaseComponent implements
         IEventListener {
@@ -20,13 +19,15 @@ public class ScrollLogicComponent extends BaseComponent implements
     }
     
     @Override
-    public void onInit() {
-        SnareGame.get().getEventManager().addListener(IScrollEvent.EVENT_TYPE, this);
+    public void onInit()
+    {
+        mGame.getEventManager().addListener(IScrollEvent.EVENT_TYPE, this);
     }
 
     @Override
-    public void onShutdown() {
-        SnareGame.get().getEventManager().removeListener(IScrollEvent.EVENT_TYPE, this);
+    public void onShutdown()
+    {
+        mGame.getEventManager().removeListener(IScrollEvent.EVENT_TYPE, this);
     }
 
     public boolean handleEvent(IEvent event) {

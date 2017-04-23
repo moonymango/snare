@@ -3,7 +3,6 @@ package com.moonymango.snare.ui.scene3D.mesh;
 import android.opengl.GLES20;
 
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.TextureObjOptions;
 import com.moonymango.snare.res.texture.BaseTextureResource;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
@@ -31,7 +30,7 @@ public class GridMesh extends BaseMesh {
      * @param z Number of squares in z dimension.
      */
     public GridMesh(IGame game, int x, int z) {
-        super(game, GridMesh.class.getName() + SnareGame.DELIMITER + x + SnareGame.DELIMITER + z, false, false);
+        super(game, GridMesh.class.getName() + IGame.DELIMITER + x + IGame.DELIMITER + z, false, false);
         mXLines = x + 1;
         mZLines = z + 1;
         mMaxX = mSquare * x /2;

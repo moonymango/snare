@@ -6,7 +6,6 @@ import com.moonymango.snare.events.IGameObjTouchEvent;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.ui.TouchAction;
 
 public class TouchLogicComponent extends BaseComponent implements IEventListener {
@@ -20,13 +19,13 @@ public class TouchLogicComponent extends BaseComponent implements IEventListener
 
     @Override
     public void onInit() {
-        SnareGame.get().getEventManager().addListener(IGameObjTouchEvent.EVENT_TYPE, this);
+        mGame.getEventManager().addListener(IGameObjTouchEvent.EVENT_TYPE, this);
         
     }
 
     @Override
     public void onShutdown() {
-        SnareGame.get().getEventManager().removeListener(IGameObjTouchEvent.EVENT_TYPE, this);
+        mGame.getEventManager().removeListener(IGameObjTouchEvent.EVENT_TYPE, this);
     }
     
     public boolean handleEvent(IEvent event) {

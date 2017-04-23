@@ -5,7 +5,6 @@ import com.moonymango.snare.events.ITouchEvent;
 import com.moonymango.snare.events.IWidgetTouchedBeginEvent;
 import com.moonymango.snare.events.IWidgetTouchedEndEvent;
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.proc.ProcessManager.IOnProcessKilledListener;
 import com.moonymango.snare.ui.TouchAction;
@@ -92,13 +91,13 @@ public abstract class BaseTouchWidget extends BaseWidget implements IOnProcessKi
             mRunsClickAnimation = true;
             mClickAnimation.run();
             // send event 
-        	final EventManager em = SnareGame.get().getEventManager();
+        	final EventManager em = mGame.getEventManager();
         	final IWidgetTouchedBeginEvent evt = em.obtain(IWidgetTouchedBeginEvent.EVENT_TYPE);
         	evt.setWidgetData(this);
         	em.queueEvent(evt);
         } else {
         	// no animation, send end event immediately
-        	final EventManager em = SnareGame.get().getEventManager();
+        	final EventManager em = mGame.getEventManager();
         	final IWidgetTouchedEndEvent evt = em.obtain(IWidgetTouchedEndEvent.EVENT_TYPE);
         	evt.setWidgetData(this);
         	em.queueEvent(evt);        	
@@ -113,7 +112,7 @@ public abstract class BaseTouchWidget extends BaseWidget implements IOnProcessKi
         mRunsClickAnimation = false;
         
         // send end event
-        final EventManager em = SnareGame.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
     	final IWidgetTouchedEndEvent evt = em.obtain(IWidgetTouchedEndEvent.EVENT_TYPE);
     	evt.setWidgetData(this);
     	em.queueEvent(evt);   

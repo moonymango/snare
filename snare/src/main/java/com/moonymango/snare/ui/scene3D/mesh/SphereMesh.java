@@ -3,7 +3,6 @@ package com.moonymango.snare.ui.scene3D.mesh;
 import android.opengl.GLES20;
 
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
 import com.moonymango.snare.util.Geometry;
 import com.moonymango.snare.util.VectorAF;
@@ -35,10 +34,10 @@ public class SphereMesh extends BaseMesh {
     private static String buildName(int numRings, int numSegments, int startRing, int endRing,
                                     int startSegment, int endSegment)
     {
-        return SphereMesh.class.getName() + SnareGame.DELIMITER + numRings
-                + SnareGame.DELIMITER + numSegments + SnareGame.DELIMITER
-                + startRing + SnareGame.DELIMITER + endRing + SnareGame.DELIMITER
-                + startSegment + SnareGame.DELIMITER + endSegment;
+        return SphereMesh.class.getName() + IGame.DELIMITER + numRings
+                + IGame.DELIMITER + numSegments + IGame.DELIMITER
+                + startRing + IGame.DELIMITER + endRing + IGame.DELIMITER
+                + startSegment + IGame.DELIMITER + endSegment;
     }
 
     /**

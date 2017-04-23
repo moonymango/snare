@@ -1,8 +1,8 @@
 package com.moonymango.snare.game;
 
 /**
- * Base class for other classes.
- * Provides a reference to the game instance.
+ * Provides a reference to the game instance, so everything that needs access to {@link IGame} should be
+ * derived from this class.
  */
 
 public class BaseSnareClass
@@ -11,6 +11,8 @@ public class BaseSnareClass
 
     public BaseSnareClass(IGame game)
     {
+        if (game == null)
+            throw new IllegalArgumentException("game reference must not be null");
         mGame = game;
     }
 

@@ -1,6 +1,5 @@
 package com.moonymango.snare.ui.widgets;
 
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.BufferObj;
 import com.moonymango.snare.opengl.BufferObj.IBufferConfigurationSetup;
 import com.moonymango.snare.opengl.BufferObj.IBufferDataProvider;
@@ -180,7 +179,7 @@ public class Text extends BaseTouchWidget implements IBufferDataProvider {
         // GL buffer objects (vertex buffer is unique to each instance
         // because they probably contain different text. Index buffer is
         // global.
-        final String s = SnareGame.get().getRandomString();
+        final String s = mGame.getRandomString();
         mVertexAttrBufferObjDescr = new GLObjDescriptor(mGame, Text.class.getName() +".vertices_" + s, GLObjType.BUFFER);
         mIndexBufferObjDescr = new GLObjDescriptor(mGame, Text.class.getName() + ".indices", GLObjType.BUFFER);
 

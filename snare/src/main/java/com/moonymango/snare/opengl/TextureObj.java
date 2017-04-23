@@ -1,6 +1,5 @@
 package com.moonymango.snare.opengl;
 
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.GLObjDescriptor.GLObjType;
 import com.moonymango.snare.res.texture.BaseTextureResHandle;
 import com.moonymango.snare.res.texture.BaseTextureResource;
@@ -35,8 +34,7 @@ public class TextureObj extends BaseGLObj  {
             throw new IllegalArgumentException("Missing texture resource.");
         }
         mTextureResource = texture;
-        mOptions = options != null ? options : 
-                SnareGame.get().getSettings().mDefaultTextureOptions;
+        mOptions = options != null ? options : mGame.getSettings().mDefaultTextureOptions;
         
         setState(GLObjState.TO_LOAD);
     }
@@ -50,13 +48,12 @@ public class TextureObj extends BaseGLObj  {
         if (isConfigured()) {
             throw new IllegalStateException("Already configured.");
         }
-        final int maxSize = SnareGame.get().getRenderer().getInfo().getMaxTextureSize();
+        final int maxSize = mGame.getRenderer().getInfo().getMaxTextureSize();
         if (size.value() > maxSize) {
             throw new IllegalStateException("Unsupported texture size.");
         }
         mSize = size;
-        mOptions = options != null ? options : 
-            SnareGame.get().getSettings().mDefaultTextureOptions;
+        mOptions = options != null ? options : mGame.getSettings().mDefaultTextureOptions;
         
         setState(GLObjState.TO_LOAD);
     }

@@ -2,7 +2,6 @@ package com.moonymango.snare.proc;
 
 import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.IGame.ClockType;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.util.PoolItem;
 
 import java.util.ArrayList;
@@ -215,7 +214,7 @@ public class ProcessManager {
          */
         public void run() {
             if (isDead()) {
-                SnareGame.get().getProcManager().attach(this);
+                mGame.getProcManager().attach(this);
             }
         }
         

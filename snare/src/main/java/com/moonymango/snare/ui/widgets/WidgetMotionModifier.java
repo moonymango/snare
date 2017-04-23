@@ -1,7 +1,6 @@
 package com.moonymango.snare.ui.widgets;
 
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.proc.ProcessManager.IOnProcessKilledListener;
 import com.moonymango.snare.proc.ProcessManager.ProcState;
@@ -112,7 +111,8 @@ public class WidgetMotionModifier extends BaseProcess {
      * doesn't keep a reference to this, so a single instance can be used to
      * configure multiple modifiers.
      */
-    public static class MotionSettings {
+    public static class MotionSettings
+    {
         /** Widget to move */
         public IPositionable2D widget;
         /** Easing function used for motion (Default = LINEAR) */
@@ -155,14 +155,14 @@ public class WidgetMotionModifier extends BaseProcess {
          * (default = false)
          */
         public boolean addToViewBeforeMotion = false;
-        /** View to add widget to. (default = game primary view) */
-        public PlayerGameView view = SnareGame.get().getPrimaryView();
+        /** View to add widget to. */
+        public PlayerGameView view;
         /** 
          * Remove widget from its view after motion is finished. 
          * default = false 
          */
         public boolean removeFromViewAfterMotion = false;
-        
+
         public void copy(MotionSettings other) {
             addToViewBeforeMotion = other.addToViewBeforeMotion;
             duration = other.duration;

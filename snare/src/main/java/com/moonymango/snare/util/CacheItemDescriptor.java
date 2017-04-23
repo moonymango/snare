@@ -2,7 +2,6 @@ package com.moonymango.snare.util;
 
 import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 
 public abstract class CacheItemDescriptor<C extends Cache<C,D,I>, D extends CacheItemDescriptor<C,D,I>, I extends CacheItem<C,D,I>>
     extends BaseSnareClass
@@ -36,7 +35,7 @@ public abstract class CacheItemDescriptor<C extends Cache<C,D,I>, D extends Cach
         mName = name;
         if (qualifier != null) {
             mQualifier = qualifier;
-            mQName = name + SnareGame.DELIMITER + mQualifier;
+            mQName = name + IGame.DELIMITER + mQualifier;
         } else {
             mQualifier = null;
             mQName = name;

@@ -1,5 +1,6 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.ui.scene3D.BaseSceneDrawable;
 import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Scene3D;
@@ -24,8 +25,9 @@ public class OffsetSceneDrawable extends BaseSceneDrawable {
     private final float[] mTmpVec = new float[4];
     private final float[] mTmpMat = new float[16];
     
-    public OffsetSceneDrawable(RenderPass rp) {
-        super(rp);
+    public OffsetSceneDrawable(IGame game, RenderPass rp)
+    {
+        super(game, rp);
         MatrixAF.setIdentityM(mRotScaleMatrix, 0);
     }
     

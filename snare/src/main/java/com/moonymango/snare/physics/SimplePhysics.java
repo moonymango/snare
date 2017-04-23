@@ -12,7 +12,6 @@ import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
 import com.moonymango.snare.game.GameObj.GameObjLayer;
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.physics.BaseBoundingVolume.IntersectionDistance;
 import com.moonymango.snare.physics.BaseBoundingVolume.VolumeType;
 import com.moonymango.snare.util.Pool;
@@ -58,9 +57,10 @@ public class SimplePhysics extends BaseSnareClass implements IPhysics {
         mCollisionChecking = enable;
     }
 
-    public void onInit() {
-        SnareGame.get().getEventManager().addListener(IGameObjNewEvent.EVENT_TYPE, this);
-        SnareGame.get().getEventManager().addListener(IGameObjDestroyEvent.EVENT_TYPE, this);
+    public void onInit()
+    {
+        mGame.getEventManager().addListener(IGameObjNewEvent.EVENT_TYPE, this);
+        mGame.getEventManager().addListener(IGameObjDestroyEvent.EVENT_TYPE, this);
     }
 
     public void tick(long realTime, float realDelta, float virtualDelta) {
@@ -109,7 +109,7 @@ public class SimplePhysics extends BaseSnareClass implements IPhysics {
             final ICollisionPair p = mCurrentIterator.get(i);
             if (mPreviousCollisions.get(p.hashCode()) == null) {
                 // new collision, send collision event
-                final EventManager em = SnareGame.get().getEventManager();
+                final EventManager em = mGame.getEventManager();
                 IGameObjCollisionEvent e = em.obtain(IGameObjCollisionEvent.EVENT_TYPE);
                 final float[] cp = p.getCollisionPoint();
                 e.setGameObjData(p.getObjIdA(), p.getObjIdB(), cp[0], cp[1], cp[2]);

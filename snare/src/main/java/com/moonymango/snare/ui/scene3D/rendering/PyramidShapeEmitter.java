@@ -2,7 +2,6 @@ package com.moonymango.snare.ui.scene3D.rendering;
 
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.BufferObj.AttribPointer;
 import com.moonymango.snare.opengl.GLState;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
@@ -135,8 +134,7 @@ public class PyramidShapeEmitter extends BaseDynamicMeshEffect {
      
     private static RenderContext createRenderContext(IGame game, Channel c)
     {    
-        final String name = PyramidShapeEmitter.class.getName() + SnareGame.DELIMITER
-                + c.toString();
+        final String name = PyramidShapeEmitter.class.getName() + IGame.DELIMITER + c.toString();
         String fs;
         switch(c) {
         case R: fs = FRAGMENT_SHADER.replaceAll(CHANNEL, "shape.r");
@@ -181,7 +179,7 @@ public class PyramidShapeEmitter extends BaseDynamicMeshEffect {
     public PyramidShapeEmitter(IGame game, int paricleCnt, Channel shapeChannel, IGame.ClockType clock)
     {
         super(createRenderContext(game, shapeChannel),
-                new DefaultParticleGenerator(paricleCnt), clock);
+                new DefaultParticleGenerator(game, paricleCnt), clock);
         
         // use default particle buffer and pointer
         mGen = (DefaultParticleGenerator) getGenerator();

@@ -7,11 +7,11 @@ import com.moonymango.snare.events.IGameObjDestroyEvent;
 import com.moonymango.snare.events.IGameObjNewEvent;
 import com.moonymango.snare.events.IGameObjTouchEvent;
 import com.moonymango.snare.events.ITouchEvent;
+import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
 import com.moonymango.snare.game.GameObj.GameObjLayer;
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.physics.Raycast;
 import com.moonymango.snare.ui.IScreenElement;
 import com.moonymango.snare.ui.PlayerGameView;
@@ -35,7 +35,7 @@ import java.util.Collections;
  * context or material and performs a render context switch or binds the
  * necessary textures.
  */
-public class Scene3D implements IScreenElement, IEventListener {
+public class Scene3D extends BaseSnareClass implements IScreenElement, IEventListener {
     
     /** Max. number of render contexts per drawable. */
     public static final int MAX_CTX_PER_DRAWABLE = 3;
@@ -60,9 +60,10 @@ public class Scene3D implements IScreenElement, IEventListener {
     /**
      * Constructs scene using default layer mask.
      */
-    public Scene3D() {
-        this(SnareGame.get().getSettings().SCENE_OPTIONS.DEFAULT_LAYER_MASK,
-                SnareGame.get().getSettings().SCENE_OPTIONS.SCENE_MATRIX_STACK_SIZE);
+    public Scene3D(IGame game)
+    {
+        this(game, game.getSettings().SCENE_OPTIONS.DEFAULT_LAYER_MASK,
+                game.getSettings().SCENE_OPTIONS.SCENE_MATRIX_STACK_SIZE);
     }
     
     /**
@@ -70,11 +71,13 @@ public class Scene3D implements IScreenElement, IEventListener {
      * mask will be added to the scene and be considered by touch event raycasts.  
      * @param layerMask
      */
-    public Scene3D(GameObjLayer layerMask) {
-        this(layerMask, SnareGame.get().getSettings().SCENE_OPTIONS.SCENE_MATRIX_STACK_SIZE);
+    public Scene3D(IGame game, GameObjLayer layerMask) {
+        this(game, layerMask, game.getSettings().SCENE_OPTIONS.SCENE_MATRIX_STACK_SIZE);
     }
     
-    public Scene3D(GameObjLayer layerMask, int matrixStackSize) {
+    public Scene3D(IGame game, GameObjLayer layerMask, int matrixStackSize)
+    {
+        super(game);
         mViewTransformStack = new MatrixStack(matrixStackSize);
         mLayerMask = layerMask;
         
@@ -128,26 +131,27 @@ public class Scene3D implements IScreenElement, IEventListener {
             mCamera.onAttachToScene(this);
         }
         
-        for (int i = 0; i < SnareGame.get().getGameObjCnt(); i++) {
-            final GameObj obj = SnareGame.get().getObjByListIdx(i);
+        for (int i = 0; i < mGame.getGameObjCnt(); i++) {
+            final GameObj obj = mGame.getObjByListIdx(i);
             addObjComponents(obj);
         }
         
-        final EventManager em = SnareGame.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         em.addListener(IGameObjNewEvent.EVENT_TYPE, this);
         em.addListener(IGameObjDestroyEvent.EVENT_TYPE, this);
     }
     
-    public void onDetachFromScreen() {
-        for (int i = 0; i < SnareGame.get().getGameObjCnt(); i++) {
-            final GameObj obj = SnareGame.get().getObjByListIdx(i);
+    public void onDetachFromScreen()
+    {
+        for (int i = 0; i < mGame.getGameObjCnt(); i++) {
+            final GameObj obj = mGame.getObjByListIdx(i);
             removeObjComponents(obj);
         }
         
         mView = null;
         mIsAttached = false;
         
-        final EventManager em = SnareGame.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         em.removeListener(IGameObjNewEvent.EVENT_TYPE, this);
         em.removeListener(IGameObjDestroyEvent.EVENT_TYPE, this);
     }
@@ -336,24 +340,23 @@ public class Scene3D implements IScreenElement, IEventListener {
         return mIsAttached;
     }
 
-    public boolean onTouchEvent(ITouchEvent e) {
+    public boolean onTouchEvent(ITouchEvent e)
+    {
         // do a raycast to determine the touched game object
-        final IGame game = SnareGame.get();
-       
         final int x = e.getTouchX();
         final int y = e.getTouchY();
         final float[] s = mCamera.getPosition();
         final float[] v = mCamera.getRayDirection(x, y);
         
-        final Raycast r = game.getPhysics().doRaycast(s, v, mLayerMask);
+        final Raycast r = mGame.getPhysics().doRaycast(s, v, mLayerMask);
         final GameObj touchedObj = r.getNearestHit();
         
         if (touchedObj != null) {
-            IGameObjTouchEvent te = game.getEventManager()
+            IGameObjTouchEvent te = mGame.getEventManager()
                     .obtain(IGameObjTouchEvent.EVENT_TYPE);
             te.setGameObjData(touchedObj.getID(), r.getNearestHitPoint(), 
                     e.getTouchAction(), x, y);
-            game.getEventManager().queueEvent(te);
+            mGame.getEventManager().queueEvent(te);
         }     
         r.recycle(); 
         return touchedObj != null;

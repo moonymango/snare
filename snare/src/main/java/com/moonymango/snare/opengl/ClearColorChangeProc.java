@@ -1,7 +1,6 @@
 package com.moonymango.snare.opengl;
 
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.ui.ColorWrapper;
 import com.moonymango.snare.ui.ColorWrapper.IColorSeqListener;
@@ -13,7 +12,7 @@ import com.moonymango.snare.ui.ColorWrapper.IColorSeqListener;
 public class ClearColorChangeProc extends BaseProcess implements IColorSeqListener
 {
     private final ColorWrapper mCP;
-    private final RenderOptions mRo = SnareGame.get().getSettings().RENDER_OPTIONS;
+    private final RenderOptions mRo = mGame.getSettings().RENDER_OPTIONS;
     
     public ClearColorChangeProc(IGame game, ColorWrapper cp)
     {

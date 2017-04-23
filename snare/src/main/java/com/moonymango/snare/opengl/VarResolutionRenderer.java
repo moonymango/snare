@@ -2,7 +2,6 @@ package com.moonymango.snare.opengl;
 
 import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.BufferObj.IBufferConfigurationSetup;
 import com.moonymango.snare.opengl.BufferObj.IBufferDataProvider;
 import com.moonymango.snare.opengl.BufferObj.IBufferUpdateSetup;
@@ -205,15 +204,14 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
         return mPlayerGameView;
     }
 
-    public void onDrawFrame(GL10 gl) {
+    public void onDrawFrame(GL10 gl)
+    {
+        final RenderOptions ro = mGame.getSettings().RENDER_OPTIONS;
         
-        final IGame game = SnareGame.get();
-        final RenderOptions ro = game.getSettings().RENDER_OPTIONS;
-        
-        game.waitForDraw();
+        mGame.waitForDraw();
        
         // make sure everything is in GPU before actual drawing
-        game.getGLObjCache().update();
+        mGame.getGLObjCache().update();
         GLState.sync();
         drawPlayerView(ro);
         if (!mUseNativeRes) {
@@ -226,7 +224,7 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
                     + Integer.toHexString(e));
         }
         
-        long time = SnareGame.get().getLastMeasuredTime();
+        long time = mGame.getLastMeasuredTime();
         
         // FPS counter
         mFrameCnt++;
@@ -238,12 +236,12 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
             mLastFPSUpdateTime = time;
         } 
         
-        game.notifyEndDraw();
+        mGame.notifyEndDraw();
     }
 
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
-        final IGame game = SnareGame.get();
-        game.waitForDraw();
+    public void onSurfaceChanged(GL10 gl, int width, int height)
+    {
+        mGame.waitForDraw();
         
         mSurfaceHeight = height;
         mSurfaceWidth = width;
@@ -273,20 +271,20 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
         }
         
         initGL();
-        game.notifyEndDraw();
+        mGame.notifyEndDraw();
     }
 
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        final IGame game = SnareGame.get();
-        game.waitForDraw();
+    public void onSurfaceCreated(GL10 gl, EGLConfig config)
+    {
+        mGame.waitForDraw();
         
         //read EGL context properties + extensions
         if (mRenderInfo ==null) {
             mRenderInfo = new GLInfo();
         }
         mRenderInfo.collectValues();
-        game.getGLObjCache().reloadAll();   
-        game.notifyEndDraw();
+        mGame.getGLObjCache().reloadAll();
+        mGame.notifyEndDraw();
     }
     
     public boolean hasSurface() {
@@ -306,7 +304,8 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
     /**
      * Init GL stuff necessary to draw FBO to screen.
      */
-    private void initGL() {
+    private void initGL()
+    {
         if (mFBO != null) {
             return;
         }
@@ -314,7 +313,7 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
         // prepare GL stuff (because renderer is bound to Game instance for
         // live time, do not care about releasing anything of it)
         mFBODescr = new GLObjDescriptor(mGame,
-                VarResolutionRenderer.class.getName() + SnareGame.DELIMITER + SnareGame.get().getRandomString(),
+                VarResolutionRenderer.class.getName() + IGame.DELIMITER + mGame.getRandomString(),
                 GLObjType.FRAMEBUFFER);
         mFBO = (FramebufferObj) mFBODescr.getHandle();
         if (!mFBO.isConfigured()) {
@@ -322,7 +321,7 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
         }
         
         mProgramDescr = new GLObjDescriptor(mGame,
-                VarResolutionRenderer.class.getName() + SnareGame.DELIMITER + "program",
+                VarResolutionRenderer.class.getName() + IGame.DELIMITER + "program",
                 GLObjType.PROGRAM);
         mProgram = (ProgramObj) mProgramDescr.getHandle();
         if (!mProgram.isConfigured()) {
@@ -330,7 +329,7 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
         }
         
         mBufferDescr = new GLObjDescriptor(mGame,
-                VarResolutionRenderer.class.getName() + SnareGame.DELIMITER + "vertex",
+                VarResolutionRenderer.class.getName() + IGame.DELIMITER + "vertex",
                 GLObjType.BUFFER);
         mBufferObj = (BufferObj) mBufferDescr.getHandle();
         if (!mBufferObj.isConfigured()) {
@@ -345,7 +344,7 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
         }
         
         glClearColor(ro.BG_COLOR_R, ro.BG_COLOR_G, ro.BG_COLOR_B, 1.0f);
-        if (SnareGame.get().getSettings().RENDER_OPTIONS.CLEAR_SCREEN) {
+        if (mGame.getSettings().RENDER_OPTIONS.CLEAR_SCREEN) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
         mPlayerGameView.draw();

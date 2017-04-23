@@ -1,7 +1,7 @@
 package com.moonymango.snare.opengl;
 
+import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.IGame;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.ui.PlayerGameView;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -16,7 +16,7 @@ import static com.moonymango.snare.opengl.GLES20Trace.glClearColor;
 import static com.moonymango.snare.opengl.GLES20Trace.glViewport;
 
 
-public class FullScreenRenderer implements IRenderer {
+public class FullScreenRenderer extends BaseSnareClass implements IRenderer {
     
     private final PlayerGameView mPlayerGameView;
     private GLInfo mRenderInfo;
@@ -27,7 +27,10 @@ public class FullScreenRenderer implements IRenderer {
     private int mSurfaceHeight;
     
            
-    public FullScreenRenderer(PlayerGameView view) {
+    public FullScreenRenderer(IGame game, PlayerGameView view)
+    {
+        super(game);
+
         if (view == null) {
             throw new IllegalArgumentException("Missing player view");
         }
@@ -50,18 +53,18 @@ public class FullScreenRenderer implements IRenderer {
         return mPlayerGameView;
     }
 
-    public void onDrawFrame(GL10 gl) {
-        final IGame game = SnareGame.get();
-        final RenderOptions ro = game.getSettings().RENDER_OPTIONS;
-        game.waitForDraw();
+    public void onDrawFrame(GL10 gl)
+    {
+        final RenderOptions ro = mGame.getSettings().RENDER_OPTIONS;
+        mGame.waitForDraw();
         
         glClearColor(ro.BG_COLOR_R, ro.BG_COLOR_G, ro.BG_COLOR_B, 1.0f);
-        if (game.getSettings().RENDER_OPTIONS.CLEAR_SCREEN) {
+        if (mGame.getSettings().RENDER_OPTIONS.CLEAR_SCREEN) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
         
         // make sure everything is in GPU before actual drawing
-        game.getGLObjCache().update();
+        mGame.getGLObjCache().update();
         GLState.sync();
         mPlayerGameView.draw();
         
@@ -71,7 +74,7 @@ public class FullScreenRenderer implements IRenderer {
                     + Integer.toHexString(e));
         }
         
-        long time = SnareGame.get().getLastMeasuredTime();
+        long time = mGame.getLastMeasuredTime();
         
         // FPS counter
         mFrameCnt++;
@@ -83,12 +86,12 @@ public class FullScreenRenderer implements IRenderer {
             mLastFPSUpdateTime = time;
         }
         
-        game.notifyEndDraw();
+        mGame.notifyEndDraw();
     }
 
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
-        final IGame game = SnareGame.get();
-        game.waitForDraw();
+    public void onSurfaceChanged(GL10 gl, int width, int height)
+    {
+        mGame.waitForDraw();
         
         glViewport(0, 0, width, height);
         mPlayerGameView.onSurfaceChanged(width, height);
@@ -96,21 +99,21 @@ public class FullScreenRenderer implements IRenderer {
         mSurfaceHeight = height;
         mSurfaceWidth = width;
         
-        game.notifyEndDraw();
+        mGame.notifyEndDraw();
     }
 
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        final IGame game = SnareGame.get();
-        game.waitForDraw();
+    public void onSurfaceCreated(GL10 gl, EGLConfig config)
+    {
+        mGame.waitForDraw();
         
         //read EGL context properties + extensions
         if (mRenderInfo ==null) {
             mRenderInfo = new GLInfo();
         }
         mRenderInfo.collectValues();
-        game.getGLObjCache().reloadAll();
+        mGame.getGLObjCache().reloadAll();
         
-        game.notifyEndDraw();
+        mGame.notifyEndDraw();
     }
     
     public boolean hasSurface() {

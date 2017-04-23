@@ -4,7 +4,6 @@ import com.moonymango.snare.events.EventManager.IEventListener;
 import com.moonymango.snare.events.IEvent;
 import com.moonymango.snare.events.IGameObjMoveEvent;
 import com.moonymango.snare.game.GameObj;
-import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 
 /**
@@ -54,9 +53,9 @@ public class FollowMotionModifier extends BaseProcess implements IEventListener 
     }
 
     @Override
-    protected void onInit() {
-        SnareGame.get().getEventManager().addListener(IGameObjMoveEvent.EVENT_TYPE,
-                this);
+    protected void onInit()
+    {
+        mGame.getEventManager().addListener(IGameObjMoveEvent.EVENT_TYPE, this);
         final float[] pos = mToFollowObj.getPosition();
         mPos[0] = pos[0];
         mPos[1] = pos[1];
@@ -67,7 +66,8 @@ public class FollowMotionModifier extends BaseProcess implements IEventListener 
 
     @Override
     protected boolean onUpdate(long realTime, float realDelta,
-            float virtualDelta) {
+            float virtualDelta)
+    {
         if (mHasChanged) {
             mFollower.setPosition(mPos[0] + mOffsX, mPos[1] + mOffsY, mPos[2] + mOffsZ);
             mHasChanged = false;
@@ -76,9 +76,9 @@ public class FollowMotionModifier extends BaseProcess implements IEventListener 
     }
 
     @Override
-    protected void onKill() {
-        SnareGame.get().getEventManager().removeListener(IGameObjMoveEvent.EVENT_TYPE,
-                this);
+    protected void onKill()
+    {
+        mGame.getEventManager().removeListener(IGameObjMoveEvent.EVENT_TYPE, this);
     }
 
 }

@@ -1,8 +1,12 @@
 package com.moonymango.snare.opengl;
 
-import static android.opengl.GLES20.*;
-
-import com.moonymango.snare.game.SnareGame;
+import static android.opengl.GLES20.GL_DEPTH_COMPONENT16;
+import static android.opengl.GLES20.GL_RENDERBUFFER;
+import static android.opengl.GLES20.GL_RGB565;
+import static android.opengl.GLES20.glBindRenderbuffer;
+import static android.opengl.GLES20.glDeleteRenderbuffers;
+import static android.opengl.GLES20.glGenRenderbuffers;
+import static android.opengl.GLES20.glRenderbufferStorage;
 
 public class RenderbufferObj extends BaseGLObj {
 
@@ -37,7 +41,7 @@ public class RenderbufferObj extends BaseGLObj {
             throw new IllegalStateException("Already configured.");
         }
         mFormat = format;
-        final int maxSize = SnareGame.get().getRenderer().getInfo()
+        final int maxSize = mGame.getRenderer().getInfo()
                 .getMaxRenderbufferSize();
         if (width < 1 || width > maxSize 
                 || height < 1 || height > maxSize) {

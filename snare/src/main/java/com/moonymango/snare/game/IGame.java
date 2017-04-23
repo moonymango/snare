@@ -17,11 +17,14 @@ import com.moonymango.snare.ui.BaseFont;
 import com.moonymango.snare.ui.PlayerGameView;
 
 /**
- * Created by moonymango on 23.04.17.
+ * Interface of main game class.
  */
 
 public interface IGame
 {
+    String ENGINE_NAME = "snare";
+    String DELIMITER = ".";
+
     // ---------------------------------------------------------
     // methods
     // ---------------------------------------------------------
