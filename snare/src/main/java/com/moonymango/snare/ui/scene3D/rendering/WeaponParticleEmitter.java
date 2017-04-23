@@ -1,5 +1,14 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
+import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.opengl.BufferObj.AttribPointer;
+import com.moonymango.snare.opengl.GLState;
+import com.moonymango.snare.ui.scene3D.BaseMesh;
+import com.moonymango.snare.ui.scene3D.Material;
+import com.moonymango.snare.ui.scene3D.RenderPass;
+import com.moonymango.snare.ui.scene3D.Scene3D;
+
 import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
 import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
@@ -10,14 +19,6 @@ import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glUniform1f;
 import static android.opengl.GLES20.glUniform4f;
 import static android.opengl.GLES20.glUniformMatrix4fv;
-import com.moonymango.snare.game.Game.ClockType;
-import com.moonymango.snare.game.GameObj;
-import com.moonymango.snare.opengl.BufferObj.AttribPointer;
-import com.moonymango.snare.opengl.GLState;
-import com.moonymango.snare.ui.scene3D.BaseMesh;
-import com.moonymango.snare.ui.scene3D.Material;
-import com.moonymango.snare.ui.scene3D.RenderPass;
-import com.moonymango.snare.ui.scene3D.Scene3D;
 
 public class WeaponParticleEmitter extends BaseDynamicMeshEffect {
 
@@ -74,11 +75,11 @@ public class WeaponParticleEmitter extends BaseDynamicMeshEffect {
     private static int muLength;
     private static final AttribPointer[] maPointers = new AttribPointer[1];
     
-    private static RenderContext createRenderContext() {
+    private static RenderContext createRenderContext(IGame game) {
         final GLState s = new GLState();
         s.enableBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA).lock();
 
-        return new RenderContext(
+        return new RenderContext(game,
                 WeaponParticleEmitter.class.getName(),
                 VERTEX_SHADER,
                 FRAGMENT_SHADER,
@@ -91,11 +92,10 @@ public class WeaponParticleEmitter extends BaseDynamicMeshEffect {
     private final DefaultParticleGenerator mGen;
    
     
-    public WeaponParticleEmitter(int particleCnt, float particleSize, 
-            float speed, float length) 
+    public WeaponParticleEmitter(IGame game, int particleCnt, float particleSize,
+                                 float speed, float length)
     {
-        super(createRenderContext(), new DefaultParticleGenerator(particleCnt), 
-                ClockType.VIRTUAL);
+        super(createRenderContext(game), new DefaultParticleGenerator(particleCnt), IGame.ClockType.VIRTUAL);
         
         mSize = particleSize;
         mSpeed = speed;

@@ -4,7 +4,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.OvershootInterpolator;
 
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.SnareGame;
 
 /**
  * Some interpolation profiles. This maps an input value in range [0..1] 
@@ -46,7 +46,7 @@ public enum EasingProfile implements IEasingProfile
     public float value(float x) {
         switch(this) {
             case LINEAR: return Math.max(0, Math.min(x, 1));
-            case RANDOM: return Game.get().getRandomFloat(0, 1);
+            case RANDOM: return SnareGame.get().getRandomFloat(0, 1);
             case SIN_IN: return (float) Math.sin(x*Geometry.RAD90);
             case SIN_OUT: return (float) (1-Math.cos(x*Geometry.RAD90));
             case SIN_2:

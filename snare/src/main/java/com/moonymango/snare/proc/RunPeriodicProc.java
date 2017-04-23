@@ -1,5 +1,6 @@
 package com.moonymango.snare.proc;
 
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 
 public class RunPeriodicProc extends BaseProcess {
@@ -8,7 +9,9 @@ public class RunPeriodicProc extends BaseProcess {
     private final float mPeriod;
     private float mWaited;
     
-    public RunPeriodicProc(Runnable target, float period) {
+    public RunPeriodicProc(IGame game, Runnable target, float period)
+    {
+        super(game);
         if (target == null) {
             throw new IllegalArgumentException("Missing runnable.");
         }

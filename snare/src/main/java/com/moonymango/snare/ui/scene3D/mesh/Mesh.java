@@ -20,7 +20,7 @@ public class Mesh extends BaseMesh {
     private MeshResHandle mHnd;
     
     public Mesh(MeshResource res) {
-        super(res.getQName(), false, false); 
+        super(res.mGame, res.getQName(), false, false);
         mMeshRes = res;
     }
 

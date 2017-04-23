@@ -1,14 +1,15 @@
 package com.moonymango.snare.game;
 
 /**
- * Base class for all other classes.
+ * Base class for other classes.
+ * Provides a reference to the game instance.
  */
 
 public class BaseSnareClass
 {
-    protected final Game mGame;
+    public final IGame mGame;
 
-    BaseSnareClass(Game game)
+    public BaseSnareClass(IGame game)
     {
         mGame = game;
     }

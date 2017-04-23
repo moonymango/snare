@@ -1,11 +1,12 @@
 package com.moonymango.snare.physics;
 
-import java.util.ArrayList;
-
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.GameObjLayer;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.util.PoolItem;
 import com.moonymango.snare.util.VectorAF;
+
+import java.util.ArrayList;
 
 public class Raycast extends PoolItem {
             
@@ -17,10 +18,15 @@ public class Raycast extends PoolItem {
     private float mNearestObjDist;
     private final float[] mNearestHitPoint = new float[4];
     private GameObjLayer mLayerMask;
-    
+
+    public Raycast(IGame game)
+    {
+        super(game);
+    }
+
     /**
      * Sets the ray's origin (S) and direction (V).
-     * @param layer Layer of objects to test.
+     * @param layerMask Layer of objects to test.
      * @param sx Ray origin x.
      * @param sy Ray origin y.
      * @param sz Ray origin z.

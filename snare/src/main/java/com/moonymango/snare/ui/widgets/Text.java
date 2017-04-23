@@ -1,6 +1,6 @@
 package com.moonymango.snare.ui.widgets;
 
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.BufferObj;
 import com.moonymango.snare.opengl.BufferObj.IBufferConfigurationSetup;
 import com.moonymango.snare.opengl.BufferObj.IBufferDataProvider;
@@ -159,13 +159,11 @@ public class Text extends BaseTouchWidget implements IBufferDataProvider {
      */
     public Text(BaseFont font, String text, PositionAlignment alignment, TouchSetting setting, int maxChars)
     {
-        super(setting);
+        super(font.mGame, setting);
         mTextureResource = font;
         mTextureOptions = TextureObjOptions.LINEAR_CLAMP;
-        mTextureObjDescr = new GLObjDescriptor(mTextureResource.getName(),
-                GLObjType.TEXTURE);
-        mProgramDescr = new GLObjDescriptor(Text.class.getName() + ".program",
-                GLObjType.PROGRAM);
+        mTextureObjDescr = new GLObjDescriptor(mGame, mTextureResource.getName(), GLObjType.TEXTURE);
+        mProgramDescr = new GLObjDescriptor(mGame, Text.class.getName() + ".program", GLObjType.PROGRAM);
 
         mFont = font;
 
@@ -182,11 +180,9 @@ public class Text extends BaseTouchWidget implements IBufferDataProvider {
         // GL buffer objects (vertex buffer is unique to each instance
         // because they probably contain different text. Index buffer is
         // global.
-        final String s = Game.get().getRandomString();
-        mVertexAttrBufferObjDescr = new GLObjDescriptor(Text.class.getName() +
-                ".vertices_" + s, GLObjType.BUFFER);
-        mIndexBufferObjDescr = new GLObjDescriptor(Text.class.getName() +
-                ".indices", GLObjType.BUFFER);
+        final String s = SnareGame.get().getRandomString();
+        mVertexAttrBufferObjDescr = new GLObjDescriptor(mGame, Text.class.getName() +".vertices_" + s, GLObjType.BUFFER);
+        mIndexBufferObjDescr = new GLObjDescriptor(mGame, Text.class.getName() + ".indices", GLObjType.BUFFER);
 
         mAlignment = alignment != null ? alignment
                 : PositionAlignment.CENTERED_XY;

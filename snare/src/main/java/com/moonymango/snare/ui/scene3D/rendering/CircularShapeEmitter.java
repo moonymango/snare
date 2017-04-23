@@ -1,7 +1,7 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
-import com.moonymango.snare.game.Game.ClockType;
 import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.opengl.BufferObj.AttribPointer;
 import com.moonymango.snare.opengl.GLState;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
@@ -79,21 +79,21 @@ public class CircularShapeEmitter extends BaseDynamicMeshEffect {
                
             "}";
                    
-    private static RenderContext createRenderContext()
+    private static RenderContext createRenderContext(IGame game)
     {
         final GLState s = new GLState();
         s.enableDepth().enableDepthMask(false).enableBlend(GL_SRC_ALPHA, GL_ONE)
                 .lock();
-        return new RenderContext(
+        return new RenderContext(game,
                 CircularShapeEmitter.class.getName(),
                 VERTEX_SHADER, FRAGMENT_SHADER, s);
     }
     
     private static final int TEX_UNIT = 0;
     /** Creates {@link Material} object matching the effect. */
-    public static Material makeMaterial(BaseTextureResource res, 
-            TextureObjOptions options) {
-        final Material m = new Material();
+    public static Material makeMaterial(BaseTextureResource res, TextureObjOptions options)
+    {
+        final Material m = new Material(res.mGame);
         m.addTextureUnit(new TextureUnit(TEX_UNIT, res, options));
         return m;
     }
@@ -132,13 +132,14 @@ public class CircularShapeEmitter extends BaseDynamicMeshEffect {
     
     
 
-    public CircularShapeEmitter(int paricleCnt, boolean runOnce) {
-        this(paricleCnt, runOnce, ClockType.VIRTUAL);
+    public CircularShapeEmitter(IGame game, int paricleCnt, boolean runOnce)
+    {
+        this(game, paricleCnt, runOnce, IGame.ClockType.VIRTUAL);
     }
     
-    public CircularShapeEmitter(int paricleCnt, boolean runOnce, ClockType clock) 
+    public CircularShapeEmitter(IGame game, int paricleCnt, boolean runOnce, IGame.ClockType clock)
     {
-        super(createRenderContext(), new DefaultParticleGenerator(paricleCnt), clock);
+        super(createRenderContext(game), new DefaultParticleGenerator(paricleCnt), clock);
         mRunOnce = runOnce;
         
         // use default buffer and pointer

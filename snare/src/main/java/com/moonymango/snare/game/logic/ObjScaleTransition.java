@@ -1,7 +1,7 @@
 package com.moonymango.snare.game.logic;
 
-import com.moonymango.snare.game.Game.ClockType;
 import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.proc.ProcessManager.ProcState;
 import com.moonymango.snare.util.IEasingProfile;
@@ -17,18 +17,17 @@ public class ObjScaleTransition extends BaseProcess {
     private final float[] mEndScale = {1, 1, 1, 1};
     private float mDuration;
     private IEasingProfile mProfile;
-    private ClockType mClock = ClockType.VIRTUAL;
+    private IGame.ClockType mClock = IGame.ClockType.VIRTUAL;
     
     private float mTime;
     
     /** 
      * Constructs unspecified transition. Has to be configured (see configure())
      * before starting the process.
-     * @param obj
-     * @param time
-     * @param profile
      */
-    public ObjScaleTransition() {
+    public ObjScaleTransition(IGame game)
+    {
+        super(game);
         mStart = null;
         mEnd = null;
     }
@@ -41,9 +40,9 @@ public class ObjScaleTransition extends BaseProcess {
      * @param time
      * @param profile
      */
-    public ObjScaleTransition(GameObj obj, float[] start, float[] end,
-            float time, IEasingProfile profile) {
-        
+    public ObjScaleTransition(IGame game, GameObj obj, float[] start, float[] end, float time, IEasingProfile profile)
+    {
+        super(game);
         mStart = null;
         mEnd = null;
         configure(obj, start, end, time, profile);
@@ -56,8 +55,9 @@ public class ObjScaleTransition extends BaseProcess {
      * @param end Object describing end state.
      * @param time time in milliseconds
      */
-    public ObjScaleTransition(GameObj obj, GameObj start, GameObj end, 
-            float time, IEasingProfile profile) {
+    public ObjScaleTransition(IGame game, GameObj obj, GameObj start, GameObj end, float time, IEasingProfile profile)
+    {
+        super(game);
         mObj = obj;
         mStart = start;
         mEnd = end;
@@ -73,13 +73,12 @@ public class ObjScaleTransition extends BaseProcess {
      * @param time
      * @param profile
      */
-    public ObjScaleTransition(GameObj obj, GameObj end, float time, 
-            IEasingProfile profile) {
-        this(obj, obj, end, time, profile);
+    public ObjScaleTransition(IGame game, GameObj obj, GameObj end, float time, IEasingProfile profile)
+    {
+        this(game, obj, obj, end, time, profile);
     }
     
-    public ObjScaleTransition configure (GameObj obj, float[] start, float[] end, 
-            float time, IEasingProfile profile)
+    public ObjScaleTransition configure (GameObj obj, float[] start, float[] end, float time, IEasingProfile profile)
     {
         if (getState() != ProcState.DEAD) {
             throw new IllegalArgumentException("Cannot change a running " +
@@ -97,7 +96,7 @@ public class ObjScaleTransition extends BaseProcess {
         return this;
     }
     
-    public ObjScaleTransition setClockType(ClockType clock) {
+    public ObjScaleTransition setClockType(IGame.ClockType clock) {
         if (getState() != ProcState.DEAD) {
             throw new IllegalArgumentException("Cannot change a running " +
                     "process.");
@@ -132,7 +131,7 @@ public class ObjScaleTransition extends BaseProcess {
     @Override
     protected boolean onUpdate(long realTime, float realDelta,
             float virtualDelta) {
-        mTime += mClock == ClockType.REALTIME ? realDelta : virtualDelta;
+        mTime += mClock == IGame.ClockType.REALTIME ? realDelta : virtualDelta;
         if (mTime >= mDuration) {
             // set to exact end state
             mObj.setScale(mEndScale[0], mEndScale[1], mEndScale[2]);

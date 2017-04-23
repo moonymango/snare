@@ -1,6 +1,8 @@
 package com.moonymango.snare.ui.widgets;
 
 import com.moonymango.snare.events.ITouchEvent;
+import com.moonymango.snare.game.BaseSnareClass;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.opengl.ProgramObj.ILocationHolder;
 import com.moonymango.snare.ui.ColorWrapper;
 import com.moonymango.snare.ui.ColorWrapper.IColorSeqListener;
@@ -14,8 +16,9 @@ import com.moonymango.snare.util.MatrixAF;
  * TODO prioD: review widget class hierarchy,
  * especially AABB implementation
  */
-public abstract class BaseWidget implements IScreenElement, ILocationHolder,
-        IColorSeqListener, IPositionable2D {
+public abstract class BaseWidget extends BaseSnareClass
+        implements IScreenElement, ILocationHolder,IColorSeqListener, IPositionable2D
+{
 
     // ---------------------------------------------------------
     // static
@@ -56,7 +59,13 @@ public abstract class BaseWidget implements IScreenElement, ILocationHolder,
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
-    
+
+    public BaseWidget(IGame game)
+    {
+        super(game);
+    }
+
+
     // ---------------------------------------------------------
     // methods
     // ---------------------------------------------------------

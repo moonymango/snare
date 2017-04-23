@@ -1,12 +1,21 @@
 package com.moonymango.snare.res.xml;
 
+import com.moonymango.snare.game.IGame;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-public abstract class BaseXMLHandler<T> extends DefaultHandler {
+public abstract class BaseXMLHandler<T> extends DefaultHandler
+{
+    public final IGame mGame;
     
     protected XMLResource<?> mXMLResDescriptor;
-    
+
+    public BaseXMLHandler(IGame game)
+    {
+        this.mGame = game;
+    }
+
     protected static int parseInt(Attributes attr, String name) {
         return Integer.parseInt(attr.getValue(name));
     }

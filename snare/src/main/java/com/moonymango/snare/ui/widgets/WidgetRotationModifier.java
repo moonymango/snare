@@ -1,12 +1,12 @@
 package com.moonymango.snare.ui.widgets;
 
-import com.moonymango.snare.game.Game.ClockType;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.proc.ProcessManager.IOnProcessKilledListener;
 import com.moonymango.snare.proc.ProcessManager.ProcState;
 
 /**
- * Rotate a widget based on real time clock ({@link ClockType}).
+ * Rotate a widget based on real time clock
  */
 public class WidgetRotationModifier extends BaseProcess {
 
@@ -17,12 +17,15 @@ public class WidgetRotationModifier extends BaseProcess {
     private float mStartAngle;
     private float mAngle;
     
-    public WidgetRotationModifier() {
-     
+    public WidgetRotationModifier(IGame game)
+    {
+        super(game);
     }
     
-    public WidgetRotationModifier(BaseWidget widget, float angularSpeed, 
-            float angle, IOnProcessKilledListener listener) {
+    public WidgetRotationModifier(IGame game, BaseWidget widget, float angularSpeed, float angle,
+                                  IOnProcessKilledListener listener)
+    {
+        super(game);
         configure(widget, angularSpeed, angle, listener);
     }
     

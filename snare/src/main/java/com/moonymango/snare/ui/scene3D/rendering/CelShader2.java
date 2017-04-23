@@ -1,6 +1,7 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
 import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.opengl.GLState;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
 import com.moonymango.snare.opengl.TextureObjOptions;
@@ -73,19 +74,18 @@ public class CelShader2 extends BaseEffect {
             "}                                              \n";            
     
         
-    private static RenderContext createRenderContext() 
+    private static RenderContext createRenderContext(IGame game)
     {
         final GLState s0 = new GLState();
         s0.enableBackFaceCulling().enableDepth().lock();
-        return new RenderContext(CelShader2.class.getName(),
-                VERTEX_SHADER_FILL, FRAGMENT_SHADER_FILL, s0);
+        return new RenderContext(game, CelShader2.class.getName(), VERTEX_SHADER_FILL, FRAGMENT_SHADER_FILL, s0);
     }
     
     /** Creates {@link Material} object matching the effect. */
-    public static Material makeMaterial(BaseTextureResource res, 
-            TextureObjOptions options) {
+    public static Material makeMaterial(BaseTextureResource res, TextureObjOptions options)
+    {
         // effect uses unit 0
-        final Material m = new Material();
+        final Material m = new Material(res.mGame);
         m.addTextureUnit(new TextureUnit(0, res, options));
         return m;
     }
@@ -102,8 +102,8 @@ public class CelShader2 extends BaseEffect {
     
     private float mFetchT = 0;
     
-    public CelShader2() {
-        super(createRenderContext());
+    public CelShader2(IGame game) {
+        super(createRenderContext(game));
     }
 
     /** Sets t coordinate for color texture fetch in fragment shader. */

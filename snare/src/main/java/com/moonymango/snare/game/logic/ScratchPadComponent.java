@@ -2,6 +2,7 @@ package com.moonymango.snare.game.logic;
 
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
+import com.moonymango.snare.game.IGame;
 
 /**
  * Component that allows decoration of {@link GameObj} with arbitrary data.
@@ -10,8 +11,9 @@ public class ScratchPadComponent extends BaseComponent {
 
     private final Object[] mObjs;
     
-    public ScratchPadComponent(int numObjs) {
-        super(ComponentType.SCRATCH_PAD);
+    public ScratchPadComponent(IGame game, int numObjs)
+    {
+        super(game, ComponentType.SCRATCH_PAD);
         mObjs = new Object[numObjs];
     }
 

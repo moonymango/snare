@@ -1,6 +1,6 @@
 package com.moonymango.snare.util;
 
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.IGame;
 
 /**
  * taken from:
@@ -23,14 +23,14 @@ public class RandomString {
     // ---------------------------------------------------------
     // fields
     // ---------------------------------------------------------
-    private final Game mGame;
+    private final IGame mGame;
     private final char[] buf;
     
 
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
-    public RandomString(int length, Game game)
+    public RandomString(int length, IGame game)
     {
       if (length < 1)
         throw new IllegalArgumentException("length < 1: " + length);

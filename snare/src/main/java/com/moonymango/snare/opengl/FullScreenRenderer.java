@@ -1,6 +1,7 @@
 package com.moonymango.snare.opengl;
 
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.ui.PlayerGameView;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -50,7 +51,7 @@ public class FullScreenRenderer implements IRenderer {
     }
 
     public void onDrawFrame(GL10 gl) {
-        final Game game = Game.get();
+        final IGame game = SnareGame.get();
         final RenderOptions ro = game.getSettings().RENDER_OPTIONS;
         game.waitForDraw();
         
@@ -70,7 +71,7 @@ public class FullScreenRenderer implements IRenderer {
                     + Integer.toHexString(e));
         }
         
-        long time = Game.get().getLastMeasuredTime();
+        long time = SnareGame.get().getLastMeasuredTime();
         
         // FPS counter
         mFrameCnt++;
@@ -86,7 +87,7 @@ public class FullScreenRenderer implements IRenderer {
     }
 
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        final Game game = Game.get();
+        final IGame game = SnareGame.get();
         game.waitForDraw();
         
         glViewport(0, 0, width, height);
@@ -99,7 +100,7 @@ public class FullScreenRenderer implements IRenderer {
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        final Game game = Game.get();
+        final IGame game = SnareGame.get();
         game.waitForDraw();
         
         //read EGL context properties + extensions

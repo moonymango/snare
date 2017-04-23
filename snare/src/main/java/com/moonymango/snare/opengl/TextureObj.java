@@ -1,10 +1,19 @@
 package com.moonymango.snare.opengl;
 
-import static android.opengl.GLES20.*;
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.GLObjDescriptor.GLObjType;
 import com.moonymango.snare.res.texture.BaseTextureResHandle;
 import com.moonymango.snare.res.texture.BaseTextureResource;
+
+import static android.opengl.GLES20.GL_RGB;
+import static android.opengl.GLES20.GL_TEXTURE0;
+import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.GL_UNSIGNED_SHORT_5_6_5;
+import static android.opengl.GLES20.glActiveTexture;
+import static android.opengl.GLES20.glBindTexture;
+import static android.opengl.GLES20.glDeleteTextures;
+import static android.opengl.GLES20.glGenTextures;
+import static android.opengl.GLES20.glTexImage2D;
 
 
 public class TextureObj extends BaseGLObj  {
@@ -27,7 +36,7 @@ public class TextureObj extends BaseGLObj  {
         }
         mTextureResource = texture;
         mOptions = options != null ? options : 
-                Game.get().getSettings().mDefaultTextureOptions;
+                SnareGame.get().getSettings().mDefaultTextureOptions;
         
         setState(GLObjState.TO_LOAD);
     }
@@ -41,13 +50,13 @@ public class TextureObj extends BaseGLObj  {
         if (isConfigured()) {
             throw new IllegalStateException("Already configured.");
         }
-        final int maxSize = Game.get().getRenderer().getInfo().getMaxTextureSize();
+        final int maxSize = SnareGame.get().getRenderer().getInfo().getMaxTextureSize();
         if (size.value() > maxSize) {
             throw new IllegalStateException("Unsupported texture size.");
         }
         mSize = size;
         mOptions = options != null ? options : 
-            Game.get().getSettings().mDefaultTextureOptions;
+            SnareGame.get().getSettings().mDefaultTextureOptions;
         
         setState(GLObjState.TO_LOAD);
     }
@@ -192,7 +201,7 @@ public class TextureObj extends BaseGLObj  {
             this.target = target;
             this.res = res;
             this.options = options;
-            mTexDescr = new GLObjDescriptor(res.getName(), GLObjType.TEXTURE);
+            mTexDescr = new GLObjDescriptor(res.mGame, res.getName(), GLObjType.TEXTURE);
         }
         
         public TextureUnit(int unit, BaseTextureResource res,

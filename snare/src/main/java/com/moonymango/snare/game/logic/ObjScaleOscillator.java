@@ -1,7 +1,8 @@
 package com.moonymango.snare.game.logic;
 
-import com.moonymango.snare.game.Game;
 import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.proc.ProcessManager;
 import com.moonymango.snare.util.Geometry;
 
@@ -13,7 +14,7 @@ public class ObjScaleOscillator extends ProcessManager.BaseProcess
 {
     private GameObj mObj;
     private float[] mOrigScale = new float[4];
-    private Game.ClockType mClock;
+    private SnareGame.ClockType mClock;
     private float mLocalTime;
 
     // oscillation parameters for each dimensions
@@ -21,6 +22,10 @@ public class ObjScaleOscillator extends ProcessManager.BaseProcess
     private float[] mFreq = new float[3];
     private float[] mPhase = new float[3];
 
+    public ObjScaleOscillator(IGame game)
+    {
+        super(game);
+    }
 
     /**
      * Configures the oscillation.
@@ -37,7 +42,7 @@ public class ObjScaleOscillator extends ProcessManager.BaseProcess
      * @param phaseZ     Phase in degrees for z dimension.*
      * @return this
      */
-    public ObjScaleOscillator configure(GameObj obj, Game.ClockType clock,
+    public ObjScaleOscillator configure(GameObj obj, SnareGame.ClockType clock,
                                         float amplitudeX, float amplitudeY, float amplitudeZ,
                                         float periodX, float periodY, float periodZ,
                                         float phaseX, float phaseY, float phaseZ)
@@ -72,8 +77,8 @@ public class ObjScaleOscillator extends ProcessManager.BaseProcess
      * @param period        Oscillation period in milliseconds.
      * @return this
      */
-    public ObjScaleOscillator configure(GameObj obj, Game.ClockType clock, float amplitude,
-                          float period)
+    public ObjScaleOscillator configure(GameObj obj, SnareGame.ClockType clock, float amplitude,
+                                        float period)
     {
         mObj = obj;
         mClock = clock;
@@ -105,7 +110,7 @@ public class ObjScaleOscillator extends ProcessManager.BaseProcess
     @Override
     protected boolean onUpdate(long realTime, float realDelta, float virtualDelta)
     {
-        mLocalTime += (mClock == Game.ClockType.REALTIME) ? realDelta : virtualDelta;
+        mLocalTime += (mClock == SnareGame.ClockType.REALTIME) ? realDelta : virtualDelta;
 
         final float sx = 1f + (float) (mAmpl[0] * Math.sin(mFreq[0]*mLocalTime + mPhase[0]));
         final float sy = 1f + (float) (mAmpl[1] * Math.sin(mFreq[1]*mLocalTime + mPhase[1]));

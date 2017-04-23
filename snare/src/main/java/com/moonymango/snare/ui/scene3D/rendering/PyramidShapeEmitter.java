@@ -1,5 +1,19 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
+import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
+import com.moonymango.snare.opengl.BufferObj.AttribPointer;
+import com.moonymango.snare.opengl.GLState;
+import com.moonymango.snare.opengl.TextureObj.TextureUnit;
+import com.moonymango.snare.opengl.TextureObjOptions;
+import com.moonymango.snare.res.texture.BaseTextureResource;
+import com.moonymango.snare.res.texture.BitmapTextureResource.ITextureChannelSource.Channel;
+import com.moonymango.snare.ui.scene3D.BaseMesh;
+import com.moonymango.snare.ui.scene3D.Material;
+import com.moonymango.snare.ui.scene3D.RenderPass;
+import com.moonymango.snare.ui.scene3D.Scene3D;
+
 import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
 import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
@@ -11,19 +25,6 @@ import static android.opengl.GLES20.glUniform1f;
 import static android.opengl.GLES20.glUniform1i;
 import static android.opengl.GLES20.glUniform4f;
 import static android.opengl.GLES20.glUniformMatrix4fv;
-import com.moonymango.snare.game.Game;
-import com.moonymango.snare.game.Game.ClockType;
-import com.moonymango.snare.game.GameObj;
-import com.moonymango.snare.opengl.BufferObj.AttribPointer;
-import com.moonymango.snare.opengl.GLState;
-import com.moonymango.snare.opengl.TextureObj.TextureUnit;
-import com.moonymango.snare.opengl.TextureObjOptions;
-import com.moonymango.snare.res.texture.BaseTextureResource;
-import com.moonymango.snare.res.texture.BitmapTextureResource.ITextureChannelSource.Channel;
-import com.moonymango.snare.ui.scene3D.BaseMesh;
-import com.moonymango.snare.ui.scene3D.Material;
-import com.moonymango.snare.ui.scene3D.RenderPass;
-import com.moonymango.snare.ui.scene3D.Scene3D;
 
 /**
  * Based on AMD's RenderMonkey Particle System example.
@@ -132,9 +133,9 @@ public class PyramidShapeEmitter extends BaseDynamicMeshEffect {
     private static final AttribPointer[] maPointers = new AttribPointer[1];
         
      
-    private static RenderContext createRenderContext(Channel c) 
+    private static RenderContext createRenderContext(IGame game, Channel c)
     {    
-        final String name = PyramidShapeEmitter.class.getName() + Game.DELIMITER 
+        final String name = PyramidShapeEmitter.class.getName() + SnareGame.DELIMITER
                 + c.toString();
         String fs;
         switch(c) {
@@ -147,19 +148,17 @@ public class PyramidShapeEmitter extends BaseDynamicMeshEffect {
         final GLState s = new GLState();
         s.enableBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA).lock();
 
-        return new RenderContext(name, VERTEX_SHADER, fs, s);
+        return new RenderContext(game, name, VERTEX_SHADER, fs, s);
     } 
     
     private static final int TEX_UNIT_COLOR = 0;
     private static final int TEX_UNIT_SHAPE = 1;
     /** Creates {@link Material} object matching the effect. */
-    public static Material makeMaterial(BaseTextureResource colorTex, 
-            BaseTextureResource shapeTex) {
-        final Material m = new Material();
-        m.addTextureUnit(new TextureUnit(TEX_UNIT_COLOR, colorTex, 
-                TextureObjOptions.LINEAR_CLAMP));
-        m.addTextureUnit(new TextureUnit(TEX_UNIT_SHAPE, shapeTex, 
-                TextureObjOptions.LINEAR_CLAMP));
+    public static Material makeMaterial(BaseTextureResource colorTex, BaseTextureResource shapeTex)
+    {
+        final Material m = new Material(colorTex.mGame);
+        m.addTextureUnit(new TextureUnit(TEX_UNIT_COLOR, colorTex, TextureObjOptions.LINEAR_CLAMP));
+        m.addTextureUnit(new TextureUnit(TEX_UNIT_SHAPE, shapeTex, TextureObjOptions.LINEAR_CLAMP));
         return m;
     }
     
@@ -179,10 +178,9 @@ public class PyramidShapeEmitter extends BaseDynamicMeshEffect {
      * @param shapeChannel Color channel which is used for shape fetch
      * @param clock
      */
-    public PyramidShapeEmitter(int paricleCnt, Channel shapeChannel, 
-            ClockType clock) 
+    public PyramidShapeEmitter(IGame game, int paricleCnt, Channel shapeChannel, IGame.ClockType clock)
     {
-        super(createRenderContext(shapeChannel), 
+        super(createRenderContext(game, shapeChannel),
                 new DefaultParticleGenerator(paricleCnt), clock);
         
         // use default particle buffer and pointer

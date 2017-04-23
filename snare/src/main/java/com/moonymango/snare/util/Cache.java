@@ -1,11 +1,13 @@
 package com.moonymango.snare.util;
 
+import com.moonymango.snare.game.BaseSnareClass;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.proc.AsyncProc;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.moonymango.snare.proc.AsyncProc;
 
 /**
  * TODO prioC: make this thread-safe, so that it can be used within 
@@ -15,7 +17,9 @@ import com.moonymango.snare.proc.AsyncProc;
  * @param <D>
  * @param <I>
  */
-public abstract class Cache<C extends Cache<C, D, I>, D extends CacheItemDescriptor<C, D, I>, I extends CacheItem<C, D, I>> {
+public abstract class Cache<C extends Cache<C, D, I>, D extends CacheItemDescriptor<C, D, I>, I extends CacheItem<C, D, I>>
+    extends BaseSnareClass
+{
 
     //---------------------------------------------------------
     // static
@@ -33,7 +37,9 @@ public abstract class Cache<C extends Cache<C, D, I>, D extends CacheItemDescrip
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
-    public Cache(CleanUpPolicy cleanUpPolicy) {
+    public Cache(IGame game, CleanUpPolicy cleanUpPolicy)
+    {
+        super(game);
         mCleanUpPolicy = cleanUpPolicy;
     }
 

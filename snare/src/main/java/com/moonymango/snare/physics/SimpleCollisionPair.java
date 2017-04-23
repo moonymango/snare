@@ -1,5 +1,6 @@
 package com.moonymango.snare.physics;
 
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.util.PoolItem;
 
 /**
@@ -11,8 +12,13 @@ import com.moonymango.snare.util.PoolItem;
  *       have moved in the meantime. You need to init() again to
  *       perform a new test. 
  */
-public class SimpleCollisionPair extends PoolItem implements ICollisionPair {
-    
+public class SimpleCollisionPair extends PoolItem implements ICollisionPair
+{
+    public SimpleCollisionPair(IGame game)
+    {
+        super(game);
+    }
+
     /**
      * Computes hash of a pair based on object ids.
      * @param bvA bounding volume

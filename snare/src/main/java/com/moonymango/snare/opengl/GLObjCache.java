@@ -1,5 +1,6 @@
 package com.moonymango.snare.opengl;
 
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.opengl.BaseGLObj.GLObjState;
 import com.moonymango.snare.util.Cache;
 import com.moonymango.snare.util.Logger;
@@ -13,8 +14,9 @@ public class GLObjCache extends Cache<GLObjCache, GLObjDescriptor, BaseGLObj> {
     /** Stores GL objects in same order they were created. */
     private final ArrayList<BaseGLObj> mGLObjects = new ArrayList<BaseGLObj>();
     
-    public GLObjCache() {
-        super(CleanUpPolicy.IMMEDIATELY);
+    public GLObjCache(IGame game)
+    {
+        super(game, CleanUpPolicy.IMMEDIATELY);
     }
     
     @Override

@@ -1,6 +1,7 @@
 package com.moonymango.snare.ui.scene3D;
 
 import com.moonymango.snare.game.GameObj.ComponentType;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.logic.BaseComponent;
 import com.moonymango.snare.opengl.BufferObj;
 import com.moonymango.snare.opengl.BufferObj.IBufferConfigurationSetup;
@@ -22,9 +23,8 @@ import static android.opengl.GLES20.glBindBuffer;
 import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glVertexAttribPointer;
 
-public abstract class BaseMesh extends BaseComponent 
-        implements IBufferDataProvider {
-
+public abstract class BaseMesh extends BaseComponent implements IBufferDataProvider
+{
     private final GLObjDescriptor mVertexBufferDescr;
     private BufferObj mVertexBufferObj;
     private final GLObjDescriptor mIndexBufferDescr;
@@ -46,11 +46,11 @@ public abstract class BaseMesh extends BaseComponent
      * @param updatableVertices True to allow updates to vertex buffer data. 
      * @param updatableIndices True to allow updates to index buffer data.
      */
-    protected BaseMesh(String name, boolean updatableVertices,
-            boolean updatableIndices) {
-        super(ComponentType.MESH);
-        mVertexBufferDescr = new GLObjDescriptor(name + ".vertices", GLObjType.BUFFER);
-        mIndexBufferDescr = new GLObjDescriptor(name + ".indices", GLObjType.BUFFER);
+    protected BaseMesh(IGame game, String name, boolean updatableVertices,
+                       boolean updatableIndices) {
+        super(game, ComponentType.MESH);
+        mVertexBufferDescr = new GLObjDescriptor(game, name + ".vertices", GLObjType.BUFFER);
+        mIndexBufferDescr = new GLObjDescriptor(game, name + ".indices", GLObjType.BUFFER);
         mUpdatableVertices = updatableVertices;
         mUpdatableIndices = updatableIndices;
     }

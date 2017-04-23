@@ -1,6 +1,6 @@
 package com.moonymango.snare.game.logic;
 
-import com.moonymango.snare.game.Game.ClockType;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 
 
@@ -12,7 +12,7 @@ public class RotationModifier extends BaseProcess {
     private final float[] mRotationVec = new float[3];
     private float mDegreesPerMilliSeconds;
     private IRotatable3D mObj;
-    private ClockType mClock;
+    private IGame.ClockType mClock;
         
     /**
      * Constructs modifier based on virtual clock.
@@ -22,13 +22,16 @@ public class RotationModifier extends BaseProcess {
      * @param z Rotation axis - Z
      * @param degreesPerSecond Rotation speed
      */
-    public RotationModifier(IRotatable3D obj, float x, float y, float z, 
-            float degreesPerSecond) {
-        configure(obj, x, y, z, degreesPerSecond, ClockType.VIRTUAL);
+    public RotationModifier(IGame game, IRotatable3D obj, float x, float y, float z, float degreesPerSecond)
+    {
+        super(game);
+        configure(obj, x, y, z, degreesPerSecond, IGame.ClockType.VIRTUAL);
     }
             
-    public RotationModifier(IRotatable3D obj, float x, float y, float z, 
-            float degreesPerSecond, ClockType clock) {
+    public RotationModifier(IGame game, IRotatable3D obj, float x, float y, float z, float degreesPerSecond,
+                            IGame.ClockType clock)
+    {
+        super(game);
         configure(obj, x, y, z, degreesPerSecond, clock);
     }
 
@@ -36,8 +39,9 @@ public class RotationModifier extends BaseProcess {
      * Constructor for deferred configuration.
      * configure() must be called before running the process.
      */
-    public RotationModifier() {
-
+    public RotationModifier(IGame game)
+    {
+        super(game);
     }
 
     /**
@@ -49,7 +53,7 @@ public class RotationModifier extends BaseProcess {
      * @param degreesPerSecond Rotation speed
      */
     public RotationModifier configure(IRotatable3D obj, float x, float y, float z,
-            float degreesPerSecond, ClockType clock) {
+            float degreesPerSecond, IGame.ClockType clock) {
 
         if (obj == null) {
             throw new IllegalArgumentException("Missing game obj.");
@@ -75,7 +79,7 @@ public class RotationModifier extends BaseProcess {
 
     @Override
     public boolean onUpdate(long realTime, float realDelta, float virtualDelta) {
-        final float delta = mClock == ClockType.REALTIME ? realDelta : virtualDelta;
+        final float delta = mClock == IGame.ClockType.REALTIME ? realDelta : virtualDelta;
         final float angle = (mDegreesPerMilliSeconds * delta) % 360;
         
         mObj.rotate(mRotationVec[0], mRotationVec[1], mRotationVec[2], angle);

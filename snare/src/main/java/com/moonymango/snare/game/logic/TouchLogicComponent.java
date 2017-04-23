@@ -3,29 +3,30 @@ package com.moonymango.snare.game.logic;
 import com.moonymango.snare.events.EventManager.IEventListener;
 import com.moonymango.snare.events.IEvent;
 import com.moonymango.snare.events.IGameObjTouchEvent;
-import com.moonymango.snare.game.Game;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.ui.TouchAction;
 
 public class TouchLogicComponent extends BaseComponent implements IEventListener {
    
     private ITouchInputHandler mHandler;
     
-    public TouchLogicComponent(ITouchInputHandler handler) {
-        super(ComponentType.LOGIC);
+    public TouchLogicComponent(IGame game, ITouchInputHandler handler) {
+        super(game, ComponentType.LOGIC);
         mHandler = handler;
     }
 
     @Override
     public void onInit() {
-        Game.get().getEventManager().addListener(IGameObjTouchEvent.EVENT_TYPE, this);
+        SnareGame.get().getEventManager().addListener(IGameObjTouchEvent.EVENT_TYPE, this);
         
     }
 
     @Override
     public void onShutdown() {
-        Game.get().getEventManager().removeListener(IGameObjTouchEvent.EVENT_TYPE, this);
+        SnareGame.get().getEventManager().removeListener(IGameObjTouchEvent.EVENT_TYPE, this);
     }
     
     public boolean handleEvent(IEvent event) {

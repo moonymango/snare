@@ -1,5 +1,6 @@
 package com.moonymango.snare.proc;
 
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 
 public class DelayProc extends BaseProcess {
@@ -11,7 +12,9 @@ public class DelayProc extends BaseProcess {
      * Constructor.
      * @param delay Delay in ms.
      */
-    public DelayProc(float delay) {
+    public DelayProc(IGame game, float delay)
+    {
+        super(game);
         mDelay = delay;
     }
     

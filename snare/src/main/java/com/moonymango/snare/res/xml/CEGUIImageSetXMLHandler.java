@@ -1,16 +1,17 @@
 package com.moonymango.snare.res.xml;
 
-import java.io.File;
-import java.util.HashMap;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.res.texture.BaseTextureResource;
 import com.moonymango.snare.res.texture.BaseTextureResource.ITextureRegionProvider;
 import com.moonymango.snare.res.texture.BaseTextureResource.TextureRegion;
 import com.moonymango.snare.res.texture.BitmapTextureResource;
 import com.moonymango.snare.res.texture.ETC1TextureResource;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import java.io.File;
+import java.util.HashMap;
 
 /**
  * Handler for Crazy Eddies GUI system image set files. 
@@ -26,7 +27,11 @@ public class CEGUIImageSetXMLHandler extends BaseXMLHandler<BaseTextureResource>
     private CEGUITextureRegionProvider mProvider;
     private ImageFileType mType;
 
-    
+    public CEGUIImageSetXMLHandler(IGame game)
+    {
+        super(game);
+    }
+
     @Override
     protected BaseTextureResource getXMLParseResult() {
         return mTexture;
@@ -46,11 +51,11 @@ public class CEGUIImageSetXMLHandler extends BaseXMLHandler<BaseTextureResource>
     public void endDocument() throws SAXException {
         switch (mType) {
         case PNG:
-            mTexture = new BitmapTextureResource(mFilePath, mProvider);
+            mTexture = new BitmapTextureResource(mGame, mFilePath, mProvider);
             return;
             
         case PKM:
-            mTexture = new ETC1TextureResource(mFilePath, mProvider);
+            mTexture = new ETC1TextureResource(mGame, mFilePath, mProvider);
             return;
             
         default:

@@ -54,7 +54,8 @@ import java.util.Random;
  * 
  * TODO prioB: set UncaughtExceptionHandler
  */
-public final class Game {
+public final class SnareGame implements IGame
+{
     
     //---------------------------------------------------------
     // static
@@ -71,10 +72,10 @@ public final class Game {
     // when activity gets destroyed the game instance gets released,
     // static reference for easy access to game instance
     @SuppressLint("StaticFieldLeak")
-    private static Game sInstance = null;
+    private static SnareGame sInstance = null;
 
     /** Getter for use from the activity only */
-    protected static Game create(BaseGameActivity activity) {
+    protected static SnareGame create(BaseGameActivity activity) {
         // create new game instance
         final String name = activity.getName();
         final GameSettings settings = activity.onLoadGameSettings();
@@ -82,13 +83,13 @@ public final class Game {
         final IRenderer renderer = activity.onLoadRenderer(view);
         final EventManager em = activity.onLoadEventManager();
         final IPhysics physics = activity.onLoadPhysics();      
-        sInstance = new Game(name, activity, view,
+        sInstance = new SnareGame(name, activity, view,
                 physics, renderer, settings, em);
                 
         return sInstance;
     }
     
-    public static Game get() {
+    public static IGame get() {
         return sInstance;
     }
 
@@ -111,7 +112,7 @@ public final class Game {
     private final IRenderer mRenderer;
     private final Vibrator mVibrator;
     private final ProcessManager mProcessManager = new ProcessManager();
-    private final GLObjCache mGLObjCache = new GLObjCache();
+    private final GLObjCache mGLObjCache;
     private final Random mRandom = new Random();
     private final RandomString mRandomStringGen;
     
@@ -144,23 +145,24 @@ public final class Game {
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
-    private Game(String name,
-            BaseGameActivity activity,
-            PlayerGameView view,
-            IPhysics physics,
-            IRenderer renderer, 
-            GameSettings settings,
-            EventManager eventManager) {
+    private SnareGame(String name,
+                      BaseGameActivity activity,
+                      PlayerGameView view,
+                      IPhysics physics,
+                      IRenderer renderer,
+                      GameSettings settings,
+                      EventManager eventManager) {
 
         final Application app = activity.getApplication();
 
         mName = name;
         mActivity = activity;
         mEventManager = eventManager;
-        mRessourceCache = new ResourceCache(settings.RESOURCE_CACHE_THRESHOLD, app);
+        mRessourceCache = new ResourceCache(this, settings.RESOURCE_CACHE_THRESHOLD, app);
         mSettings = settings;
         mPhysics = physics;
         mRenderer = renderer;
+        mGLObjCache = new GLObjCache(this);
         mPrimaryPlayerView = view;
         mAudioManager = new SnareAudioManager(settings.SOUND_MAX_STREAMS, app);
         mVibrator = (Vibrator) app.getSystemService(Context.VIBRATOR_SERVICE);
@@ -187,6 +189,7 @@ public final class Game {
     // ---------------------------------------------------------
     // methods
     // ---------------------------------------------------------
+    @Override
     public synchronized void waitForDraw() {
         if (!mSettings.MULTI_THREADED) {
             update();
@@ -201,6 +204,7 @@ public final class Game {
         }
     }
     
+    @Override
     public synchronized void notifyEndDraw() {
         if (!mSettings.MULTI_THREADED) {
             return;
@@ -227,6 +231,7 @@ public final class Game {
     }
     
     
+    @Override
     public void onResume() {
         mLastMeasuredTime = SystemClock.elapsedRealtime();
         mAudioManager.onResume();    // create new SoundPool
@@ -242,6 +247,7 @@ public final class Game {
     }
     
     
+    @Override
     public void onPause() {
         if (mSettings.MULTI_THREADED && mGameThread != null) {
             mGameThread.interrupt();
@@ -257,30 +263,45 @@ public final class Game {
         mRessourceCache.onPause();
     }
     
+    @Override
     public String getName()                     {return mName;}
+    @Override
     public EventManager getEventManager()       {return mEventManager;}
+    @Override
     public ResourceCache getResourceCache()     {return mRessourceCache;}
+    @Override
     public SnareAudioManager getAudioManager()  {return mAudioManager;}
+    @Override
     public IRenderer getRenderer()              {return mRenderer;}
+    @Override
     public PlayerGameView getPrimaryView()      {return mPrimaryPlayerView;}
+    @Override
     public GameSettings getSettings()           {return mSettings;}
+    @Override
     public BaseFont getSystemFont()             {return mSystemFont;}
+    @Override
     public void setScratchPadData(Object data)  {mScratchPad = data;}
+    @Override
     public Object getScratchPadData()           {return mScratchPad;}
+    @Override
     public String getRandomString()             {return mRandomStringGen.nextString();}
+    @Override
     public int getRandomInt()                   {return mRandom.nextInt();}
+    @Override
     public int getRandomInt(int min, int max) {
         return mRandom.nextInt(max - min + 1) + min;
     }
     /**
      * @return Random float in [0..1];
      */
+    @Override
     public float getRandomFloat() {
         return mRandom.nextFloat();
     }
     /**
      * @return Random float in [min..max];
      */
+    @Override
     public float getRandomFloat(float min, float max) {
         return mRandom.nextFloat() * (max - min) + min;
     }
@@ -289,12 +310,14 @@ public final class Game {
      * @param resId
      * @return
      */
+    @Override
     public String getResourceString(int resId) {
         return mActivity != null ? mActivity.getApplication().getString(resId) : null;
     }
     /**
      * @return retrieves {@link SharedPreferences} from the context. 
      */
+    @Override
     public SharedPreferences getPreferences(String name) {
         if (mActivity != null) {
             return mActivity.getSharedPreferences(name, Context.MODE_PRIVATE);
@@ -303,28 +326,42 @@ public final class Game {
         }
     }
 
+    @Override
     public Application getApplication() {
         return mActivity != null ? mActivity.getApplication(): null;
     }
     
+    @Override
     public GLSurfaceView getSurfaceView()       {return mSurfaceView;}
+    @Override
     public ProcessManager getProcManager()      {return mProcessManager;}
+    @Override
     public GLObjCache getGLObjCache()           {return mGLObjCache;}
     /** Returns active game state. */
+    @Override
     public IGameState getGameState()            {return mGameState;}
     /** Returns previous game state. */
+    @Override
     public IGameState getPrevGameState()        {return mPrevGameState;}
     /** Returns state before previous game state. */
+    @Override
     public IGameState getPrevPrevGameState()    {return mPrevPrevGameState;}
+    @Override
     public IGameState getOnPauseGameState()     {return mPauseGameState;}
+    @Override
     public IPhysics getPhysics()                {return mPhysics;}
+    @Override
     public void stopVirtualTime()               {mVirtualTimeStopped = true;}
+    @Override
     public void startVirtualTime()              {mVirtualTimeStopped = false;}
     /** Returns last time taken from the system. */
+    @Override
     public long getLastMeasuredTime()           {return mLastMeasuredTime;}
     /** Returns game internal realtime. */
+    @Override
     public long getRealTime()                   {return mRealtime;}
     
+    @Override
     public void setVirtualTimeFactor(float factor) {
         if (factor < 0) {
             throw new IllegalArgumentException("Cannot turn back time.");
@@ -332,9 +369,12 @@ public final class Game {
         mVirtualTimeFactor = factor;
     }
     
+    @Override
     public float getVirtualTimeFactor()     {return mVirtualTimeFactor;}
+    @Override
     public void vibrate(long time)          {mVibrator.vibrate(time);}
     
+    @Override
     public void showToast(String msg) {
         if (mActivity == null) return;
 
@@ -346,6 +386,7 @@ public final class Game {
         });       
     }
     
+    @Override
     public GameObj addGameObj(GameObj obj) {
         mObjects.put(obj.getID(), obj);
         mObjectsList.add(obj);
@@ -358,6 +399,7 @@ public final class Game {
         return obj;
     }
     
+    @Override
     public void removeGameObj(GameObj obj) {
         IGameObjDestroyEvent e = mEventManager.obtain(IGameObjDestroyEvent.EVENT_TYPE);
         e.setGameObj(obj);
@@ -369,10 +411,12 @@ public final class Game {
         obj.onShutdown();   
     }
     
+    @Override
     public GameObj getObjById(int id) {
         return mObjects.get(id);
     }
     
+    @Override
     public GameObj getObjByListIdx(int idx) {
         return mObjectsList.get(idx);
     }
@@ -384,6 +428,7 @@ public final class Game {
      * @param layer
      * @return
      */
+    @Override
     public GameObj getObjByListIdx(int idx, GameObjLayer layer) {
         final GameObj obj = mObjectsList.get(idx);
         return layer.covers(obj.getLayer()) ? obj : null;
@@ -393,10 +438,12 @@ public final class Game {
      * Gets total number of game objects.
      * @return
      */
+    @Override
     public int getGameObjCnt() {
         return mObjectsList.size();
     }
     
+    @Override
     public BaseGameView addGameView(BaseGameView view) {
         mViews.append(view.getID(), view);
         mViewsList.add(view);
@@ -404,6 +451,7 @@ public final class Game {
         return view;
     }
     
+    @Override
     public void removeGameView(BaseGameView view) {
         mViews.delete(view.getID());
         mViewsList.remove(view);
@@ -440,14 +488,17 @@ public final class Game {
      * @param state State or null in case that no state change should happen
      *               on pause
      */
+    @Override
     public void setOnPauseGameState(IGameState state) {
         mPauseGameState = state;
     }
     
+    @Override
     public Activity getActivity() {
         return mActivity;
     }
     
+    @Override
     public void showMessage(String msg, String buttonText, DialogInterface.OnClickListener listener) {
         final String m = msg;
         final DialogInterface.OnClickListener l = listener;
@@ -616,10 +667,5 @@ public final class Game {
             Logger.i(LogSource.GAME, "game thread stopped.");
         }
     }
-    
-    public enum ClockType {
-        REALTIME,
-        VIRTUAL
-    }
-    
+
 }

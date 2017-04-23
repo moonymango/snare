@@ -1,12 +1,13 @@
 package com.moonymango.snare.ui;
 
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.res.IAssetName;
 import com.moonymango.snare.res.texture.BaseTextureResource;
 import com.moonymango.snare.res.texture.BitmapTextureResource;
 import com.moonymango.snare.res.texture.ETC1TextureResource;
+
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 /**
  * TODO prioC: derive {@link BaseFont} directly from {@link BaseTextureResource}
@@ -30,13 +31,11 @@ public abstract class BaseFont extends BitmapTextureResource {
         return numChars * ELEMENTS_PER_CHAR;
     }
     
-    public BaseFont(IAssetName asset) {
-        super(asset);
+    public BaseFont(IGame game, IAssetName asset) {
+        super(game, asset);
     }
 
-    public BaseFont(String name) {
-        super(name);
-    }
+    public BaseFont(IGame game, String name) { super(game, name); }
  
     public abstract String getTypeFace();
     public abstract boolean isBold();

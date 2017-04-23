@@ -1,7 +1,7 @@
 package com.moonymango.snare.game.logic;
 
 import com.moonymango.snare.game.GameObj;
-import com.moonymango.snare.game.Game.ClockType;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.util.IEasingProfile;
 import com.moonymango.snare.util.QuaternionAF;
@@ -19,7 +19,7 @@ public class ObjRotationTransition extends BaseProcess {
     private final float[] mEndRotQ = new float[4];
     private final float mDuration;
     private final IEasingProfile mProfile;
-    private ClockType mClock = ClockType.VIRTUAL;
+    private IGame.ClockType mClock = IGame.ClockType.VIRTUAL;
     
     private float mTime;
     
@@ -30,8 +30,9 @@ public class ObjRotationTransition extends BaseProcess {
      * @param end Object describing end state.
      * @param time time in milliseconds
      */
-    public ObjRotationTransition(GameObj obj, GameObj start, GameObj end, 
-            float time, IEasingProfile profile) {
+    public ObjRotationTransition(GameObj obj, GameObj start, GameObj end, float time, IEasingProfile profile)
+    {
+        super(obj.mGame);
         mObj = obj;
         mStart = start;
         mEnd = end;
@@ -39,12 +40,12 @@ public class ObjRotationTransition extends BaseProcess {
         mProfile = profile;
     }
     
-    public ObjRotationTransition(GameObj obj, GameObj end, float time, 
-            IEasingProfile profile) {
+    public ObjRotationTransition(GameObj obj, GameObj end, float time, IEasingProfile profile)
+    {
         this(obj, obj, end, time, profile);
     }
     
-    public void setClockType(ClockType clock) {
+    public void setClockType(IGame.ClockType clock) {
         mClock = clock;
     }
     
@@ -66,7 +67,7 @@ public class ObjRotationTransition extends BaseProcess {
     @Override
     protected boolean onUpdate(long realTime, float realDelta,
             float virtualDelta) {
-        mTime += mClock == ClockType.REALTIME ? realDelta : virtualDelta;
+        mTime += mClock == IGame.ClockType.REALTIME ? realDelta : virtualDelta;
         if (mTime >= mDuration) {
             // set to exact end state
             mObj.setRotationQ(mEndRotQ);

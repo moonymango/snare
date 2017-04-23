@@ -7,10 +7,11 @@ import com.moonymango.snare.events.IGameObjDestroyEvent;
 import com.moonymango.snare.events.IGameObjNewEvent;
 import com.moonymango.snare.events.IGameObjTouchEvent;
 import com.moonymango.snare.events.ITouchEvent;
-import com.moonymango.snare.game.Game;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
 import com.moonymango.snare.game.GameObj.GameObjLayer;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.physics.Raycast;
 import com.moonymango.snare.ui.IScreenElement;
 import com.moonymango.snare.ui.PlayerGameView;
@@ -60,8 +61,8 @@ public class Scene3D implements IScreenElement, IEventListener {
      * Constructs scene using default layer mask.
      */
     public Scene3D() {
-        this(Game.get().getSettings().SCENE_OPTIONS.DEFAULT_LAYER_MASK,
-                Game.get().getSettings().SCENE_OPTIONS.SCENE_MATRIX_STACK_SIZE);
+        this(SnareGame.get().getSettings().SCENE_OPTIONS.DEFAULT_LAYER_MASK,
+                SnareGame.get().getSettings().SCENE_OPTIONS.SCENE_MATRIX_STACK_SIZE);
     }
     
     /**
@@ -70,7 +71,7 @@ public class Scene3D implements IScreenElement, IEventListener {
      * @param layerMask
      */
     public Scene3D(GameObjLayer layerMask) {
-        this(layerMask, Game.get().getSettings().SCENE_OPTIONS.SCENE_MATRIX_STACK_SIZE);
+        this(layerMask, SnareGame.get().getSettings().SCENE_OPTIONS.SCENE_MATRIX_STACK_SIZE);
     }
     
     public Scene3D(GameObjLayer layerMask, int matrixStackSize) {
@@ -127,26 +128,26 @@ public class Scene3D implements IScreenElement, IEventListener {
             mCamera.onAttachToScene(this);
         }
         
-        for (int i = 0; i < Game.get().getGameObjCnt(); i++) {
-            final GameObj obj = Game.get().getObjByListIdx(i);
+        for (int i = 0; i < SnareGame.get().getGameObjCnt(); i++) {
+            final GameObj obj = SnareGame.get().getObjByListIdx(i);
             addObjComponents(obj);
         }
         
-        final EventManager em = Game.get().getEventManager(); 
+        final EventManager em = SnareGame.get().getEventManager();
         em.addListener(IGameObjNewEvent.EVENT_TYPE, this);
         em.addListener(IGameObjDestroyEvent.EVENT_TYPE, this);
     }
     
     public void onDetachFromScreen() {
-        for (int i = 0; i < Game.get().getGameObjCnt(); i++) {
-            final GameObj obj = Game.get().getObjByListIdx(i);
+        for (int i = 0; i < SnareGame.get().getGameObjCnt(); i++) {
+            final GameObj obj = SnareGame.get().getObjByListIdx(i);
             removeObjComponents(obj);
         }
         
         mView = null;
         mIsAttached = false;
         
-        final EventManager em = Game.get().getEventManager();
+        final EventManager em = SnareGame.get().getEventManager();
         em.removeListener(IGameObjNewEvent.EVENT_TYPE, this);
         em.removeListener(IGameObjDestroyEvent.EVENT_TYPE, this);
     }
@@ -337,7 +338,7 @@ public class Scene3D implements IScreenElement, IEventListener {
 
     public boolean onTouchEvent(ITouchEvent e) {
         // do a raycast to determine the touched game object
-        final Game game = Game.get();
+        final IGame game = SnareGame.get();
        
         final int x = e.getTouchX();
         final int y = e.getTouchY();

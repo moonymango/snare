@@ -1,5 +1,22 @@
 package com.moonymango.snare.ui.widgets;
 
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
+import com.moonymango.snare.opengl.BufferObj;
+import com.moonymango.snare.opengl.BufferObj.IBufferConfigurationSetup;
+import com.moonymango.snare.opengl.BufferObj.IBufferDataProvider;
+import com.moonymango.snare.opengl.BufferObj.IBufferUpdateSetup;
+import com.moonymango.snare.opengl.BufferObj.Target;
+import com.moonymango.snare.opengl.GLObjDescriptor;
+import com.moonymango.snare.opengl.GLObjDescriptor.GLObjType;
+import com.moonymango.snare.opengl.GLState;
+import com.moonymango.snare.opengl.ProgramObj;
+import com.moonymango.snare.opengl.TextureObj;
+import com.moonymango.snare.opengl.TextureObjOptions;
+import com.moonymango.snare.res.texture.BaseTextureResource;
+import com.moonymango.snare.res.texture.BaseTextureResource.TextureRegion;
+import com.moonymango.snare.ui.PlayerGameView;
+
 import static android.opengl.GLES20.GL_ARRAY_BUFFER;
 import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.GL_ONE;
@@ -21,21 +38,6 @@ import static android.opengl.GLES20.glUniform2f;
 import static android.opengl.GLES20.glUniform4f;
 import static android.opengl.GLES20.glUniformMatrix4fv;
 import static android.opengl.GLES20.glVertexAttribPointer;
-import com.moonymango.snare.game.Game;
-import com.moonymango.snare.opengl.BufferObj;
-import com.moonymango.snare.opengl.BufferObj.IBufferConfigurationSetup;
-import com.moonymango.snare.opengl.BufferObj.IBufferDataProvider;
-import com.moonymango.snare.opengl.BufferObj.IBufferUpdateSetup;
-import com.moonymango.snare.opengl.BufferObj.Target;
-import com.moonymango.snare.opengl.GLObjDescriptor;
-import com.moonymango.snare.opengl.GLObjDescriptor.GLObjType;
-import com.moonymango.snare.opengl.GLState;
-import com.moonymango.snare.opengl.ProgramObj;
-import com.moonymango.snare.opengl.TextureObj;
-import com.moonymango.snare.opengl.TextureObjOptions;
-import com.moonymango.snare.res.texture.BaseTextureResource;
-import com.moonymango.snare.res.texture.BaseTextureResource.TextureRegion;
-import com.moonymango.snare.ui.PlayerGameView;
 
 public class Rectangle extends BaseTouchWidget implements IBufferDataProvider {
     
@@ -141,40 +143,36 @@ public class Rectangle extends BaseTouchWidget implements IBufferDataProvider {
      * @param options
      * @param regionName
      * @param alignment
-     * @param listener
      */
-    public Rectangle(BaseTextureResource texture, TextureObjOptions options, 
+    public Rectangle(IGame game, BaseTextureResource texture, TextureObjOptions options,
             String regionName, PositionAlignment alignment, TouchSetting setting) {
-        super(setting);
+        super(game, setting);
         mTextureResource = texture;
         mTextureOptions = options != null ? options 
-                : Game.get().getSettings().mDefaultTextureOptions;
+                : SnareGame.get().getSettings().mDefaultTextureOptions;
         
         if (mTextureResource != null) {
             // texture
-            mTextureObjDescr = new GLObjDescriptor(mTextureResource.getName(), 
-                    GLObjType.TEXTURE);
+            mTextureObjDescr = new GLObjDescriptor(game, mTextureResource.getName(), GLObjType.TEXTURE);
             mRegion = texture.getTextureRegion(regionName);
                 
             // program
-            mProgramDescr = new GLObjDescriptor(Rectangle.class.getName() 
-                    + ".program_tex", GLObjType.PROGRAM);
+            mProgramDescr = new GLObjDescriptor(game, Rectangle.class.getName() + ".program_tex", GLObjType.PROGRAM);
             
             // when using textures, then each rectangle needs it's own
             // VBO due to texture regions, so chose random name
             final String s = Rectangle.class.getName() + ".vertices_" + 
-                    Game.get().getRandomString();
-            mVertexAttrBufferObjDescr = new GLObjDescriptor(s, GLObjType.BUFFER);
+                    SnareGame.get().getRandomString();
+            mVertexAttrBufferObjDescr = new GLObjDescriptor(game, s, GLObjType.BUFFER);
             
         } else {
             mTextureObjDescr = null;
             // program
-            mProgramDescr = new GLObjDescriptor(Rectangle.class.getName() 
-                    + ".program_no_tex", GLObjType.PROGRAM);
+            mProgramDescr = new GLObjDescriptor(game, Rectangle.class.getName() + ".program_no_tex", GLObjType.PROGRAM);
             
             // VBO
             final String s = Rectangle.class.getName() + ".vertices_no_tex";
-            mVertexAttrBufferObjDescr = new GLObjDescriptor(s, GLObjType.BUFFER);
+            mVertexAttrBufferObjDescr = new GLObjDescriptor(game, s, GLObjType.BUFFER);
         }
         
         setupVertexAttrBufferObj();
@@ -185,35 +183,33 @@ public class Rectangle extends BaseTouchWidget implements IBufferDataProvider {
     /**
      * Creates rectangle with default texture options.
      * @param texture
-     * @param listener Touch event listener.
      */
-    public Rectangle(BaseTextureResource texture, TouchSetting setting) {
-        this(texture, Game.get().getSettings().mDefaultTextureOptions, null,
+    public Rectangle(IGame game, BaseTextureResource texture, TouchSetting setting)
+    {
+        this(game, texture, SnareGame.get().getSettings().mDefaultTextureOptions, null,
                 PositionAlignment.CENTERED_XY, setting);
     }
     
     /**
      * Creates rectangle with specific texture options.
      * @param texture
-     * @param listener Touch event listener.
      */
-    public Rectangle(BaseTextureResource texture, TextureObjOptions options,
-    		TouchSetting setting) {
-        this(texture, options, null,
-                PositionAlignment.CENTERED_XY, setting);
+    public Rectangle(IGame game, BaseTextureResource texture, TextureObjOptions options, TouchSetting setting)
+    {
+        this(game, texture, options, null, PositionAlignment.CENTERED_XY, setting);
     }
     
-    public Rectangle(BaseTextureResource texture, TextureObjOptions options) {
-        this(texture, options, null,
-                PositionAlignment.CENTERED_XY, TouchSetting.NOT_TOUCHABLE);
+    public Rectangle(IGame game, BaseTextureResource texture, TextureObjOptions options)
+    {
+        this(game, texture, options, null, PositionAlignment.CENTERED_XY, TouchSetting.NOT_TOUCHABLE);
     }
     
     /**
      * Creates {@link Rectangle} without texture.
-     * @param listener
      */
-    public Rectangle(TouchSetting setting) {
-        this(null, null, null, PositionAlignment.CENTERED_XY, setting);
+    public Rectangle(IGame game, TouchSetting setting)
+    {
+        this(game, null, null, null, PositionAlignment.CENTERED_XY, setting);
     }
     
     // ---------------------------------------------------------

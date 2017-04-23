@@ -2,7 +2,8 @@ package com.moonymango.snare.opengl;
 
 import static android.opengl.GLES20.*;
 import android.opengl.ETC1Util;
-import com.moonymango.snare.game.Game;
+
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.util.Logger;
 import com.moonymango.snare.util.Logger.LogSource;
 
@@ -11,7 +12,7 @@ public class GLInfo {
     
     public static void checkGlErrors()
     {
-        final RenderOptions ro = Game.get().getSettings().RENDER_OPTIONS;
+        final RenderOptions ro = SnareGame.get().getSettings().RENDER_OPTIONS;
         int e = glGetError();
         if (e != GL_NO_ERROR && ro.THROW_ON_GL_ERROR) {
             throw new IllegalStateException("GL error: 0x" 
@@ -21,7 +22,7 @@ public class GLInfo {
     
     public static void checkGlErrors(int parameter)
     {
-        final RenderOptions ro = Game.get().getSettings().RENDER_OPTIONS;
+        final RenderOptions ro = SnareGame.get().getSettings().RENDER_OPTIONS;
         int e = glGetError();
         if (e != GL_NO_ERROR && ro.THROW_ON_GL_ERROR) {
             throw new IllegalStateException("GL error: 0x" 

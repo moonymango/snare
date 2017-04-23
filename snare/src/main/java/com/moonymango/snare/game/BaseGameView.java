@@ -1,7 +1,7 @@
 package com.moonymango.snare.game;
 
 
-public abstract class BaseGameView {
+public abstract class BaseGameView extends BaseSnareClass {
     
     //---------------------------------------------------------
     // static
@@ -16,7 +16,9 @@ public abstract class BaseGameView {
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
-    public BaseGameView() {
+    public BaseGameView(IGame game)
+    {
+        super(game);
         mViewID = ++sInstanceCnt;
     }
     

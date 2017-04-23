@@ -1,6 +1,7 @@
 package com.moonymango.snare.opengl;
 
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.util.CacheItemDescriptor;
 import com.moonymango.snare.util.Logger;
 import com.moonymango.snare.util.Logger.LogSource;
@@ -9,8 +10,8 @@ public class GLObjDescriptor extends CacheItemDescriptor<GLObjCache, GLObjDescri
     
     private final GLObjType mType;
 
-    public GLObjDescriptor(String name, GLObjType type) {
-        super(name, null); 
+    public GLObjDescriptor(IGame game, String name, GLObjType type) {
+        super(game, name, null);
         if (type == null) {
             throw new IllegalArgumentException("Missing type.");
         }
@@ -18,7 +19,7 @@ public class GLObjDescriptor extends CacheItemDescriptor<GLObjCache, GLObjDescri
     }
 
     public BaseGLObj getHandle() {
-        return getHandle(Game.get().getGLObjCache());
+        return getHandle(SnareGame.get().getGLObjCache());
     }
    
     @Override

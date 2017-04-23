@@ -1,9 +1,21 @@
 package com.moonymango.snare.opengl;
 
-import static android.opengl.GLES20.*;
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.GLObjDescriptor.GLObjType;
 import com.moonymango.snare.opengl.TextureObj.TextureSize;
+
+import static android.opengl.GLES20.GL_COLOR_ATTACHMENT0;
+import static android.opengl.GLES20.GL_DEPTH_ATTACHMENT;
+import static android.opengl.GLES20.GL_FRAMEBUFFER;
+import static android.opengl.GLES20.GL_FRAMEBUFFER_COMPLETE;
+import static android.opengl.GLES20.GL_RENDERBUFFER;
+import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.glBindFramebuffer;
+import static android.opengl.GLES20.glCheckFramebufferStatus;
+import static android.opengl.GLES20.glDeleteFramebuffers;
+import static android.opengl.GLES20.glFramebufferRenderbuffer;
+import static android.opengl.GLES20.glFramebufferTexture2D;
+import static android.opengl.GLES20.glGenFramebuffers;
 
 public class FramebufferObj extends BaseGLObj {
 
@@ -27,7 +39,7 @@ public class FramebufferObj extends BaseGLObj {
             throw new IllegalStateException("FBO already configured.");
         }
         
-        final GLInfo gl = Game.get().getRenderer().getInfo();
+        final GLInfo gl = SnareGame.get().getRenderer().getInfo();
         final int maxSize = Math.min(gl.getMaxRenderbufferSize(), 
                 gl.getMaxTextureSize());
         if (size.value() > maxSize) {
@@ -35,17 +47,19 @@ public class FramebufferObj extends BaseGLObj {
         }
 
         TextureObjOptions options = colorOptions != null ? colorOptions :
-            Game.get().getSettings().mDefaultTextureOptions;
+            SnareGame.get().getSettings().mDefaultTextureOptions;
         
         // color attachment
-        mColorAttachmentDescr = new GLObjDescriptor(mDescriptor.getQName()
-                + Game.DELIMITER + "color", GLObjType.TEXTURE);
+        mColorAttachmentDescr = new GLObjDescriptor(mGame,
+                mDescriptor.getQName() + SnareGame.DELIMITER + "color",
+                GLObjType.TEXTURE);
         mColorAttachment = (TextureObj) mColorAttachmentDescr.getHandle();
         mColorAttachment.configure(size, options);
         
         // depth attachment
-        mDepthAttachmentDescr = new GLObjDescriptor(mDescriptor.getQName()
-                + Game.DELIMITER + "depth", GLObjType.RENDERBUFFER);
+        mDepthAttachmentDescr = new GLObjDescriptor(mGame,
+                mDescriptor.getQName() + SnareGame.DELIMITER + "depth",
+                GLObjType.RENDERBUFFER);
         mDepthAttachmentR = (RenderbufferObj) mDepthAttachmentDescr.getHandle();
         mDepthAttachmentR.configureDepth(size.value(), size.value());
         

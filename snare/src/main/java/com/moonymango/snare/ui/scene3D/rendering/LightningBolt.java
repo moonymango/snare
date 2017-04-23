@@ -1,15 +1,8 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
-import static android.opengl.GLES20.*;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
-import com.moonymango.snare.game.Game;
-import com.moonymango.snare.game.Game.ClockType;
 import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.BufferObj.AttribPointer;
 import com.moonymango.snare.opengl.GLState;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
@@ -21,6 +14,23 @@ import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Scene3D;
 import com.moonymango.snare.util.Geometry;
 import com.moonymango.snare.util.VectorAF;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+
+import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
+import static android.opengl.GLES20.GL_SRC_ALPHA;
+import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
+import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
+import static android.opengl.GLES20.glDrawElements;
+import static android.opengl.GLES20.glGetAttribLocation;
+import static android.opengl.GLES20.glGetUniformLocation;
+import static android.opengl.GLES20.glUniform1f;
+import static android.opengl.GLES20.glUniform1i;
+import static android.opengl.GLES20.glUniform4f;
+import static android.opengl.GLES20.glUniformMatrix4fv;
 
 public class LightningBolt extends BaseDynamicMeshEffect {
 
@@ -71,10 +81,10 @@ public class LightningBolt extends BaseDynamicMeshEffect {
                
             "}";
     
-    private static RenderContext createRenderContext() {
+    private static RenderContext createRenderContext(IGame game) {
         final GLState s = new GLState();
         s.enableBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA).enableDepth().lock();
-        return new RenderContext(
+        return new RenderContext(game,
                 LightningBolt.class.getName(),
                 VERTEX_SHADER,
                 FRAGMENT_SHADER,
@@ -83,9 +93,9 @@ public class LightningBolt extends BaseDynamicMeshEffect {
     
     private static final int TEX_UNIT = 0;
     /** Creates {@link Material} object matching the effect. */
-    public static Material makeMaterial(BaseTextureResource res, 
-            TextureObjOptions options) {
-        final Material m = new Material();
+    public static Material makeMaterial(BaseTextureResource res, TextureObjOptions options)
+    {
+        final Material m = new Material(res.mGame);
         m.addTextureUnit(new TextureUnit(TEX_UNIT, res, options));
         return m;
     }
@@ -121,14 +131,13 @@ public class LightningBolt extends BaseDynamicMeshEffect {
      * When the bolt has disappeared completely subsequent calls to 
      * render() have no effect until reset(). Speed of the shrinking 
      * depends on value of shrinkF
-     * @param tex
      * @param gen
      * @param shrinkF shrinking for values >0, otherwise continuous rendering 
      */
-    public LightningBolt(IBoltPointGenerator gen, int shrinkF) 
+    public LightningBolt(IGame game, IBoltPointGenerator gen, int shrinkF)
     {
-        super(createRenderContext(), new BoltVertexGenerator(gen), 
-                ClockType.VIRTUAL);
+        super(createRenderContext(game), new BoltVertexGenerator(gen),
+                IGame.ClockType.VIRTUAL);
         mGen = gen;   
         mSegEnd = getNumSegments()-1;
         mShrinkF = shrinkF < 1 ? 0 : shrinkF;
@@ -136,13 +145,11 @@ public class LightningBolt extends BaseDynamicMeshEffect {
     
     /**
      * Constructs lightning bolt for continuous rendering without shrinking.
-     * @param tex
-     * @param options
      * @param gen
      */
-    public LightningBolt(IBoltPointGenerator gen)
+    public LightningBolt(IGame game, IBoltPointGenerator gen)
     {
-        this(gen, 0);
+        this(game, gen, 0);
     }
 
     @Override
@@ -386,7 +393,7 @@ public class LightningBolt extends BaseDynamicMeshEffect {
             for (int i = 0; i < bp; i++)
             {
                 mGen.getPointData(i, coords);
-                final float rand = Game.get().getRandomFloat(Geometry.RAD90, 
+                final float rand = SnareGame.get().getRandomFloat(Geometry.RAD90,
                         Geometry.RAD360);
                 // positive offset
                 vertexAttribs.put(coords[0]);

@@ -1,17 +1,17 @@
 package com.moonymango.snare.ui.widgets;
 
-import com.moonymango.snare.game.Game;
-import com.moonymango.snare.game.Game.ClockType;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.proc.ProcessManager.IOnProcessKilledListener;
 import com.moonymango.snare.proc.ProcessManager.ProcState;
 import com.moonymango.snare.ui.IScreenElement;
 import com.moonymango.snare.ui.PlayerGameView;
-import com.moonymango.snare.util.IEasingProfile;
 import com.moonymango.snare.util.EasingProfile;
+import com.moonymango.snare.util.IEasingProfile;
 
 /**
- * Moves a widget based on real time ( {@link ClockType}).
+ * Moves a widget based on real time.
  */
 public class WidgetMotionModifier extends BaseProcess {
     
@@ -24,14 +24,19 @@ public class WidgetMotionModifier extends BaseProcess {
     /**
      * Constructs an unconfigured modifier. 
      */
-    public WidgetMotionModifier() {}
+    public WidgetMotionModifier(IGame game)
+    {
+        super(game);
+    }
     
     /**
      * Constructs and configures modifier. The instance doesn't keep a reference
      * to settings so it may be used to configure other modifiers as well.
      * @param settings
      */
-    public WidgetMotionModifier(MotionSettings settings) {
+    public WidgetMotionModifier(IGame game, MotionSettings settings)
+    {
+        super(game);
         configure(settings);
     }
     
@@ -47,7 +52,7 @@ public class WidgetMotionModifier extends BaseProcess {
         }
         mS.copy(settings);
         setListener(settings.listener);
-        setDelay(ClockType.REALTIME, settings.delay);
+        setDelay(IGame.ClockType.REALTIME, settings.delay);
         return this;
     }
     
@@ -115,12 +120,12 @@ public class WidgetMotionModifier extends BaseProcess {
         /** 
          * Duration of motion in milliseconds. This will define the speed.
          * Default = 500 ms.
-         * Note: {@link ClockType} real time is always used.  
+         * Note: {@link com.moonymango.snare.game.IGame.ClockType} real time is always used.
          */
         public float duration = 500;
         /**
          * Delay until motion starts after scheduling the process.
-         * Uses the realtime {@link ClockType}.
+         * Uses the realtime {@link com.moonymango.snare.game.IGame.ClockType}.
          * Default = 0 ms;
          */
         public float delay = 0;
@@ -151,7 +156,7 @@ public class WidgetMotionModifier extends BaseProcess {
          */
         public boolean addToViewBeforeMotion = false;
         /** View to add widget to. (default = game primary view) */
-        public PlayerGameView view = Game.get().getPrimaryView();
+        public PlayerGameView view = SnareGame.get().getPrimaryView();
         /** 
          * Remove widget from its view after motion is finished. 
          * default = false 

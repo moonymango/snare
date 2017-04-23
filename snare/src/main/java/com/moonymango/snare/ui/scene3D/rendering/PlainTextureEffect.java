@@ -1,6 +1,7 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
 import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.opengl.GLState;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
 import com.moonymango.snare.opengl.TextureObjOptions;
@@ -62,11 +63,11 @@ public class PlainTextureEffect extends BaseEffect {
     /** Uniform location of color. */
     private static int muColor;
     
-    private static RenderContext createRenderContext() 
+    private static RenderContext createRenderContext(IGame game)
     {    
         final GLState s = new GLState();
         s.enableDepth().enableBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA).lock();
-        return new RenderContext(
+        return new RenderContext(game,
                 PlainTextureEffect.class.getName(),
                 VERTEX_SHADER,
                 FRAGMENT_SHADER,
@@ -74,17 +75,17 @@ public class PlainTextureEffect extends BaseEffect {
     }
     
     /** Creates {@link Material} object matching the effect. */
-    public static Material makeMaterial(BaseTextureResource res, 
-            TextureObjOptions options) {
+    public static Material makeMaterial(BaseTextureResource res, TextureObjOptions options)
+    {
         // effect uses unit 0
-        final Material m = new Material();
+        final Material m = new Material(res.mGame);
         m.addTextureUnit(new TextureUnit(0, res, options));
         m.setColor(Material.AMBIENT_COLOR_IDX, 1f, 1f, 1f, 1f);
         return m;
     }
     
-    public PlainTextureEffect() {
-        super(createRenderContext());
+    public PlainTextureEffect(IGame game) {
+        super(createRenderContext(game));
     }
 
     public void extractLocations(String programName, int prog) {

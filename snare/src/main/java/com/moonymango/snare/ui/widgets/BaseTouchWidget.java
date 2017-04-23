@@ -4,7 +4,8 @@ import com.moonymango.snare.events.EventManager;
 import com.moonymango.snare.events.ITouchEvent;
 import com.moonymango.snare.events.IWidgetTouchedBeginEvent;
 import com.moonymango.snare.events.IWidgetTouchedEndEvent;
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.proc.ProcessManager.IOnProcessKilledListener;
 import com.moonymango.snare.ui.TouchAction;
@@ -12,16 +13,16 @@ import com.moonymango.snare.ui.TouchAction;
 /**
  * Extends {@link BaseWidget} so it can act as button.
  */
-public abstract class BaseTouchWidget extends BaseWidget implements
-        IOnProcessKilledListener {
-
+public abstract class BaseTouchWidget extends BaseWidget implements IOnProcessKilledListener
+{
     private boolean mRunsClickAnimation;
     private BaseProcess mClickAnimation;
     private final TouchSetting mSetting;
     private boolean mIsEnabled = true;
 
-    public BaseTouchWidget(TouchSetting setting) 
+    public BaseTouchWidget(IGame game, TouchSetting setting)
     {
+        super(game);
     	mSetting = setting;
     	if (setting == TouchSetting.TOUCHABLE) {
     		setDefaultAnimation();    		
@@ -30,7 +31,7 @@ public abstract class BaseTouchWidget extends BaseWidget implements
 
     /**
      * Set a user defined animation for this button. Animation is played when
-     * the button catches a touch DOWN event. {@link IOnButtonClickedListener}
+     * the button catches a touch DOWN event.
      * is called after the animation process chain has finished.
      * 
      * @param proc
@@ -47,11 +48,10 @@ public abstract class BaseTouchWidget extends BaseWidget implements
     /**
      * Restores the default animation.
      */
-    public BaseTouchWidget setDefaultAnimation() {
-        WidgetScaleModifier min = new WidgetScaleModifier(this, 0.8f, 0.8f, 60,
-                null);
-        WidgetScaleModifier mag = new WidgetScaleModifier(this, 1.25f, 1.25f,
-                60, null);
+    public BaseTouchWidget setDefaultAnimation()
+    {
+        WidgetScaleModifier min = new WidgetScaleModifier(mGame, this, 0.8f, 0.8f, 60, null);
+        WidgetScaleModifier mag = new WidgetScaleModifier(mGame, this, 1.25f, 1.25f, 60, null);
         min.setNext(mag);
         setAnimation(min);
         return this;
@@ -92,13 +92,13 @@ public abstract class BaseTouchWidget extends BaseWidget implements
             mRunsClickAnimation = true;
             mClickAnimation.run();
             // send event 
-        	final EventManager em = Game.get().getEventManager();
+        	final EventManager em = SnareGame.get().getEventManager();
         	final IWidgetTouchedBeginEvent evt = em.obtain(IWidgetTouchedBeginEvent.EVENT_TYPE);
         	evt.setWidgetData(this);
         	em.queueEvent(evt);
         } else {
         	// no animation, send end event immediately
-        	final EventManager em = Game.get().getEventManager();
+        	final EventManager em = SnareGame.get().getEventManager();
         	final IWidgetTouchedEndEvent evt = em.obtain(IWidgetTouchedEndEvent.EVENT_TYPE);
         	evt.setWidgetData(this);
         	em.queueEvent(evt);        	
@@ -113,7 +113,7 @@ public abstract class BaseTouchWidget extends BaseWidget implements
         mRunsClickAnimation = false;
         
         // send end event
-        final EventManager em = Game.get().getEventManager();
+        final EventManager em = SnareGame.get().getEventManager();
     	final IWidgetTouchedEndEvent evt = em.obtain(IWidgetTouchedEndEvent.EVENT_TYPE);
     	evt.setWidgetData(this);
     	em.queueEvent(evt);   

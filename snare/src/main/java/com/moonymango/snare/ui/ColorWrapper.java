@@ -2,7 +2,7 @@ package com.moonymango.snare.ui;
 
 import android.graphics.Color;
 
-import com.moonymango.snare.game.Game.ClockType;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 
 import java.util.ArrayList;
@@ -30,25 +30,29 @@ public class ColorWrapper extends BaseProcess
     /** Parameters for Overlay fading. */
     private float mTimeScale;
     private float mLocalTime;
-    private ClockType mClockType;
+    private IGame.ClockType mClockType;
 
 
-    public ColorWrapper()
+    public ColorWrapper(IGame game)
     {
+        super(game);
     }
 
-    public ColorWrapper(float[] hsv, float a)
+    public ColorWrapper(IGame game, float[] hsv, float a)
     {
+        super(game);
         setColorHSV(hsv, a);
     }
 
-    public ColorWrapper(float[] rgba)
+    public ColorWrapper(IGame game, float[] rgba)
     {
+        super(game);
         setColor(rgba);
     }
 
     public ColorWrapper(ColorWrapper other)
     {
+        super(other.mGame);
         System.arraycopy(other.mNativeColor, 0, mNativeColor, 0, 4);
         System.arraycopy(other.mOverlayColor, 0, mOverlayColor, 0, 4);
         mOverlayFactor = other.mOverlayFactor;
@@ -74,7 +78,7 @@ public class ColorWrapper extends BaseProcess
             return false;
         }
 
-        final float delta = mClockType == ClockType.REALTIME ? realDelta : virtualDelta;
+        final float delta = mClockType == IGame.ClockType.REALTIME ? realDelta : virtualDelta;
         mLocalTime += delta * mTimeScale;
         boolean running = true;
         if (mLocalTime > 1.0f)
@@ -135,7 +139,7 @@ public class ColorWrapper extends BaseProcess
      * @param clock Clock base to use.
      * @return this
      */
-    public ColorWrapper disableOverlay(int millis, ClockType clock)
+    public ColorWrapper disableOverlay(int millis, IGame.ClockType clock)
     {
         if (mOverlayFactor < 0) throw new IllegalStateException("color overlay was not enabled.");
         mClockType = clock;

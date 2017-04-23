@@ -1,11 +1,12 @@
 package com.moonymango.snare.proc;
 
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.IGame.ClockType;
+import com.moonymango.snare.game.SnareGame;
+import com.moonymango.snare.util.PoolItem;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.moonymango.snare.game.Game;
-import com.moonymango.snare.game.Game.ClockType;
-import com.moonymango.snare.util.PoolItem;
 
 /**
  * Manager for all derivates of {@link BaseProcess}. A process is 
@@ -112,15 +113,17 @@ public class ProcessManager {
         private long mLastUpdate;
         private IOnProcessKilledListener mListener;
         
-        protected BaseProcess() {
-            this(ClockType.REALTIME, 0, null);
+        protected  BaseProcess(IGame game)
+        {
+            this(game, ClockType.REALTIME, 0, null);
         }
         
         /**
          * @param listener Listener which gets notified when process was killed.
          */
-        protected BaseProcess(IOnProcessKilledListener listener) {
-            this(ClockType.REALTIME, 0, listener);
+        protected BaseProcess(IGame game, IOnProcessKilledListener listener)
+        {
+            this(game, ClockType.REALTIME, 0, listener);
         }
         
         /**
@@ -133,8 +136,9 @@ public class ProcessManager {
          * @param delay Delay.
          * @param listener Listener which gets notified when process was killed.
          */
-        protected BaseProcess(ClockType delayClock, float delay, 
-                IOnProcessKilledListener listener) {
+        protected BaseProcess(IGame game, ClockType delayClock, float delay, IOnProcessKilledListener listener)
+        {
+            super(game);
             mListener = listener;
             mDelayClock = delayClock;
             mDelay = delay;
@@ -211,7 +215,7 @@ public class ProcessManager {
          */
         public void run() {
             if (isDead()) {
-                Game.get().getProcManager().attach(this);
+                SnareGame.get().getProcManager().attach(this);
             }
         }
         

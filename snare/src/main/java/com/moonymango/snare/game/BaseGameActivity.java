@@ -24,7 +24,8 @@ public abstract class BaseGameActivity extends Activity {
     // ---------------------------------------------------------
     // fields
     // --------------------------------------------------------- 
-       
+    protected IGame mGame;
+
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
@@ -39,47 +40,49 @@ public abstract class BaseGameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Game game = Game.create(this);
-        applySettings(game.getSettings());
-        setContentView(game.prepareGLSurfaceView());
+        final SnareGame g = SnareGame.create(this);
+        applySettings(g.getSettings());
+        setContentView(g.prepareGLSurfaceView());
+        mGame = g;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Game.dispose();
+        SnareGame.dispose();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Game.get().getSurfaceView().onPause();
-        Game.get().onPause();
+        mGame.getSurfaceView().onPause();
+        mGame.onPause();
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Game.get().onResume();
-        Game.get().getSurfaceView().onResume();
+        mGame.onResume();
+        mGame.getSurfaceView().onResume();
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
-    public GameSettings onLoadGameSettings() {
-        return new GameSettings();
+    public GameSettings onLoadGameSettings()
+    {
+        return new GameSettings(mGame);
     }
     
     public PlayerGameView onLoadPrimaryPlayerView() {
-        return new PlayerGameView();
+        return new PlayerGameView(mGame);
     }
     
     public IPhysics onLoadPhysics() {
-        return new SimplePhysics();
+        return new SimplePhysics(mGame);
     }
     
     public EventManager onLoadEventManager() {
-        return new EventManager(new DefaultEventPool());
+        return new EventManager(new DefaultEventPool(mGame));
     }
 
     public abstract IRenderer onLoadRenderer(PlayerGameView view);

@@ -15,8 +15,8 @@ import com.moonymango.snare.ui.scene3D.Scene3DOptions;
  * field after startup will have no effect. Fields named in lower case
  * (or camel case) may be changed any time to alter behaviour.
  */
-public class GameSettings {
-    
+public class GameSettings extends BaseSnareClass
+{
     //---------------------------------------------------------
     // static
     //---------------------------------------------------------
@@ -61,7 +61,7 @@ public class GameSettings {
     public final TextureObjOptions mDefaultTextureOptions = TextureObjOptions.LINEAR_CLAMP;
     
     // 3D scene
-    public final Scene3DOptions SCENE_OPTIONS = new Scene3DOptions();
+    public final Scene3DOptions SCENE_OPTIONS;
     
     // sound
     /** Max number of streams in {@link SoundPool}. */
@@ -75,6 +75,13 @@ public class GameSettings {
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
+
+    public GameSettings(IGame game)
+    {
+        super(game);
+        SCENE_OPTIONS = new Scene3DOptions(game);
+    }
+
 
     // ---------------------------------------------------------
     // methods

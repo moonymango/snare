@@ -1,11 +1,13 @@
 package com.moonymango.snare.util;
 
-import java.util.ArrayList;
-
+import com.moonymango.snare.game.BaseSnareClass;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.util.Logger.LogSource;
 
+import java.util.ArrayList;
 
-public abstract class Pool<T extends PoolItem> {
+
+public abstract class Pool<T extends PoolItem> extends BaseSnareClass {
 
     //---------------------------------------------------------
     // static
@@ -15,7 +17,7 @@ public abstract class Pool<T extends PoolItem> {
     // ---------------------------------------------------------
     // fields
     // ---------------------------------------------------------
-    private final ArrayList<T> mItems = new ArrayList<T>();
+    private final ArrayList<T> mItems = new ArrayList<>();
     private final int mCapacityIncrement;
     
     private int mObtained = 0;
@@ -25,12 +27,16 @@ public abstract class Pool<T extends PoolItem> {
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
-    public Pool() {
-        this(DEFAULT_CAPACITY_INCREMENT);
+    public Pool(IGame game)
+    {
+        this(game, DEFAULT_CAPACITY_INCREMENT);
     }
     
     
-    public Pool(int capacityIncrement) {
+    public Pool(IGame game, int capacityIncrement)
+    {
+        super(game);
+
         if (capacityIncrement <= 0) {
             mCapacityIncrement = DEFAULT_CAPACITY_INCREMENT;
         } else {

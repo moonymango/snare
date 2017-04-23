@@ -1,9 +1,10 @@
 package com.moonymango.snare.res.xml;
 
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.ui.BaseFont;
+
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-
-import com.moonymango.snare.ui.BaseFont;
 
 public class BMFont extends BaseFont {
     
@@ -25,10 +26,11 @@ public class BMFont extends BaseFont {
     private float mSpanY;
         
 
-    protected BMFont(String face, int size, boolean bold, boolean italic,
-            int lineHeight, int base, int width, int height, int outline,
-            String charTexture) {
-        super(charTexture);
+    protected BMFont(IGame game, String face, int size, boolean bold, boolean italic,
+                     int lineHeight, int base, int width, int height, int outline,
+                     String charTexture)
+    {
+        super(game, charTexture);
         mTypeFace = face;
         mBold = bold;
         mItalic = italic;

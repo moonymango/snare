@@ -32,8 +32,10 @@ public class PlayLoopAndFadeProc extends BaseProcess {
      * @param playDuration Duration in seconds of playback at volume.
      * @param fadeOutDuration Duration in seconds of fade-out.
      */
-    public PlayLoopAndFadeProc(LoopResource res, float volume, 
-            float fadeInDuration, float playDuration, float fadeOutDuration) {
+    public PlayLoopAndFadeProc(LoopResource res, float volume, float fadeInDuration,
+                               float playDuration, float fadeOutDuration)
+    {
+        super(res.mGame);
         mRes = res;
         mInitVolume = volume;
         mInitPDuration = playDuration * 1000;

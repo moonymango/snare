@@ -1,15 +1,19 @@
 package com.moonymango.snare.game.logic;
 
+import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
 import com.moonymango.snare.game.GameObj.IComponent;
+import com.moonymango.snare.game.IGame;
 
-public abstract class BaseComponent implements IComponent {
+public abstract class BaseComponent extends BaseSnareClass implements IComponent {
 
     private GameObj mGameObj;
     private final ComponentType mType;
     
-    protected BaseComponent(ComponentType type) {
+    protected BaseComponent(IGame game, ComponentType type)
+    {
+        super(game);
         mType = type;
     }
     

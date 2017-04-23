@@ -70,8 +70,9 @@ public class GameObj extends PoolItem implements IPositionable3D,
      * raycasting.
      * @param name
      */
-    public GameObj(String name) {
-        this(name, sInstanceCnt++, DEFAULT_OBJ_LAYER);
+    public GameObj(IGame game, String name)
+    {
+        this(game, name, sInstanceCnt++, DEFAULT_OBJ_LAYER);
     }
     
     /**
@@ -79,11 +80,15 @@ public class GameObj extends PoolItem implements IPositionable3D,
      * @param name
      * @param layer
      */
-    public GameObj(String name, GameObjLayer layer) {
-        this(name, sInstanceCnt++, layer);
+    public GameObj(IGame game, String name, GameObjLayer layer)
+    {
+        this(game, name, sInstanceCnt++, layer);
     }
     
-    protected GameObj(String name, int id, GameObjLayer layer) {
+    protected GameObj(IGame game, String name, int id, GameObjLayer layer)
+    {
+        super(game);
+
         if (name == null) {
             throw new IllegalArgumentException("Missing object name.");
         }
@@ -439,7 +444,7 @@ public class GameObj extends PoolItem implements IPositionable3D,
     public float getLastModTime() {
         // if object is dirty then last mod was in current frame,
         // otherwise return time of last transform update
-        return mMoved || mRotated || mScaled ? Game.get().getRealTime() 
+        return mMoved || mRotated || mScaled ? SnareGame.get().getRealTime()
                 : mLastModTime;
     }
     
@@ -463,7 +468,7 @@ public class GameObj extends PoolItem implements IPositionable3D,
         mFromWorldValid = false; 
        
         // send events
-        final Game game = Game.get();
+        final IGame game = SnareGame.get();
         if (mMoved && mSendMoveEvent && game != null) {
             final EventManager em = game.getEventManager();
             final IGameObjMoveEvent e = em.obtain(IGameObjMoveEvent.EVENT_TYPE);
@@ -531,7 +536,7 @@ public class GameObj extends PoolItem implements IPositionable3D,
     }
 
     /**
-     * Game object components.
+     * IGame object components.
      */
     public interface IComponent
     {

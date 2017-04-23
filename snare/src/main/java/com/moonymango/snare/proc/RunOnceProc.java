@@ -1,12 +1,15 @@
 package com.moonymango.snare.proc;
 
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 
 public class RunOnceProc extends BaseProcess {
 
     private final Runnable mTarget;
         
-    public RunOnceProc(Runnable target) {
+    public RunOnceProc(IGame game, Runnable target)
+    {
+        super(game);
         if (target == null) {
             throw new IllegalArgumentException("Missing runnable.");
         }

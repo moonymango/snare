@@ -1,12 +1,7 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
-import com.moonymango.snare.game.Game;
-import com.moonymango.snare.game.Game.ClockType;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.BufferObj;
 import com.moonymango.snare.opengl.BufferObj.AttribPointer;
 import com.moonymango.snare.opengl.BufferObj.IBufferConfigurationSetup;
@@ -16,6 +11,11 @@ import com.moonymango.snare.opengl.BufferObj.Target;
 import com.moonymango.snare.opengl.GLObjDescriptor;
 import com.moonymango.snare.opengl.GLObjDescriptor.GLObjType;
 import com.moonymango.snare.ui.scene3D.BaseEffect;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 /**
  * Base class for effects that bring their own mesh, i.e. particle effects. 
@@ -35,7 +35,7 @@ public abstract class BaseDynamicMeshEffect extends BaseEffect
     
     /** Time in seconds. */
     protected float mTime;
-    private final ClockType mClock;
+    private final IGame.ClockType mClock;
     
     private final IVertexGenerator mGen;
     
@@ -49,22 +49,17 @@ public abstract class BaseDynamicMeshEffect extends BaseEffect
     /**
      * Constructor takes data to compile program and generate particle buffer.
      * Use sParticlePointer for particle buffer.
-     * 
-     * @param name Program name.
-     * @param vertexShader Vertex shader.
-     * @param fragmentShader Fragment shader. 
-     * @param particleCnt Number of particles to generate.
+     *
      * @param clock Clock type for time updates.
      */
-    protected BaseDynamicMeshEffect(RenderContext context, 
-            IVertexGenerator gen, ClockType clock) 
+    protected BaseDynamicMeshEffect(RenderContext context, IVertexGenerator gen, IGame.ClockType clock)
     {
         super(context);
         
         mClock = clock;
         final String n = gen.getName();
-        mVertexBufferDescr = new GLObjDescriptor(n + ".vertices", GLObjType.BUFFER);
-        mIndexBufferDescr = new GLObjDescriptor(n + ".indices", GLObjType.BUFFER);
+        mVertexBufferDescr = new GLObjDescriptor(context.mGame, n + ".vertices", GLObjType.BUFFER);
+        mIndexBufferDescr = new GLObjDescriptor(context.mGame, n + ".indices", GLObjType.BUFFER);
         mGen = gen;
     }
  
@@ -96,7 +91,7 @@ public abstract class BaseDynamicMeshEffect extends BaseEffect
     public void onUpdate(long realTime, float realDelta, 
             float virtualDelta) {
         // update time so that particles will move
-        final float delta = mClock == ClockType.REALTIME ? realDelta 
+        final float delta = mClock == IGame.ClockType.REALTIME ? realDelta
                 : virtualDelta;
         mTime += delta / 1000;
     }
@@ -186,8 +181,8 @@ public abstract class BaseDynamicMeshEffect extends BaseEffect
             
             for (int i = 0; i < mParticleCnt; i++) {
                 // get z,w for the quads
-                final float z = Game.get().getRandomFloat(0, 1);
-                final float w = Game.get().getRandomFloat(0, 1);
+                final float z = SnareGame.get().getRandomFloat(0, 1);
+                final float w = SnareGame.get().getRandomFloat(0, 1);
                 
                 // upper left
                 vertexAttribs.put(-1);

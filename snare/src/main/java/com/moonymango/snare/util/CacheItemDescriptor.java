@@ -1,8 +1,12 @@
 package com.moonymango.snare.util;
 
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.BaseSnareClass;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 
-public abstract class CacheItemDescriptor<C extends Cache<C,D,I>, D extends CacheItemDescriptor<C,D,I>, I extends CacheItem<C,D,I>> {
+public abstract class CacheItemDescriptor<C extends Cache<C,D,I>, D extends CacheItemDescriptor<C,D,I>, I extends CacheItem<C,D,I>>
+    extends BaseSnareClass
+{
 
     //---------------------------------------------------------
     // static
@@ -22,14 +26,17 @@ public abstract class CacheItemDescriptor<C extends Cache<C,D,I>, D extends Cach
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
-    public CacheItemDescriptor(String name, String qualifier) {
+    public CacheItemDescriptor(IGame game, String name, String qualifier)
+    {
+        super(game);
+
         if (name == null) {
             throw new IllegalArgumentException("Missing cache item descriptor name.");
         }
         mName = name;
         if (qualifier != null) {
             mQualifier = qualifier;
-            mQName = name + Game.DELIMITER + mQualifier;
+            mQName = name + SnareGame.DELIMITER + mQualifier;
         } else {
             mQualifier = null;
             mQName = name;

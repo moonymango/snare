@@ -1,32 +1,34 @@
 package com.moonymango.snare.res.texture;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-
-import com.moonymango.snare.res.BaseResHandle;
-import com.moonymango.snare.res.IAssetName;
-
 import android.content.res.AssetManager;
 import android.opengl.ETC1Util;
 import android.opengl.ETC1Util.ETC1Texture;
 
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.res.BaseResHandle;
+import com.moonymango.snare.res.IAssetName;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+
 public class ETC1TextureResource extends BaseTextureResource {
 
-    public ETC1TextureResource(String name, ITextureRegionProvider provider) {
-        super(name, provider);
+    public ETC1TextureResource(IGame game, String name, ITextureRegionProvider provider)
+    {
+        super(game, name, provider);
     }
 
-    public ETC1TextureResource(String name) {
-        super(name);
+    public ETC1TextureResource(IGame game, String name) {
+        super(game, name);
     }
 
-    public ETC1TextureResource(IAssetName asset) {
-        super(asset);
+    public ETC1TextureResource(IGame game, IAssetName asset) {
+        super(game, asset);
     }
     
-    public ETC1TextureResource(IAssetName asset,
-            ITextureRegionProvider provider) {
-        super(asset, provider);
+    public ETC1TextureResource(IGame game, IAssetName asset, ITextureRegionProvider provider)
+    {
+        super(game, asset, provider);
     }
 
     @Override

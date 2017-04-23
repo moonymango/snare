@@ -1,6 +1,8 @@
 package com.moonymango.snare.opengl;
 
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.BaseSnareClass;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.BufferObj.IBufferConfigurationSetup;
 import com.moonymango.snare.opengl.BufferObj.IBufferDataProvider;
 import com.moonymango.snare.opengl.BufferObj.IBufferUpdateSetup;
@@ -47,9 +49,8 @@ import static com.moonymango.snare.opengl.GLES20Trace.glViewport;
  * Also implements {@link ILocationHolder} for the program which is used
  * to do final rendering to screen. 
  */
-public class VarResolutionRenderer implements IRenderer, ILocationHolder, 
-        IBufferDataProvider {
-
+public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, ILocationHolder, IBufferDataProvider
+{
     private static final String VERTEX_SHADER =
         "attribute vec4 aPosition;" +
         "uniform vec2 uRes;" +
@@ -110,11 +111,13 @@ public class VarResolutionRenderer implements IRenderer, ILocationHolder,
      * Create render. Max resolution is screen resolution.
      * @param view
      */
-    public VarResolutionRenderer(PlayerGameView view) {
+    public VarResolutionRenderer(PlayerGameView view)
+    {
         this(view, 0, 0, 0);
     }
     
-    public VarResolutionRenderer(PlayerGameView view, float scale) {
+    public VarResolutionRenderer(PlayerGameView view, float scale)
+    {
         this(view, 0, 0, scale);
     }
      
@@ -124,17 +127,15 @@ public class VarResolutionRenderer implements IRenderer, ILocationHolder,
      * @param maxResX Max. resolution x.
      * @param maxResY Max. resolution y.
      */
-    public VarResolutionRenderer(PlayerGameView view, int maxResX, 
-            int maxResY) {
+    public VarResolutionRenderer(PlayerGameView view, int maxResX, int maxResY)
+    {
         this(view, maxResX, maxResY, 0);
     }
     
-    private VarResolutionRenderer(PlayerGameView view, int maxResX, 
-            int maxResY, float scale) {
-        if (view == null) {
-            throw new IllegalArgumentException("Missing player view");
-        }
-        
+    private VarResolutionRenderer(PlayerGameView view, int maxResX, int maxResY, float scale)
+    {
+        super(view.mGame);
+
         mPlayerGameView = view;
         mScale = scale;
         mMaxResX = maxResX;
@@ -206,7 +207,7 @@ public class VarResolutionRenderer implements IRenderer, ILocationHolder,
 
     public void onDrawFrame(GL10 gl) {
         
-        final Game game = Game.get();
+        final IGame game = SnareGame.get();
         final RenderOptions ro = game.getSettings().RENDER_OPTIONS;
         
         game.waitForDraw();
@@ -225,7 +226,7 @@ public class VarResolutionRenderer implements IRenderer, ILocationHolder,
                     + Integer.toHexString(e));
         }
         
-        long time = Game.get().getLastMeasuredTime();
+        long time = SnareGame.get().getLastMeasuredTime();
         
         // FPS counter
         mFrameCnt++;
@@ -241,7 +242,7 @@ public class VarResolutionRenderer implements IRenderer, ILocationHolder,
     }
 
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        final Game game = Game.get();
+        final IGame game = SnareGame.get();
         game.waitForDraw();
         
         mSurfaceHeight = height;
@@ -276,7 +277,7 @@ public class VarResolutionRenderer implements IRenderer, ILocationHolder,
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        final Game game = Game.get();
+        final IGame game = SnareGame.get();
         game.waitForDraw();
         
         //read EGL context properties + extensions
@@ -312,23 +313,25 @@ public class VarResolutionRenderer implements IRenderer, ILocationHolder,
         
         // prepare GL stuff (because renderer is bound to Game instance for
         // live time, do not care about releasing anything of it)
-        final String fboName = VarResolutionRenderer.class.getName() + Game.DELIMITER
-                + Game.get().getRandomString();
-        mFBODescr = new GLObjDescriptor(fboName, GLObjType.FRAMEBUFFER);
+        mFBODescr = new GLObjDescriptor(mGame,
+                VarResolutionRenderer.class.getName() + SnareGame.DELIMITER + SnareGame.get().getRandomString(),
+                GLObjType.FRAMEBUFFER);
         mFBO = (FramebufferObj) mFBODescr.getHandle();
         if (!mFBO.isConfigured()) {
             mFBO.configure(mSize, TextureObjOptions.NEAREST_REPEAT);
         }
         
-        mProgramDescr = new GLObjDescriptor(VarResolutionRenderer.class.getName() + 
-                Game.DELIMITER + "program", GLObjType.PROGRAM);
+        mProgramDescr = new GLObjDescriptor(mGame,
+                VarResolutionRenderer.class.getName() + SnareGame.DELIMITER + "program",
+                GLObjType.PROGRAM);
         mProgram = (ProgramObj) mProgramDescr.getHandle();
         if (!mProgram.isConfigured()) {
             mProgram.configure(VERTEX_SHADER, FRAGMENT_SHADER, this);
         }
         
-        mBufferDescr = new GLObjDescriptor(VarResolutionRenderer.class.getName() + 
-                Game.DELIMITER + "vertex", GLObjType.BUFFER);
+        mBufferDescr = new GLObjDescriptor(mGame,
+                VarResolutionRenderer.class.getName() + SnareGame.DELIMITER + "vertex",
+                GLObjType.BUFFER);
         mBufferObj = (BufferObj) mBufferDescr.getHandle();
         if (!mBufferObj.isConfigured()) {
             mBufferObj.configure(this);
@@ -342,7 +345,7 @@ public class VarResolutionRenderer implements IRenderer, ILocationHolder,
         }
         
         glClearColor(ro.BG_COLOR_R, ro.BG_COLOR_G, ro.BG_COLOR_B, 1.0f);
-        if (Game.get().getSettings().RENDER_OPTIONS.CLEAR_SCREEN) {
+        if (SnareGame.get().getSettings().RENDER_OPTIONS.CLEAR_SCREEN) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
         mPlayerGameView.draw();

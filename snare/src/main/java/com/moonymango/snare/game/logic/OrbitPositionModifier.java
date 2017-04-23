@@ -1,6 +1,7 @@
 package com.moonymango.snare.game.logic;
 
-import com.moonymango.snare.game.Game.ClockType;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.IGame.ClockType;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.util.MatrixAF;
 
@@ -18,7 +19,7 @@ public class OrbitPositionModifier extends BaseProcess {
     private final IPositionable3D mObj;
     private final float mDegreesPerMillisecond;
     private float mAngle;
-    private final ClockType mClock;
+    private final IGame.ClockType mClock;
     
     /**
      * Constructs modifier based on virtual clock.
@@ -27,9 +28,10 @@ public class OrbitPositionModifier extends BaseProcess {
      * @param axisVector Vector of the rotation axis
      * @param degreesPerSecond Orbit speed
      */
-    public OrbitPositionModifier(IPositionable3D obj, float[] axisPoint, 
-            float[] axisVector, float degreesPerSecond) {
-        this(obj, axisPoint, axisVector, degreesPerSecond, ClockType.VIRTUAL);
+    public OrbitPositionModifier(IGame game, IPositionable3D obj, float[] axisPoint, float[] axisVector,
+                                 float degreesPerSecond)
+    {
+        this(game, obj, axisPoint, axisVector, degreesPerSecond, ClockType.VIRTUAL);
     }
     
     /**
@@ -39,13 +41,15 @@ public class OrbitPositionModifier extends BaseProcess {
      * @param axisVector
      * @param degreesPerSecond
      */
-    public OrbitPositionModifier(IPositionable3D obj, float[] axisVector, 
-            float degreesPerSecond) {
-        this(obj, null, axisVector, degreesPerSecond, ClockType.VIRTUAL);
+    public OrbitPositionModifier(IGame game, IPositionable3D obj, float[] axisVector, float degreesPerSecond)
+    {
+        this(game, obj, null, axisVector, degreesPerSecond, ClockType.VIRTUAL);
     }
     
-    public OrbitPositionModifier(IPositionable3D obj, float[] axisPoint, 
-            float[] axisVector, float degreesPerSecond, ClockType clock) {
+    public OrbitPositionModifier(IGame game, IPositionable3D obj, float[] axisPoint, float[] axisVector,
+                                 float degreesPerSecond, ClockType clock)
+    {
+        super(game);
         if (obj == null) {
             throw new IllegalArgumentException("Missing game object.");
         }

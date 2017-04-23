@@ -1,25 +1,27 @@
 package com.moonymango.snare.audio;
 
-import java.io.IOException;
-
-import com.moonymango.snare.game.Game;
-import com.moonymango.snare.res.BaseResHandle;
-import com.moonymango.snare.res.BaseResource;
-import com.moonymango.snare.res.IAssetName;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
+import com.moonymango.snare.res.BaseResHandle;
+import com.moonymango.snare.res.BaseResource;
+import com.moonymango.snare.res.IAssetName;
+
+import java.io.IOException;
+
 public class SoundResource extends BaseResource {
 
-    public SoundResource(IAssetName asset) {
-        super(asset);
+    public SoundResource(IGame game, IAssetName asset) {
+        super(game, asset);
     }
 
     @Override
     protected BaseResHandle createHandleByAsset(AssetManager am) {
         try {
-            return new SoundHandle(this, Game.get().getAudioManager(),
-                    Game.get().getSettings().mDefaultSoundFXVolume);
+            return new SoundHandle(this, SnareGame.get().getAudioManager(),
+                    SnareGame.get().getSettings().mDefaultSoundFXVolume);
         } catch (IOException e) {
             return null;
         }
@@ -32,7 +34,7 @@ public class SoundResource extends BaseResource {
     }
     
     public SoundHandle getHandle() {
-        return (SoundHandle) getHandle(Game.get().getResourceCache());
+        return (SoundHandle) getHandle(SnareGame.get().getResourceCache());
     }
 
 }

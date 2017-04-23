@@ -1,9 +1,10 @@
 package com.moonymango.snare.proc;
 
-import java.util.ArrayList;
-
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.proc.ProcessManager.ProcState;
+
+import java.util.ArrayList;
 
 /**
  * Provides handling of a group of processes as if it was a single process.
@@ -11,9 +12,13 @@ import com.moonymango.snare.proc.ProcessManager.ProcState;
  */
 public class ProcessGroup extends BaseProcess {
 
-    private ArrayList<BaseProcess> mProcs = 
-            new ArrayList<ProcessManager.BaseProcess>();
-    
+    private ArrayList<BaseProcess> mProcs = new ArrayList<>();
+
+    public ProcessGroup(IGame game)
+    {
+        super(game);
+    }
+
     @Override
     protected void onInit() {
         // start all processes

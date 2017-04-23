@@ -1,22 +1,24 @@
 package com.moonymango.snare.res.data;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.res.BaseResHandle;
 import com.moonymango.snare.res.BaseResource;
 import com.moonymango.snare.res.IAssetName;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 
 public class MeshResource extends BaseResource {
     
     private final BaseImportTransform mTransform;
 
-    public MeshResource(IAssetName asset) {
-        this(asset, null);
+    public MeshResource(IGame game, IAssetName asset) {
+        this(game, asset, null);
     }
     
     /**
@@ -25,8 +27,8 @@ public class MeshResource extends BaseResource {
      * @param asset
      * @param transform
      */
-    public MeshResource(IAssetName asset, BaseImportTransform transform) { 
-        super(asset);
+    public MeshResource(IGame game, IAssetName asset, BaseImportTransform transform) {
+        super(game, asset);
         if (asset.getQualifier() == null) {
             throw new IllegalArgumentException("Missing mesh name.");
         }
@@ -69,7 +71,7 @@ public class MeshResource extends BaseResource {
     }
 
     public MeshResHandle getHandle() {
-        return (MeshResHandle) getHandle(Game.get().getResourceCache());
+        return (MeshResHandle) getHandle(SnareGame.get().getResourceCache());
     }
     
     /** Transformation operation performed during mesh import. */

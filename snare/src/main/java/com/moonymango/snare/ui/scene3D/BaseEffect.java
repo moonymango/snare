@@ -1,7 +1,9 @@
 package com.moonymango.snare.ui.scene3D;
 
+import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.logic.BaseComponent;
 import com.moonymango.snare.opengl.GLObjDescriptor;
 import com.moonymango.snare.opengl.GLObjDescriptor.GLObjType;
@@ -25,8 +27,9 @@ public abstract class BaseEffect extends BaseComponent
     private final RenderContext mContext;
         
     /** Constructor. */
-    protected BaseEffect(RenderContext context) {
-        super(ComponentType.EFFECT);
+    protected BaseEffect(RenderContext context)
+    {
+        super(context.mGame, ComponentType.EFFECT);
         mContext = context;
     }
     
@@ -91,8 +94,8 @@ public abstract class BaseEffect extends BaseComponent
      * This is used by {@link Scene3D} to group drawables within their 
      * respective render passes.
      */
-    public static class RenderContext {
-
+    public static class RenderContext extends BaseSnareClass
+    {
         private final String mName;
         private final String mVertexShaderText;
         private final String mFragmentShaderText;
@@ -109,13 +112,14 @@ public abstract class BaseEffect extends BaseComponent
          * @param fragmentShader Fragment shader text.
          * @param state GlState to use with the shader (state has to be locked)   
          */
-        public RenderContext(String name, String vertexShader, 
-                String fragmentShader, GLState state) {
+        public RenderContext(IGame game, String name, String vertexShader, String fragmentShader, GLState state)
+        {
+            super(game);
             mName = name;
             mVertexShaderText = vertexShader;
             mFragmentShaderText = fragmentShader;
             mState = state;
-            mProgramDescr = new GLObjDescriptor(name, GLObjType.PROGRAM);
+            mProgramDescr = new GLObjDescriptor(game, name, GLObjType.PROGRAM);
             
             // calculate hash
             final int prime = 31;

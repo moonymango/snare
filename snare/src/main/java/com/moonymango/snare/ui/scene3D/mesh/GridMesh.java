@@ -1,16 +1,17 @@
 package com.moonymango.snare.ui.scene3D.mesh;
 
+import android.opengl.GLES20;
+
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
+import com.moonymango.snare.opengl.TextureObjOptions;
+import com.moonymango.snare.res.texture.BaseTextureResource;
+import com.moonymango.snare.ui.scene3D.BaseMesh;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-
-import android.opengl.GLES20;
-
-import com.moonymango.snare.game.Game;
-import com.moonymango.snare.opengl.TextureObjOptions;
-import com.moonymango.snare.res.texture.BaseTextureResource;
-import com.moonymango.snare.ui.scene3D.BaseMesh;
 
 /**
  * Generates a mesh of sqares centered in the xz plane. Intended to be drawn with
@@ -29,9 +30,8 @@ public class GridMesh extends BaseMesh {
      * @param x Number of squares in x dimension.
      * @param z Number of squares in z dimension.
      */
-    public GridMesh(int x, int z) {
-        super(GridMesh.class.getName() + Game.DELIMITER + x + Game.DELIMITER + z,
-                false, false);
+    public GridMesh(IGame game, int x, int z) {
+        super(game, GridMesh.class.getName() + SnareGame.DELIMITER + x + SnareGame.DELIMITER + z, false, false);
         mXLines = x + 1;
         mZLines = z + 1;
         mMaxX = mSquare * x /2;

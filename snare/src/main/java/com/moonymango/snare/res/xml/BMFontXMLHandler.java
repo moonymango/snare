@@ -1,11 +1,12 @@
 package com.moonymango.snare.res.xml;
 
-import java.io.File;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.res.xml.BMFont.Char;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import com.moonymango.snare.res.xml.BMFont.Char;
+import java.io.File;
 
 /**
  * Handler for parsing BMFont .fnt files.
@@ -27,8 +28,12 @@ public class BMFontXMLHandler extends BaseXMLHandler<BMFont> {
     private String mTextureFileName;
     private String mTextureFileExt;
     private String mTextureFilePath;
-    
-     
+
+    public BMFontXMLHandler(IGame game)
+    {
+        super(game);
+    }
+
     @Override
     public BMFont getXMLParseResult() {
         return mFont;
@@ -103,7 +108,8 @@ public class BMFontXMLHandler extends BaseXMLHandler<BMFont> {
         }
         
         if (localName.equals("chars")) {
-            mFont = new BMFont(mName, 
+            mFont = new BMFont(mGame,
+                    mName,
                     mSize, 
                     mBold, 
                     mItalic, 

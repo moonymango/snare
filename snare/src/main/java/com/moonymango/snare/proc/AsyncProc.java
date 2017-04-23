@@ -1,6 +1,7 @@
 package com.moonymango.snare.proc;
 
 import com.moonymango.snare.events.EventManager;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 
 /**
@@ -16,7 +17,9 @@ public class AsyncProc extends BaseProcess {
     private Thread mThread;
     private Runnable mRunnable;
     
-    public AsyncProc(Runnable r) {
+    public AsyncProc(IGame game, Runnable r)
+    {
+        super(game);
         mRunnable = r;
     }
     

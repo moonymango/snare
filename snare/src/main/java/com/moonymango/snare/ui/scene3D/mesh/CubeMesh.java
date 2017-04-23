@@ -1,15 +1,16 @@
 package com.moonymango.snare.ui.scene3D.mesh;
 
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.ui.scene3D.BaseMesh;
+
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-
-import com.moonymango.snare.ui.scene3D.BaseMesh;
 
 public class CubeMesh extends BaseMesh {
 
     
-    public CubeMesh() {
-        super(CubeMesh.class.getName(), false, false);
+    public CubeMesh(IGame game) {
+        super(game, CubeMesh.class.getName(), false, false);
     }
 
     @Override

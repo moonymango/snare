@@ -7,10 +7,12 @@ import com.moonymango.snare.events.IEvent;
 import com.moonymango.snare.events.IGameObjCollisionEvent;
 import com.moonymango.snare.events.IGameObjDestroyEvent;
 import com.moonymango.snare.events.IGameObjNewEvent;
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
 import com.moonymango.snare.game.GameObj.GameObjLayer;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.physics.BaseBoundingVolume.IntersectionDistance;
 import com.moonymango.snare.physics.BaseBoundingVolume.VolumeType;
 import com.moonymango.snare.util.Pool;
@@ -23,7 +25,7 @@ import java.util.ArrayList;
  * when only a small number of objects have to be tested for collisions.
  * No motion, no forces or anything like that.
  */
-public class SimplePhysics implements IPhysics {
+public class SimplePhysics extends BaseSnareClass implements IPhysics {
     
     private RaycastPool mRaycastPool;
     private PairPool mPairPool;
@@ -45,9 +47,11 @@ public class SimplePhysics implements IPhysics {
     
     private boolean mCollisionChecking;
     
-    public SimplePhysics() {
-        mRaycastPool = new RaycastPool();
-        mPairPool = new PairPool();
+    public SimplePhysics(IGame game)
+    {
+        super(game);
+        mRaycastPool = new RaycastPool(game);
+        mPairPool = new PairPool(game);
     }
     
     public void enableCollisionChecking(boolean enable) {
@@ -55,8 +59,8 @@ public class SimplePhysics implements IPhysics {
     }
 
     public void onInit() {
-        Game.get().getEventManager().addListener(IGameObjNewEvent.EVENT_TYPE, this);
-        Game.get().getEventManager().addListener(IGameObjDestroyEvent.EVENT_TYPE, this);
+        SnareGame.get().getEventManager().addListener(IGameObjNewEvent.EVENT_TYPE, this);
+        SnareGame.get().getEventManager().addListener(IGameObjDestroyEvent.EVENT_TYPE, this);
     }
 
     public void tick(long realTime, float realDelta, float virtualDelta) {
@@ -105,7 +109,7 @@ public class SimplePhysics implements IPhysics {
             final ICollisionPair p = mCurrentIterator.get(i);
             if (mPreviousCollisions.get(p.hashCode()) == null) {
                 // new collision, send collision event
-                final EventManager em = Game.get().getEventManager();
+                final EventManager em = SnareGame.get().getEventManager();
                 IGameObjCollisionEvent e = em.obtain(IGameObjCollisionEvent.EVENT_TYPE);
                 final float[] cp = p.getCollisionPoint();
                 e.setGameObjData(p.getObjIdA(), p.getObjIdB(), cp[0], cp[1], cp[2]);
@@ -196,20 +200,30 @@ public class SimplePhysics implements IPhysics {
     }
 
 
-    private static class RaycastPool extends Pool<Raycast> {
-        
+    private static class RaycastPool extends Pool<Raycast>
+    {
+        public RaycastPool(IGame game)
+        {
+            super(game);
+        }
+
         @Override
         protected Raycast allocatePoolItem() {
-            return new Raycast();
+            return new Raycast(mGame);
         }
 
     }
     
-    private static class PairPool extends Pool<SimpleCollisionPair> {
+    private static class PairPool extends Pool<SimpleCollisionPair>
+    {
+        public PairPool(IGame game)
+        {
+            super(game);
+        }
 
         @Override
         protected SimpleCollisionPair allocatePoolItem() {
-            return new SimpleCollisionPair();
+            return new SimpleCollisionPair(mGame);
         }
         
     }

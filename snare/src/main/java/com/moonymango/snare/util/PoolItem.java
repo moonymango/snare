@@ -1,7 +1,10 @@
 package com.moonymango.snare.util;
 
-public abstract class PoolItem {
+import com.moonymango.snare.game.BaseSnareClass;
+import com.moonymango.snare.game.IGame;
 
+public abstract class PoolItem extends BaseSnareClass
+{
     //---------------------------------------------------------
     // static
     //---------------------------------------------------------
@@ -15,6 +18,11 @@ public abstract class PoolItem {
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
+
+    public PoolItem(IGame game)
+    {
+        super(game);
+    }
 
     // ---------------------------------------------------------
     // methods

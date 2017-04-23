@@ -1,19 +1,21 @@
 package com.moonymango.snare.res.texture;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
-
-import com.moonymango.snare.opengl.TextureObj.TextureSize;
-import com.moonymango.snare.res.BaseResHandle;
-import com.moonymango.snare.res.IAssetName;
-import com.moonymango.snare.res.texture.BitmapTextureResource.ITextureChannelSource.Channel;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.opengl.TextureObj.TextureSize;
+import com.moonymango.snare.res.BaseResHandle;
+import com.moonymango.snare.res.IAssetName;
+import com.moonymango.snare.res.texture.BitmapTextureResource.ITextureChannelSource.Channel;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ShortBuffer;
 
 public class BitmapTextureResource extends BaseTextureResource {
 
@@ -29,11 +31,11 @@ public class BitmapTextureResource extends BaseTextureResource {
      * Constructs procedural bitmap ALPHA_8 resource.
      * Not yet not supported! 
      * @param name
-     * @param source
      */
-    public BitmapTextureResource(String name, TextureSize size, 
-            ITextureChannelSource alpha) {
-        this(name, size, null, null, null, alpha);
+    public BitmapTextureResource(IGame game, String name, TextureSize size,
+                                 ITextureChannelSource alpha)
+    {
+        this(game, name, size, null, null, null, alpha);
         mConfig = Config.ALPHA_8;
     }
     
@@ -45,10 +47,10 @@ public class BitmapTextureResource extends BaseTextureResource {
      * @param green
      * @param blue
      */
-    public BitmapTextureResource(String name, TextureSize size, 
+    public BitmapTextureResource(IGame game, String name, TextureSize size,
             ITextureChannelSource red, ITextureChannelSource green, 
             ITextureChannelSource blue) {
-        this(name, size, red, green, blue, null);
+        this(game, name, size, red, green, blue, null);
         mConfig = Config.RGB_565;
     }
     
@@ -61,10 +63,10 @@ public class BitmapTextureResource extends BaseTextureResource {
      * @param blue
      * @param alpha
      */
-    public BitmapTextureResource(String name, TextureSize size, 
+    public BitmapTextureResource(IGame game, String name, TextureSize size,
             ITextureChannelSource red, ITextureChannelSource green, 
             ITextureChannelSource blue, ITextureChannelSource alpha) {
-        super(name);
+        super(game, name);
         mGen = true;
         mR = red;
         mG = green;
@@ -78,8 +80,8 @@ public class BitmapTextureResource extends BaseTextureResource {
      * Creates texture resource using file location into asset folder.
      * @param name file location
      */
-    public BitmapTextureResource(String name) {
-        super(name);
+    public BitmapTextureResource(IGame game, String name) {
+        super(game, name);
         mGen = false;
     }
     
@@ -89,8 +91,8 @@ public class BitmapTextureResource extends BaseTextureResource {
      * @param name
      * @param provider
      */
-    public BitmapTextureResource(String name, ITextureRegionProvider provider) {
-        super(name, provider);
+    public BitmapTextureResource(IGame game, String name, ITextureRegionProvider provider) {
+        super(game, name, provider);
         mGen = false;
     }
     
@@ -98,8 +100,8 @@ public class BitmapTextureResource extends BaseTextureResource {
      * Creates texture resource using {@link IAssetName} description. 
      * @param asset
      */
-    public BitmapTextureResource(IAssetName asset) {
-        super(asset);
+    public BitmapTextureResource(IGame game, IAssetName asset) {
+        super(game, asset);
         mGen = false;
     }
      
@@ -109,8 +111,8 @@ public class BitmapTextureResource extends BaseTextureResource {
      * @param asset
      * @param provider
      */
-    public BitmapTextureResource(IAssetName asset, ITextureRegionProvider provider) {
-        super(asset, provider);
+    public BitmapTextureResource(IGame game, IAssetName asset, ITextureRegionProvider provider) {
+        super(game, asset, provider);
         mGen = false;
     }
    

@@ -1,5 +1,6 @@
 package com.moonymango.snare.ui.widgets;
 
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.proc.ProcessManager.IOnProcessKilledListener;
 
@@ -15,12 +16,15 @@ public class WidgetScaleModifier extends BaseProcess {
     private float mStartScaleX;
     private float mProgress;
  
-    public WidgetScaleModifier() {
-            
+    public WidgetScaleModifier(IGame game)
+    {
+        super(game);
     }
     
-    public WidgetScaleModifier(BaseWidget widget, float scaleX, float scaleY, 
-            long milliseconds, IOnProcessKilledListener listener) {
+    public WidgetScaleModifier(IGame game, BaseWidget widget, float scaleX, float scaleY, long milliseconds,
+                               IOnProcessKilledListener listener)
+    {
+        super(game);
         configure(widget, scaleX, scaleY, milliseconds, listener);
     }
     

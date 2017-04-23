@@ -1,35 +1,41 @@
 package com.moonymango.snare.res.texture;
 
-import com.moonymango.snare.game.Game;
+import android.content.res.Resources;
+
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.res.BaseResHandle;
 import com.moonymango.snare.res.BaseResource;
 import com.moonymango.snare.res.IAssetName;
-import android.content.res.Resources;
 
-public abstract class BaseTextureResource extends BaseResource {
-    
+public abstract class BaseTextureResource extends BaseResource
+{
     /** Texture region that covers the whole range (0, 0) to (1, 1) */
     public static final TextureRegion DEFAULT_TEXTURE_REGION = new TextureRegion(true, 0, 1, 1, 0);
     
     private final ITextureRegionProvider mProvider;
     
-    public BaseTextureResource(String name) {
-        super(name);
+    public BaseTextureResource(IGame game, String name)
+    {
+        super(game, name);
         mProvider = null;
     }
     
-    public BaseTextureResource(String name, ITextureRegionProvider provider) {
-        super(name);
+    public BaseTextureResource(IGame game, String name, ITextureRegionProvider provider)
+    {
+        super(game, name);
         mProvider = provider;
     }
     
-    public BaseTextureResource(IAssetName asset) {
-        super(asset);
+    public BaseTextureResource(IGame game, IAssetName asset)
+    {
+        super(game, asset);
         mProvider = null;
     }
     
-    public BaseTextureResource(IAssetName asset, ITextureRegionProvider provider) {
-        super(asset);
+    public BaseTextureResource(IGame game, IAssetName asset, ITextureRegionProvider provider)
+    {
+        super(game, asset);
         mProvider = provider;
     }
 
@@ -39,11 +45,10 @@ public abstract class BaseTextureResource extends BaseResource {
     }
     
     public BaseTextureResHandle getHandle() {
-        return (BaseTextureResHandle) getHandle(Game.get().getResourceCache());
+        return (BaseTextureResHandle) getHandle(SnareGame.get().getResourceCache());
     }
 
     /**
-     * @param id
      * @return
      */
     public TextureRegion getTextureRegion(String name) {

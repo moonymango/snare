@@ -1,23 +1,7 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
-import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
-import static android.opengl.GLES20.GL_SRC_ALPHA;
-import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
-import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
-import static android.opengl.GLES20.glDrawElements;
-import static android.opengl.GLES20.glGetAttribLocation;
-import static android.opengl.GLES20.glGetUniformLocation;
-import static android.opengl.GLES20.glUniform1f;
-import static android.opengl.GLES20.glUniform1i;
-import static android.opengl.GLES20.glUniformMatrix4fv;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
-import com.moonymango.snare.game.Game.ClockType;
 import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.opengl.BufferObj.AttribPointer;
 import com.moonymango.snare.opengl.GLState;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
@@ -30,9 +14,24 @@ import com.moonymango.snare.ui.scene3D.Scene3D;
 import com.moonymango.snare.util.IEasingProfile;
 import com.moonymango.snare.util.VectorAF;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+
+import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
+import static android.opengl.GLES20.GL_SRC_ALPHA;
+import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
+import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
+import static android.opengl.GLES20.glDrawElements;
+import static android.opengl.GLES20.glGetAttribLocation;
+import static android.opengl.GLES20.glGetUniformLocation;
+import static android.opengl.GLES20.glUniform1f;
+import static android.opengl.GLES20.glUniform1i;
+import static android.opengl.GLES20.glUniformMatrix4fv;
+
 /** 
- * Draws a ring of radius 1 with movable inner edge. Use in combination 
- * with {@link BlastEffectProc} to get a fully dynamic blast effect.
+ * Draws a ring of radius 1 with movable inner edge.
  */
 public class BlastEffect extends BaseDynamicMeshEffect {
 
@@ -71,10 +70,10 @@ public class BlastEffect extends BaseDynamicMeshEffect {
                 //"gl_FragColor = vec4(v_tex_coord.s, 0.0, 0.0, 1.0);   \n" +
             "}";
     
-    private static RenderContext createRenderContext() {
+    private static RenderContext createRenderContext(IGame game) {
         final GLState s = new GLState();
         s.enableBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA).enableDepth().lock();
-        return new RenderContext(
+        return new RenderContext(game,
                 BlastEffect.class.getName(),
                 VERTEX_SHADER,
                 FRAGMENT_SHADER,
@@ -83,9 +82,9 @@ public class BlastEffect extends BaseDynamicMeshEffect {
     
     private static final int TEX_UNIT = 0;
     /** Creates {@link Material} object matching the effect. */
-    public static Material makeMaterial(BaseTextureResource res, 
-            TextureObjOptions options) {
-        final Material m = new Material();
+    public static Material makeMaterial(BaseTextureResource res, TextureObjOptions options)
+    {
+        final Material m = new Material(res.mGame);
         m.addTextureUnit(new TextureUnit(TEX_UNIT, res, options));
         return m;
     }
@@ -115,10 +114,10 @@ public class BlastEffect extends BaseDynamicMeshEffect {
      * @param speed Effect speed.
      * @param clock Clock to use.
      */
-    public BlastEffect(int segments, IEasingProfile inner, IEasingProfile outer,
-                       float speed, ClockType clock) {
-        super(createRenderContext(), 
-                new BlastVertexGenerator(segments), clock);
+    public BlastEffect(IGame game, int segments, IEasingProfile inner, IEasingProfile outer, float speed,
+                       IGame.ClockType clock)
+    {
+        super(createRenderContext(game), new BlastVertexGenerator(segments), clock);
         mNumSegments = segments;
         mInnerEdgeProfile = inner;
         mOuterEdgeProfile = outer;

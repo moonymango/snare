@@ -1,5 +1,14 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
+import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.opengl.GLState;
+import com.moonymango.snare.ui.scene3D.BaseEffect;
+import com.moonymango.snare.ui.scene3D.BaseMesh;
+import com.moonymango.snare.ui.scene3D.Material;
+import com.moonymango.snare.ui.scene3D.RenderPass;
+import com.moonymango.snare.ui.scene3D.Scene3D;
+
 import static android.opengl.GLES20.GL_LINES;
 import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
 import static android.opengl.GLES20.glDisableVertexAttribArray;
@@ -9,13 +18,6 @@ import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glLineWidth;
 import static android.opengl.GLES20.glUniform4f;
 import static android.opengl.GLES20.glUniformMatrix4fv;
-import com.moonymango.snare.game.GameObj;
-import com.moonymango.snare.opengl.GLState;
-import com.moonymango.snare.ui.scene3D.BaseEffect;
-import com.moonymango.snare.ui.scene3D.BaseMesh;
-import com.moonymango.snare.ui.scene3D.Material;
-import com.moonymango.snare.ui.scene3D.RenderPass;
-import com.moonymango.snare.ui.scene3D.Scene3D;
 
 public class LinesEffect extends BaseEffect {
 
@@ -54,23 +56,22 @@ public class LinesEffect extends BaseEffect {
     private static int maPosition;
     
     
-    private static RenderContext createRenderContext() {
+    private static RenderContext createRenderContext(IGame game) {
         final GLState s = new GLState();
         s.enableDepth().lock();
 
-        return new RenderContext(
-                LinesEffect.class.getName(), VERTEX_SHADER, FRAGMENT_SHADER, s);
+        return new RenderContext(game, LinesEffect.class.getName(), VERTEX_SHADER, FRAGMENT_SHADER, s);
     }
     
     private final float mLineWidth;
     
     
-    public LinesEffect() {
-        this(1);
+    public LinesEffect(IGame game) {
+        this(game, 1);
     }
     
-    public LinesEffect(float width) {
-        super(createRenderContext());
+    public LinesEffect(IGame game, float width) {
+        super(createRenderContext(game));
         mLineWidth = width;
     }
     

@@ -1,23 +1,25 @@
 package com.moonymango.snare.res;
 
+import android.content.res.AssetManager;
+import android.content.res.Resources;
+
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
-import com.moonymango.snare.game.Game;
-
-import android.content.res.AssetManager;
-import android.content.res.Resources;
-
 public class TextResource extends BaseResource {
     
-    public TextResource(IAssetName asset) {
-        super(asset);
+    public TextResource(IGame game, IAssetName asset)
+    {
+        super(game, asset);
     }
 
 
-    public TextResource(IResourceName descr) {
-        super(descr);
+    public TextResource(IGame game, IResourceName descr) {
+        super(game, descr);
     }
     
     
@@ -59,7 +61,7 @@ public class TextResource extends BaseResource {
     }
 
     public TextResHandle getHandle() {
-        return (TextResHandle) getHandle(Game.get().getResourceCache());
+        return (TextResHandle) getHandle(SnareGame.get().getResourceCache());
     }
     
     

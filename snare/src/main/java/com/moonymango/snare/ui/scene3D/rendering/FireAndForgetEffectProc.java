@@ -1,8 +1,8 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
-import com.moonymango.snare.game.Game;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 import com.moonymango.snare.ui.scene3D.BaseSceneDrawable;
 
@@ -18,7 +18,9 @@ public class FireAndForgetEffectProc extends BaseProcess {
     private final GameObj mGameObj;
     private BaseSceneDrawable mDrawable;
     
-    public FireAndForgetEffectProc(GameObj obj) {
+    public FireAndForgetEffectProc(GameObj obj)
+    {
+        super(obj.mGame);
         mGameObj = obj;
         mDrawable = (BaseSceneDrawable) obj.getComponent(ComponentType.RENDERING);
     }
@@ -29,7 +31,7 @@ public class FireAndForgetEffectProc extends BaseProcess {
     
     @Override
     protected void onInit() {
-        Game.get().addGameObj(mGameObj);
+        SnareGame.get().addGameObj(mGameObj);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class FireAndForgetEffectProc extends BaseProcess {
 
     @Override
     protected void onKill() {
-        Game.get().removeGameObj(mGameObj);
+        SnareGame.get().removeGameObj(mGameObj);
         recycle();
     }
 

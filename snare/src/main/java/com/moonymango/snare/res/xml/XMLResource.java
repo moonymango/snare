@@ -1,29 +1,30 @@
 package com.moonymango.snare.res.xml;
 
+import android.content.res.AssetManager;
+import android.content.res.Resources;
+
+import com.moonymango.snare.game.SnareGame;
+import com.moonymango.snare.res.BaseResHandle;
+import com.moonymango.snare.res.BaseResource;
+import com.moonymango.snare.res.IAssetName;
+import com.moonymango.snare.util.Logger;
+import com.moonymango.snare.util.Logger.LogSource;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
-import com.moonymango.snare.game.Game;
-import com.moonymango.snare.res.BaseResHandle;
-import com.moonymango.snare.res.BaseResource;
-import com.moonymango.snare.res.IAssetName;
-import com.moonymango.snare.util.Logger;
-import com.moonymango.snare.util.Logger.LogSource;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
-
 public class XMLResource<T> extends BaseResource {
 
     private BaseXMLHandler<T> mHandler;
     
     public XMLResource(IAssetName asset, BaseXMLHandler<T> handler) {
-        super(asset);
+        super(handler.mGame, asset);
         if (handler == null) {
             throw new IllegalArgumentException("Missing SAX handler.");
         }
@@ -50,7 +51,7 @@ public class XMLResource<T> extends BaseResource {
 
     @SuppressWarnings("unchecked")
     public XMLResHandle<T> getHandle() {
-        return (XMLResHandle<T>) super.getHandle(Game.get().getResourceCache());
+        return (XMLResHandle<T>) super.getHandle(SnareGame.get().getResourceCache());
     }
     
     private XMLResHandle<T> parse(InputStream in) {

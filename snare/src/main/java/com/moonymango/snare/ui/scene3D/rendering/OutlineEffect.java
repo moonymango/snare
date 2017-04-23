@@ -1,6 +1,7 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
 import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.opengl.GLState;
 import com.moonymango.snare.ui.scene3D.BaseEffect;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
@@ -47,14 +48,12 @@ public class OutlineEffect extends BaseEffect {
             "}                                              \n";              
     
         
-    private static RenderContext createRenderContext()
+    private static RenderContext createRenderContext(IGame game)
     { 
         final GLState s = new GLState();
         s.enableFrontFaceCulling().enableDepth().lock();
 
-        return new RenderContext(OutlineEffect.class.getName(),
-                VERTEX_SHADER_OUTLINE,
-                FRAGMENT_SHADER_OUTLINE, s);
+        return new RenderContext(game, OutlineEffect.class.getName(), VERTEX_SHADER_OUTLINE, FRAGMENT_SHADER_OUTLINE, s);
     }
     
     private static int muViewProjTransformOutline;
@@ -65,8 +64,8 @@ public class OutlineEffect extends BaseEffect {
     // intermediate storage
     private float[] mScale = new float[16];
 
-    public OutlineEffect() {
-        super(createRenderContext());
+    public OutlineEffect(IGame game) {
+        super(createRenderContext(game));
 
         MatrixAF.setIdentityM(mScale, 0);
     }

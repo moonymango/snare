@@ -1,5 +1,6 @@
 package com.moonymango.snare.proc;
 
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.proc.ProcessManager.BaseProcess;
 
 
@@ -7,7 +8,9 @@ public class UpdateProc extends BaseProcess {
 
     private final IUpdateable mTarget;
     
-    public UpdateProc(IUpdateable target) {
+    public UpdateProc(IGame game, IUpdateable target)
+    {
+        super(game);
         mTarget = target;
     }
     

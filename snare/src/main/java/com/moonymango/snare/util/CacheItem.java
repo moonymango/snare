@@ -1,6 +1,10 @@
 package com.moonymango.snare.util;
 
-public abstract class CacheItem<C extends Cache<C,D,I>, D extends CacheItemDescriptor<C,D,I>, I extends CacheItem<C,D,I>> {
+import com.moonymango.snare.game.BaseSnareClass;
+
+public abstract class CacheItem<C extends Cache<C,D,I>, D extends CacheItemDescriptor<C,D,I>, I extends CacheItem<C,D,I>>
+    extends BaseSnareClass
+{
 
     //---------------------------------------------------------
     // static
@@ -15,7 +19,9 @@ public abstract class CacheItem<C extends Cache<C,D,I>, D extends CacheItemDescr
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
-    public CacheItem(D descriptor) {
+    public CacheItem(D descriptor)
+    {
+        super(descriptor.mGame);
         mDescriptor = descriptor;
     }
     

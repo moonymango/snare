@@ -1,29 +1,30 @@
 package com.moonymango.snare.ui.scene3D.mesh;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
+import android.opengl.GLES20;
 
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
 import com.moonymango.snare.opengl.TextureObjOptions;
 import com.moonymango.snare.ui.BaseFont;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
 import com.moonymango.snare.ui.scene3D.Material;
-import android.opengl.GLES20;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
  
 public class TextMesh extends BaseMesh {
 
     private final BaseFont mFont;
     private String mText;
-    private final Material mMat = new Material();
+    private final Material mMat;
     
     public TextMesh(BaseFont font, String text) {
-        super(TextMesh.class.getName() + Game.DELIMITER + Game.get().getRandomString(),
-                false, false);
+        super(font.mGame, TextMesh.class.getName() + SnareGame.DELIMITER + SnareGame.get().getRandomString(), false, false);
         mFont = font;
         mText = text;
+        mMat = new Material(font.mGame);
         mMat.addTextureUnit(new TextureUnit(0, font, TextureObjOptions.LINEAR_REPEAT));
         
     }

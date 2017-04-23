@@ -2,6 +2,7 @@ package com.moonymango.snare.events;
 
 import com.moonymango.snare.events.EventManager.IEventType;
 import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.IGameState;
 import com.moonymango.snare.ui.TouchAction;
 import com.moonymango.snare.ui.widgets.BaseTouchWidget;
@@ -52,7 +53,9 @@ public class DefaultEvent extends PoolItem implements
     private Object mObject0;
     
     
-    public DefaultEvent() {
+    public DefaultEvent(IGame game)
+    {
+        super(game);
         mType = IEvent.SystemEventType.INVALID;
     }
     

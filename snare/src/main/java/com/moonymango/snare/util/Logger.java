@@ -1,6 +1,7 @@
 package com.moonymango.snare.util;
 
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.SnareGame;
+
 import android.util.Log;
 
 public class Logger {
@@ -8,7 +9,7 @@ public class Logger {
     //---------------------------------------------------------
     // static
     //---------------------------------------------------------
-    public static final String TAG = Game.ENGINE_NAME;
+    public static final String TAG = SnareGame.ENGINE_NAME;
     public static boolean sMasterEnable = true;
     public static LogLevel sCurrentLevel = LogLevel.INFO; 
      

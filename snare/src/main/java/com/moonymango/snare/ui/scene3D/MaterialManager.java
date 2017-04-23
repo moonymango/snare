@@ -4,6 +4,7 @@ import android.util.SparseArray;
 
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.logic.BaseComponent;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
 import com.moonymango.snare.ui.ColorWrapper;
@@ -102,9 +103,9 @@ public class MaterialManager
     {
         private int mKey; 
         
-        private MaterialComponent() 
+        private MaterialComponent(IGame game)
         {
-            super(ComponentType.MATERIAL);
+            super(game, ComponentType.MATERIAL);
         }
         
         public void mapMaterial(int key)

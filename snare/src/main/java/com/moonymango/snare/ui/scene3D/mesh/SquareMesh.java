@@ -2,6 +2,7 @@ package com.moonymango.snare.ui.scene3D.mesh;
 
 import android.opengl.GLES20;
 
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.physics.IBoundingVolumeProvider;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
 
@@ -17,8 +18,8 @@ import java.nio.ShortBuffer;
 
 public class SquareMesh extends BaseMesh implements IBoundingVolumeProvider
 {
-    public SquareMesh() {
-        super(SquareMesh.class.getName(), false, false);
+    public SquareMesh(IGame game) {
+        super(game, SquareMesh.class.getName(), false, false);
     }
 
     @Override

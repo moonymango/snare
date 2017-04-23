@@ -1,6 +1,7 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
 import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.opengl.GLState;
 import com.moonymango.snare.ui.scene3D.BaseEffect;
 import com.moonymango.snare.ui.scene3D.BaseMesh;
@@ -68,7 +69,7 @@ public class CelShader extends BaseEffect {
     //              variables to hold locations for each of them
     
      
-    private static RenderContext createRenderContext(int levels) 
+    private static RenderContext createRenderContext(IGame game, int levels)
     {
         final String vs = VERTEX_SHADER_FILL.replaceAll(LEVELS, Float.toString(levels));
         final String fs = FRAGMENT_SHADER_FILL.replaceAll(LEVELS, Float.toString(levels));
@@ -76,8 +77,7 @@ public class CelShader extends BaseEffect {
         final GLState s0 = new GLState();
         s0.enableBackFaceCulling().enableDepth().lock();
 
-        return new RenderContext(CelShader.class.getName(),
-                vs, fs, s0);
+        return new RenderContext(game, CelShader.class.getName(), vs, fs, s0);
     }
     
     private static int muViewProjTransform;
@@ -92,12 +92,12 @@ public class CelShader extends BaseEffect {
     private static int maNormal;
     
     
-    public CelShader() {
-        this(3);
+    public CelShader(IGame game) {
+        this(game, 3);
     }
     
-    public CelShader(int levels) {
-        super(createRenderContext(levels));
+    public CelShader(IGame game, int levels) {
+        super(createRenderContext(game, levels));
     }
 
     public void extractLocations(String programName, int prog) {

@@ -4,6 +4,7 @@ import android.util.SparseArray;
 
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.logic.BaseComponent;
 import com.moonymango.snare.opengl.TextureObj.TextureUnit;
 import com.moonymango.snare.ui.ColorWrapper;
@@ -30,12 +31,13 @@ public class Material extends BaseComponent implements IColorSeqListener {
     private int mHash;
     
     /** Constructs material with max. 8 texture units. */
-    public Material() {
-        this(8);
+    public Material(IGame game) {
+        this(game, 8);
     }
     
-    public Material(int maxTexUnits) {
-        super(ComponentType.MATERIAL);
+    public Material(IGame game, int maxTexUnits)
+    {
+        super(game, ComponentType.MATERIAL);
         mTexUnits = new TextureUnit[maxTexUnits];
     }
     

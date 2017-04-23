@@ -1,15 +1,17 @@
 package com.moonymango.snare.ui.scene3D.mesh;
 
+import android.opengl.GLES20;
+
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
+import com.moonymango.snare.ui.scene3D.BaseMesh;
+import com.moonymango.snare.util.Geometry;
+import com.moonymango.snare.util.VectorAF;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-
-import com.moonymango.snare.game.Game;
-import com.moonymango.snare.ui.scene3D.BaseMesh;
-import com.moonymango.snare.util.Geometry;
-import com.moonymango.snare.util.VectorAF;
-import android.opengl.GLES20;
 
 /**
  * Creates a sphere mesh (or a sector of it) with its center 
@@ -29,7 +31,16 @@ public class SphereMesh extends BaseMesh {
     private final int mEndSegment;
     private final int mStartRing;
     private final int mEndRing;
-        
+
+    private static String buildName(int numRings, int numSegments, int startRing, int endRing,
+                                    int startSegment, int endSegment)
+    {
+        return SphereMesh.class.getName() + SnareGame.DELIMITER + numRings
+                + SnareGame.DELIMITER + numSegments + SnareGame.DELIMITER
+                + startRing + SnareGame.DELIMITER + endRing + SnareGame.DELIMITER
+                + startSegment + SnareGame.DELIMITER + endSegment;
+    }
+
     /**
      * Creates sector of a sphere (radius 1.0). Horizontal rings are numbered 
      * in ascending order towards negative y axis. Vertical segments are 
@@ -45,13 +56,10 @@ public class SphereMesh extends BaseMesh {
      * @param startSegment First segment of mesh. Min=0, max=endSegment
      * @param endSegment Last segment of mesh. Min=startSegment, max=numSegments-1
      */
-    public SphereMesh(int numRings, int numSegments,
-            int startRing, int endRing, int startSegment, int endSegment) {
-        super(SphereMesh.class.getName() + Game.DELIMITER + numRings 
-                + Game.DELIMITER + numSegments + Game.DELIMITER 
-                + startRing + Game.DELIMITER + endRing + Game.DELIMITER
-                + startSegment + Game.DELIMITER + endSegment,
-                false, false);
+    public SphereMesh(IGame game, int numRings, int numSegments,
+            int startRing, int endRing, int startSegment, int endSegment)
+    {
+        super(game, buildName(numRings, numSegments, startRing, endRing, startSegment, endSegment), false, false);
         if (numSegments < 3 || numRings < 2) {
             throw new IllegalArgumentException(
                     "min. rings = 2, min. segments = 3!");
@@ -89,9 +97,9 @@ public class SphereMesh extends BaseMesh {
      * @param numRings Number of horizontal rings.
      * @param numSegments Number of vertical segments.
      */
-    public SphereMesh(int numRings, int numSegments) {
-        this(numRings, numSegments, 0, numRings-1, 
-                0, numSegments-1);
+    public SphereMesh(IGame game, int numRings, int numSegments)
+    {
+        this(game, numRings, numSegments, 0, numRings-1, 0, numSegments-1);
     }
     
     @Override

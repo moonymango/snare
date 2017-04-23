@@ -2,21 +2,23 @@ package com.moonymango.snare.audio;
 
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import com.moonymango.snare.game.Game;
+
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.res.BaseResHandle;
 import com.moonymango.snare.res.BaseResource;
 import com.moonymango.snare.res.IAssetName;
 
 public class LoopResource extends BaseResource {
     
-    public LoopResource(IAssetName asset) {
-        super(asset);
+    public LoopResource(IGame game, IAssetName asset) {
+        super(game, asset);
     }
 
     @Override
     protected BaseResHandle createHandleByAsset(AssetManager am) {
-        return new LoopHandle(this, Game.get().getAudioManager(), 
-                Game.get().getSettings().mDefaultLoopVolume);
+        return new LoopHandle(this, SnareGame.get().getAudioManager(),
+                SnareGame.get().getSettings().mDefaultLoopVolume);
     }
 
     @Override
@@ -26,7 +28,7 @@ public class LoopResource extends BaseResource {
     }
     
     public LoopHandle getHandle() {
-        return (LoopHandle) getHandle(Game.get().getResourceCache());
+        return (LoopHandle) getHandle(SnareGame.get().getResourceCache());
     }
 
 }

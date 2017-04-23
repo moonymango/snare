@@ -1,9 +1,11 @@
 package com.moonymango.snare.res;
 
-import com.moonymango.snare.util.Cache;
 import android.app.Application;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.util.Cache;
 
 
 /**
@@ -25,8 +27,9 @@ public class ResourceCache extends Cache<ResourceCache, BaseResource, BaseResHan
      * @param threshold Memory usage threshold for creation of new resources.
      * @param appContext
      */
-    public ResourceCache(long threshold, Application appContext) {
-        super(CleanUpPolicy.USER_DEFINED);
+    public ResourceCache(IGame game, long threshold, Application appContext)
+    {
+        super(game, CleanUpPolicy.USER_DEFINED);
         mResources = appContext.getResources();
         mAssetManager = appContext.getAssets();
         mThreshold = threshold;

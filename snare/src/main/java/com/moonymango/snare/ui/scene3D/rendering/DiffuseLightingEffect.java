@@ -1,5 +1,15 @@
 package com.moonymango.snare.ui.scene3D.rendering;
 
+import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
+import com.moonymango.snare.opengl.GLState;
+import com.moonymango.snare.ui.scene3D.BaseEffect;
+import com.moonymango.snare.ui.scene3D.BaseMesh;
+import com.moonymango.snare.ui.scene3D.Light;
+import com.moonymango.snare.ui.scene3D.Material;
+import com.moonymango.snare.ui.scene3D.RenderPass;
+import com.moonymango.snare.ui.scene3D.Scene3D;
+
 import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
 import static android.opengl.GLES20.glDisableVertexAttribArray;
@@ -9,14 +19,6 @@ import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glUniform3f;
 import static android.opengl.GLES20.glUniform4f;
 import static android.opengl.GLES20.glUniformMatrix4fv;
-import com.moonymango.snare.game.GameObj;
-import com.moonymango.snare.opengl.GLState;
-import com.moonymango.snare.ui.scene3D.BaseEffect;
-import com.moonymango.snare.ui.scene3D.BaseMesh;
-import com.moonymango.snare.ui.scene3D.Light;
-import com.moonymango.snare.ui.scene3D.Material;
-import com.moonymango.snare.ui.scene3D.RenderPass;
-import com.moonymango.snare.ui.scene3D.Scene3D;
 
 /**
  * Simple diffuse and ambient lighting. Supports only one ambient and one
@@ -63,10 +65,10 @@ public class DiffuseLightingEffect extends BaseEffect {
             "   gl_FragColor = vColor;                      \n" +
             "}                                              \n";      
      
-    private static RenderContext createRenderContext() {
+    private static RenderContext createRenderContext(IGame game) {
         final GLState s = new GLState();
         s.enableDepth().enableBackFaceCulling().lock();
-        return new RenderContext(
+        return new RenderContext(game,
                 DiffuseLightingEffect.class.getName(),
                 VERTEX_SHADER,
                 FRAGMENT_SHADER,
@@ -98,8 +100,8 @@ public class DiffuseLightingEffect extends BaseEffect {
     private static int maNormal;
     
         
-    public DiffuseLightingEffect() {
-        super(createRenderContext());
+    public DiffuseLightingEffect(IGame game) {
+        super(createRenderContext(game));
     }
     
     public void extractLocations(String programName, int prog) {

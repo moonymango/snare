@@ -3,7 +3,7 @@ package com.moonymango.snare.audio;
 import com.moonymango.snare.events.EventManager.IEventListener;
 import com.moonymango.snare.events.IEvent;
 import com.moonymango.snare.events.IGameObjTouchEvent;
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.SnareGame;
 import com.moonymango.snare.ui.TouchAction;
 
 /**
@@ -18,13 +18,13 @@ public class DemoAudioComponent extends AudioComponent implements IEventListener
     @Override
     public void onInit() {
         super.onInit();
-        Game.get().getEventManager().addListener(IGameObjTouchEvent.EVENT_TYPE, this);
+        SnareGame.get().getEventManager().addListener(IGameObjTouchEvent.EVENT_TYPE, this);
     }
 
     @Override
     public void onShutdown() {
         super.onShutdown();
-        Game.get().getEventManager().removeListener(IGameObjTouchEvent.EVENT_TYPE, this);
+        SnareGame.get().getEventManager().removeListener(IGameObjTouchEvent.EVENT_TYPE, this);
     }
 
     public boolean handleEvent(IEvent event) {
