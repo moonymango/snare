@@ -35,12 +35,15 @@ public class BoundingVolumeTest {
     GameObj mObjA;
     BaseSimpleBoundingVolume mBVB;
     GameObj mObjB;
+    GameStub mGame;
     final float[] mS = new float[4];
     final float[] mV = new float[4];
-    final IPhysics mPhysics = new SimplePhysics();
+    IPhysics mPhysics;
     
     @Before
     public void setUp() throws Exception {
+        mGame = new GameStub();
+        mPhysics = new SimplePhysics(mGame);
         mPhysics.enableCollisionChecking(true);
     }
 
@@ -52,7 +55,7 @@ public class BoundingVolumeTest {
         // define box with dimensions 2, 4, 1 at point (5, 0, 0)
         mBVA = (BaseSimpleBoundingVolume) mPhysics.createBoundingVolume(VolumeType.BOX);
         ((SimpleAABB) mBVA).setDimensions(min, max);
-        mObjA = new GameObj("bounding_volume");
+        mObjA = new GameObj(mGame, "bounding_volume");
         mObjA.addComponent(mBVA);
         mObjA.setPosition(5, 0, 0);
         mObjA.setScale(1, 2, 0.5f);
@@ -131,7 +134,7 @@ public class BoundingVolumeTest {
                 
         mBVA = (BaseSimpleBoundingVolume) mPhysics.createBoundingVolume(VolumeType.BOX);
         ((SimpleAABB) mBVA).setDimensions(min, max);
-        mObjA = new GameObj("bounding_volume");
+        mObjA = new GameObj(mGame, "bounding_volume");
         mObjA.addComponent(mBVA);
        
         assertEquals(false, mBVA.isInVolume(1.1f, 0, 0)); 
@@ -150,18 +153,18 @@ public class BoundingVolumeTest {
                 
         mBVA = (BaseSimpleBoundingVolume) mPhysics.createBoundingVolume(VolumeType.BOX);
         ((SimpleAABB) mBVA).setDimensions(min, max);
-        mObjA = new GameObj("bounding_volumeA");
+        mObjA = new GameObj(mGame, "bounding_volumeA");
         mObjA.addComponent(mBVA);
         
         // box at center
         mBVB = (BaseSimpleBoundingVolume) mPhysics.createBoundingVolume(VolumeType.BOX);
         ((SimpleAABB) mBVB).setDimensions(min, max);
-        mObjB = new GameObj("bounding_volumeB");
+        mObjB = new GameObj(mGame, "bounding_volumeB");
         mObjB.addComponent(mBVB);
         mObjB.setScale(5, 5, 5);
         mObjB.onUpdateTransform(0, 0, 0);
         
-        final SimpleCollisionPair p = new SimpleCollisionPair();
+        final SimpleCollisionPair p = new SimpleCollisionPair(mGame);
         
         // no collision
         p.init(mBVA, mBVB);
@@ -210,7 +213,7 @@ public class BoundingVolumeTest {
         // + object flattened along z axis
         mBVA = (BaseSimpleBoundingVolume) mPhysics.createBoundingVolume(VolumeType.SPHERE);
         ((SimpleSphereBoundingVolume) mBVA).setDimensions(2);
-        mObjA = new GameObj("bounding_volume");
+        mObjA = new GameObj(mGame, "bounding_volume");
         mObjA.addComponent(mBVA);
         mObjA.setPosition(5, 0, 0);
         mObjA.setScale(1, 1, 0.5f);
@@ -286,7 +289,7 @@ public class BoundingVolumeTest {
                 
         mBVA = (BaseSimpleBoundingVolume) mPhysics.createBoundingVolume(VolumeType.SPHERE);
         ((SimpleSphereBoundingVolume) mBVA).setDimensions(2);
-        mObjA = new GameObj("bounding_volume");
+        mObjA = new GameObj(mGame, "bounding_volume");
         mObjA.addComponent(mBVA);
        
         assertEquals(false, mBVA.isInVolume(2.1f, 0, 0)); 
@@ -304,19 +307,19 @@ public class BoundingVolumeTest {
         // sphere radius 1
         mBVA = (BaseSimpleBoundingVolume) mPhysics.createBoundingVolume(VolumeType.SPHERE);
         ((SimpleSphereBoundingVolume) mBVA).setDimensions(1);
-        mObjA = new GameObj("bounding_volumeA");
+        mObjA = new GameObj(mGame, "bounding_volumeA");
         mObjA.addComponent(mBVA);
         
         // sphere radius 5
         mBVB = (BaseSimpleBoundingVolume) mPhysics.createBoundingVolume(VolumeType.SPHERE);
         ((SimpleSphereBoundingVolume) mBVB).setDimensions(1);
-        mObjB = new GameObj("bounding_volumeB");
+        mObjB = new GameObj(mGame, "bounding_volumeB");
         mObjB.addComponent(mBVB);
         mObjB.setScale(5, 5, 5);
         mObjB.onUpdateTransform(0, 0, 0);
         mObjA.onUpdateComponents(0, 0, 0);
         
-        final SimpleCollisionPair p = new SimpleCollisionPair();
+        final SimpleCollisionPair p = new SimpleCollisionPair(mGame);
         
         // no collision
         p.init(mBVA, mBVB);
@@ -364,20 +367,20 @@ public class BoundingVolumeTest {
     public void testAABBSphereCollision() {
         mBVA = (BaseSimpleBoundingVolume) mPhysics.createBoundingVolume(VolumeType.SPHERE);
         ((SimpleSphereBoundingVolume) mBVA).setDimensions(1);
-        mObjA = new GameObj("bounding_volumeA");
+        mObjA = new GameObj(mGame, "bounding_volumeA");
         mObjA.addComponent(mBVA);
         
         final float[] min = {-1, -1, -1, 1};
         final float[] max = {1, 1, 1, 1};
         mBVB = (BaseSimpleBoundingVolume) mPhysics.createBoundingVolume(VolumeType.BOX);
         ((SimpleAABB) mBVB).setDimensions(min, max);
-        mObjB = new GameObj("bounding_volumeB");
+        mObjB = new GameObj(mGame, "bounding_volumeB");
         mObjB.addComponent(mBVB);
         mObjB.setScale(5, 5, 5);
         mObjB.onUpdateTransform(0, 0, 0);
         mObjA.onUpdateComponents(0, 0, 0);
         
-        final SimpleCollisionPair p = new SimpleCollisionPair();
+        final SimpleCollisionPair p = new SimpleCollisionPair(mGame);
         
         // no collision
         p.init(mBVA, mBVB);
@@ -428,7 +431,7 @@ public class BoundingVolumeTest {
            
         cyl.setAxisOrientation(AxisOrientation.Z);
         cyl.setDimensions(2, 4);
-        mObjA = new GameObj("bounding_volume");
+        mObjA = new GameObj(mGame, "bounding_volume");
         mObjA.addComponent(mBVA);
        
         assertEquals(false, mBVA.isInVolume(0, 0, 2.1f)); 
@@ -450,7 +453,7 @@ public class BoundingVolumeTest {
         SimpleCylinderBoundingVolume cyl = (SimpleCylinderBoundingVolume) mBVA;
         cyl.setAxisOrientation(AxisOrientation.Y);
         cyl.setDimensions(5, 5);
-        mObjA = new GameObj("bounding_volume");
+        mObjA = new GameObj(mGame, "bounding_volume");
         mObjA.addComponent(mBVA);
         mObjA.setPosition(5, 0, 0);
         mObjA.onUpdateTransform(0, 0, 0);
@@ -518,10 +521,10 @@ public class BoundingVolumeTest {
     public void testSquareIntersection()
     {
         SimpleSquareBoundingVolume bv = (SimpleSquareBoundingVolume) mPhysics.createBoundingVolume(VolumeType.SQUARE);
-        SquareMesh m = new SquareMesh();
+        SquareMesh m = new SquareMesh(mGame);
         bv.setDimensions(m);
 
-        GameObj obj = new GameObj("bv");
+        GameObj obj = new GameObj(mGame, "bv");
         obj.addComponent(bv);
         obj.setPosition(10, 0, 0);
         obj.setScale(1, 1, 2);

@@ -23,7 +23,7 @@ public class CameraTest {
     @Before
     public void setUp() throws Exception {
         mCamera = new DebugPerspectiveCamera();
-        mObj = new GameObj("camera");
+        mObj = new GameObj(new GameStub(), "camera");
         mObj.addComponent(mCamera);
     }
 

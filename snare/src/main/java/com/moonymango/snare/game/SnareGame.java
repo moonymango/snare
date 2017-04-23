@@ -74,20 +74,7 @@ public final class SnareGame implements IGame
     @SuppressLint("StaticFieldLeak")
     private static SnareGame sInstance = null;
 
-    /** Getter for use from the activity only */
-    protected static SnareGame create(BaseGameActivity activity) {
-        // create new game instance
-        final String name = activity.getName();
-        final GameSettings settings = activity.onLoadGameSettings();
-        final PlayerGameView view = activity.onLoadPrimaryPlayerView();
-        final IRenderer renderer = activity.onLoadRenderer(view);
-        final EventManager em = activity.onLoadEventManager();
-        final IPhysics physics = activity.onLoadPhysics();      
-        sInstance = new SnareGame(name, activity, view,
-                physics, renderer, settings, em);
-                
-        return sInstance;
-    }
+
     
     public static IGame get() {
         return sInstance;
@@ -145,26 +132,25 @@ public final class SnareGame implements IGame
     // ---------------------------------------------------------
     // constructors
     // ---------------------------------------------------------
-    private SnareGame(String name,
-                      BaseGameActivity activity,
-                      PlayerGameView view,
-                      IPhysics physics,
-                      IRenderer renderer,
-                      GameSettings settings,
-                      EventManager eventManager) {
+    public SnareGame(BaseGameActivity activity) {
 
         final Application app = activity.getApplication();
 
-        mName = name;
+
+        sInstance = this;
+
+
+        mName =  activity.getName();
         mActivity = activity;
-        mEventManager = eventManager;
-        mRessourceCache = new ResourceCache(this, settings.RESOURCE_CACHE_THRESHOLD, app);
-        mSettings = settings;
-        mPhysics = physics;
-        mRenderer = renderer;
+        mSettings = activity.onLoadGameSettings(this);
+        mPrimaryPlayerView = activity.onLoadPrimaryPlayerView(this);
+        mRenderer = activity.onLoadRenderer(mPrimaryPlayerView);
+        mEventManager =  activity.onLoadEventManager(this);
+        mPhysics = activity.onLoadPhysics(this);
+
+        mRessourceCache = new ResourceCache(this, mSettings.RESOURCE_CACHE_THRESHOLD, app);
         mGLObjCache = new GLObjCache(this);
-        mPrimaryPlayerView = view;
-        mAudioManager = new SnareAudioManager(settings.SOUND_MAX_STREAMS, app);
+        mAudioManager = new SnareAudioManager(mSettings.SOUND_MAX_STREAMS, app);
         mVibrator = (Vibrator) app.getSystemService(Context.VIBRATOR_SERVICE);
         mRandomStringGen = new RandomString(16, this);
     }
@@ -527,7 +513,7 @@ public final class SnareGame implements IGame
         if (!mInitDone) {
             Logger.i(LogSource.GAME, "*** Hello, this is SNARE ***");
             
-            mSystemFont = ((BaseGameActivity) mActivity).onLoadSystemFont();
+            mSystemFont = ((BaseGameActivity) mActivity).onLoadSystemFont(this);
             mRenderer.onInit();
             final int cnt = mRenderer.getPlayerViewCnt();
             for (int i = 0; i < cnt; i++) {
@@ -537,7 +523,7 @@ public final class SnareGame implements IGame
             
             // init game state logic last, so that renderer and physics will be ready to
             // catch newly created game objects
-            setGameState(mActivity.onLoadInitialGameState());
+            setGameState(mActivity.onLoadInitialGameState(this));
             
             mInitDone = true;
         }

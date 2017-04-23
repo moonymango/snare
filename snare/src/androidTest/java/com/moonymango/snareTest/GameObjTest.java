@@ -47,7 +47,7 @@ public class GameObjTest  {
     @Test
     public void testTransform() {
         
-        GameObj obj = new GameObj("my object");
+        GameObj obj = new GameObj(new GameStub(), "my object");
         obj.setPosition(POS_X, POS_Y, POS_Z);
         obj.rotate(ROT_X, ROT_Y, ROT_Z, ROT_ANGLE);
         obj.setScale(SCALE_X, SCALE_Y, SCALE_Z);
@@ -66,7 +66,7 @@ public class GameObjTest  {
 
     @Test
     public void testVectors() {
-        GameObj obj = new GameObj("my object");
+        GameObj obj = new GameObj(new GameStub(), "my object");
         
         // forward points to z
         float[] vec = obj.getForwardVector();

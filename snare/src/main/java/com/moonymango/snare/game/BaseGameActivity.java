@@ -40,7 +40,7 @@ public abstract class BaseGameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final SnareGame g = SnareGame.create(this);
+        final SnareGame g = new SnareGame(this);
         applySettings(g.getSettings());
         setContentView(g.prepareGLSurfaceView());
         mGame = g;
@@ -68,33 +68,36 @@ public abstract class BaseGameActivity extends Activity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
-    public GameSettings onLoadGameSettings()
+    public GameSettings onLoadGameSettings(IGame game)
     {
-        return new GameSettings(mGame);
+        return new GameSettings(game);
     }
     
-    public PlayerGameView onLoadPrimaryPlayerView() {
-        return new PlayerGameView(mGame);
+    public PlayerGameView onLoadPrimaryPlayerView(IGame game)
+    {
+        return new PlayerGameView(game);
     }
     
-    public IPhysics onLoadPhysics() {
-        return new SimplePhysics(mGame);
+    public IPhysics onLoadPhysics(IGame game)
+    {
+        return new SimplePhysics(game);
     }
     
-    public EventManager onLoadEventManager() {
-        return new EventManager(new DefaultEventPool(mGame));
+    public EventManager onLoadEventManager(IGame game)
+    {
+        return new EventManager(new DefaultEventPool(game));
     }
 
     public abstract IRenderer onLoadRenderer(PlayerGameView view);
     public abstract String getName();
-    public abstract IGameState onLoadInitialGameState();
+    public abstract IGameState onLoadInitialGameState(IGame game);
     
     /**
      * Loads system font. When this is called, the {@link ResourceCache} is
      * already operational and can be used.
      * @return Font or null in case system output should be suppressed.
      */
-    public abstract BaseFont onLoadSystemFont();
+    public abstract BaseFont onLoadSystemFont(IGame game);
     
     
     protected void applySettings(GameSettings s) {

@@ -60,7 +60,7 @@ public class MiscTest  {
 
     @Test
     public void testColorWrapper() {
-        final ColorWrapper cw = new ColorWrapper();
+        final ColorWrapper cw = new ColorWrapper(new GameStub());
         cw.setColorHSV(0, 1, 1, 1);
         float[] c = cw.getActualColor();
         Log.e(SnareGame.ENGINE_NAME, "r " + c[0] + " g " + c[1] + " b " + c[2] + " a " + c[3]);
