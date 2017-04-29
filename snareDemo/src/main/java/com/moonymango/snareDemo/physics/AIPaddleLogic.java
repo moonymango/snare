@@ -3,9 +3,9 @@ package com.moonymango.snareDemo.physics;
 import com.moonymango.snare.events.EventManager.IEventListener;
 import com.moonymango.snare.events.IEvent;
 import com.moonymango.snare.events.IGameObjMoveEvent;
-import com.moonymango.snare.game.Game;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.logic.BaseComponent;
 
 class AIPaddleLogic extends BaseComponent implements IEventListener {
@@ -14,20 +14,20 @@ class AIPaddleLogic extends BaseComponent implements IEventListener {
     private float mSpeed = 0.004f;
     private int mBallID;
     
-    public AIPaddleLogic() {
-        super(ComponentType.LOGIC);
+    public AIPaddleLogic(IGame game) {
+        super(game, ComponentType.LOGIC);
     }
 
     @Override
     public void onInit() {
-        Game.get().getEventManager().addListener(IGameObjMoveEvent.EVENT_TYPE, this);
+        mGame.getEventManager().addListener(IGameObjMoveEvent.EVENT_TYPE, this);
         // hack to retrieve id of the ball without listening to events 
-        mBallID = ((GameState) Game.get().getGameState()).mBall.getID();
+        mBallID = ((GameState) mGame.getGameState()).mBall.getID();
     }
 
     @Override
     public void onShutdown() {
-        Game.get().getEventManager().removeListener(IGameObjMoveEvent.EVENT_TYPE, this);
+        mGame.getEventManager().removeListener(IGameObjMoveEvent.EVENT_TYPE, this);
         
     }
 

@@ -1,6 +1,5 @@
 package com.moonymango.snareDemo.textures;
 
-import com.moonymango.snareDemo.Asset;
 import com.moonymango.snare.events.EventManager;
 import com.moonymango.snare.events.EventManager.IEventListener;
 import com.moonymango.snare.events.IEvent;
@@ -8,9 +7,10 @@ import com.moonymango.snare.events.IFlingEvent;
 import com.moonymango.snare.events.IScaleEvent;
 import com.moonymango.snare.events.IScrollEvent;
 import com.moonymango.snare.events.ITouchEvent;
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameSettings;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.IGameState;
 import com.moonymango.snare.game.IGameStateLogic;
 import com.moonymango.snare.game.logic.OrbitPositionModifier;
@@ -31,14 +31,20 @@ import com.moonymango.snare.ui.scene3D.mesh.Mesh;
 import com.moonymango.snare.ui.scene3D.rendering.LinesEffect;
 import com.moonymango.snare.ui.scene3D.rendering.PlainTextureEffect;
 import com.moonymango.snare.ui.scene3D.rendering.SceneDrawable;
+import com.moonymango.snareDemo.Asset;
 
-class GameState implements IGameState, IGameStateLogic,
-        IEventListener {
-
+class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
+        IEventListener 
+{
     private PerspectiveCamera mCam;
     private GameObj mEarth;
     private GameObj mMoon;
-     
+
+    public GameState(IGame game)
+    {
+        super(game);
+    }
+
     @Override
     public IGameState onUpdate(long realTime, float realDelta,
             float virtualDelta) {
@@ -55,7 +61,7 @@ class GameState implements IGameState, IGameStateLogic,
     @Override
     public void onActivate(IGameState previous) {
     	
-        GameSettings s = Game.get().getSettings();
+        GameSettings s = mGame.getSettings();
         s.RENDER_OPTIONS.BG_COLOR_B = 0; //1;
         s.RENDER_OPTIONS.BG_COLOR_R = 0; //0.5f;
         s.RENDER_OPTIONS.BG_COLOR_G = 0; //0.5f;
@@ -68,15 +74,15 @@ class GameState implements IGameState, IGameStateLogic,
         s.INPUT_EVENT_MASK.DOUBLE_TAP_ENABLED = true;
         
     	// startup: create the scene and objects
-        final Scene3D sc = new Scene3D();
-        Game.get().getPrimaryView().pushScreenElement(sc);
+        final Scene3D sc = new Scene3D(mGame);
+        mGame.getPrimaryView().pushScreenElement(sc);
         
         // +++ camera +++
         mCam = new PerspectiveCamera();
-        GameObj camObj = new GameObj("camera");
+        GameObj camObj = new GameObj(mGame, "camera");
         camObj.addComponent(mCam);
         camObj.setPosition(0, 3, 10);
-        Game.get().addGameObj(camObj);
+        mGame.addGameObj(camObj);
         
         mCam.lookAt(0, 0, 0, 0, 1, 0);
         mCam.setNearFarPlane(2, 30);
@@ -84,73 +90,73 @@ class GameState implements IGameState, IGameStateLogic,
         sc.setCamera(mCam);
         
         // ++++ lights ++++
-        GameObj lightObj = new GameObj("directionalLight");
+        GameObj lightObj = new GameObj(mGame, "directionalLight");
         Light light = new Light(LightType.DIRECTIONAL);
         light.setColor(1, 1, 1, 0);
         lightObj.addComponent(light);
         lightObj.rotate(0, 1, 0, 90);
-        Game.get().addGameObj(lightObj);
+        mGame.addGameObj(lightObj);
         
-        lightObj = new GameObj("ambientLight");
+        lightObj = new GameObj(mGame, "ambientLight");
         light = new Light(LightType.AMBIENT);
         light.setColor(1, 1, 1, 0);
         lightObj.addComponent(light);
-        Game.get().addGameObj(lightObj);
+        mGame.addGameObj(lightObj);
                     
         
-        GameObj grid = new GameObj("grid");
-        grid.addComponent( new LinesEffect());
-        grid.addComponent(new GridMesh(20, 20));
-        grid.addComponent(new SceneDrawable(RenderPass.ENVIRONMENT));
-        Material mat = new Material();
+        GameObj grid = new GameObj(mGame, "grid");
+        grid.addComponent( new LinesEffect(mGame));
+        grid.addComponent(new GridMesh(mGame, 20, 20));
+        grid.addComponent(new SceneDrawable(mGame, RenderPass.ENVIRONMENT));
+        Material mat = new Material(mGame);
         mat.setColor(Material.LINE_COLOR_IDX, 1, 1, 1, 1);
         grid.setPosition(0, -1, 0);
         grid.addComponent(mat);
-        Game.get().addGameObj(grid);
+        mGame.addGameObj(grid);
         
         // ++++ cube ++++
         // load shape from asset file
         //MeshResource meshRes = new MeshResource(Asset.CUBE3DS_UV_MESH, 
           //      new ImportTransformCenterToOrigin(true));
-        MeshResource meshRes = new MeshResource(Asset.SPHERE_UV_MESH, 
+        MeshResource meshRes = new MeshResource(mGame, Asset.SPHERE_UV_MESH,
                 new ImportTransformBlender());
         
-        BitmapTextureResource texMoon = new BitmapTextureResource(Asset.MOON_TEX);
-        BitmapTextureResource texEarth = new BitmapTextureResource(Asset.EARTH_TEX);
-        BitmapTextureResource texSpace = new BitmapTextureResource(Asset.SPACE2_TEX);
+        BitmapTextureResource texMoon = new BitmapTextureResource(mGame, Asset.MOON_TEX);
+        BitmapTextureResource texEarth = new BitmapTextureResource(mGame, Asset.EARTH_TEX);
+        BitmapTextureResource texSpace = new BitmapTextureResource(mGame, Asset.SPACE2_TEX);
         
         
-        mEarth = new GameObj("earth"); 
+        mEarth = new GameObj(mGame, "earth");
         
-        mEarth.addComponent(new PlainTextureEffect());
+        mEarth.addComponent(new PlainTextureEffect(mGame));
         mEarth.addComponent(new Mesh(meshRes));
-        mEarth.addComponent(new SceneDrawable(RenderPass.DYNAMIC));
+        mEarth.addComponent(new SceneDrawable(mGame, RenderPass.DYNAMIC));
         mat = PlainTextureEffect.makeMaterial(texEarth, TextureObjOptions.LINEAR_REPEAT);
         mEarth.addComponent(mat);
         //mEarth.setScale(0.75f, 0.75f, 0.75f);		// set size 
         mEarth.setPosition(0, 0, 0);				// put obj to origin
         
-        Game.get().addGameObj(mEarth);
+        mGame.addGameObj(mEarth);
         
-        mMoon = new GameObj("moon"); 
+        mMoon = new GameObj(mGame, "moon");
         
-        mMoon.addComponent(new PlainTextureEffect());
+        mMoon.addComponent(new PlainTextureEffect(mGame));
         mMoon.addComponent(new Mesh(meshRes));
-        mMoon.addComponent(new SceneDrawable(RenderPass.DYNAMIC));
+        mMoon.addComponent(new SceneDrawable(mGame, RenderPass.DYNAMIC));
         mat = PlainTextureEffect.makeMaterial(texMoon, TextureObjOptions.LINEAR_REPEAT);
         mMoon.addComponent(mat);
         mMoon.setScale(0.75f, 0.75f, 0.75f);       // set size 
         mMoon.setPosition(-4, 0, 0);              
         
-        Game.get().addGameObj(mMoon);
+        mGame.addGameObj(mMoon);
         
         // space background
-        GameObj space = new GameObj("space"); 
+        GameObj space = new GameObj(mGame, "space");
         
-        space.addComponent(new PlainTextureEffect());
+        space.addComponent(new PlainTextureEffect(mGame));
         space.addComponent(new Mesh(meshRes));
-        space.addComponent(new SceneDrawable(RenderPass.ENVIRONMENT));
-        mat = new Material();
+        space.addComponent(new SceneDrawable(mGame, RenderPass.ENVIRONMENT));
+        mat = new Material(mGame);
         mat.setColor(Material.DIFFUSE_COLOR_IDX, 1, 1, 1, 1);
         mat.setColor(Material.AMBIENT_COLOR_IDX, 1, 1, 1, 1);
         mat.setColor(Material.OUTLINE_COLOR_IDX, 0, 0, 0, 1);
@@ -159,19 +165,19 @@ class GameState implements IGameState, IGameStateLogic,
         space.setScale(10f, 10, 10f);       // set size 
         space.setPosition(0, 0, 0);              
         
-        Game.get().addGameObj(space);
+        mGame.addGameObj(space);
         
         // make objects move
         float[] axis= {0, 1, 0, 0};
         float[] point = {0, 10, 0, 0};
-        OrbitPositionModifier om = new OrbitPositionModifier(mMoon, axis, 15);
+        OrbitPositionModifier om = new OrbitPositionModifier(mGame, mMoon, axis, 15);
         om.run();
         
-        om = new OrbitPositionModifier(camObj, point, axis, 5);
+        om = new OrbitPositionModifier(mGame, camObj, point, axis, 5);
         om.run();
         
         // register for fling and scroll gestures
-        final EventManager em = Game.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         em.addListener(IScrollEvent.EVENT_TYPE, this);
         em.addListener(IFlingEvent.EVENT_TYPE, this);
         em.addListener(ITouchEvent.EVENT_TYPE, this);

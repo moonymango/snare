@@ -1,8 +1,8 @@
 package com.moonymango.snareDemo.camera;
 
-import com.moonymango.snareDemo.Asset;
 import com.moonymango.snare.game.BaseGameActivity;
 import com.moonymango.snare.game.GameSettings;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.IGameState;
 import com.moonymango.snare.opengl.FullScreenRenderer;
 import com.moonymango.snare.opengl.IRenderer;
@@ -12,6 +12,7 @@ import com.moonymango.snare.res.xml.XMLResHandle;
 import com.moonymango.snare.res.xml.XMLResource;
 import com.moonymango.snare.ui.BaseFont;
 import com.moonymango.snare.ui.PlayerGameView;
+import com.moonymango.snareDemo.Asset;
 
 public class CameraDemo extends BaseGameActivity {
     
@@ -21,8 +22,8 @@ public class CameraDemo extends BaseGameActivity {
     }
 
     @Override
-    public GameSettings onLoadGameSettings() {
-        GameSettings s = new GameSettings();
+    public GameSettings onLoadGameSettings(IGame game) {
+        GameSettings s = new GameSettings(game);
         s.RENDER_OPTIONS.BG_COLOR_B = 0.3f;
         s.PRINT_STATS = true;
         //s.V_CUSTOM_BACK_BUTTON = true; 
@@ -33,13 +34,13 @@ public class CameraDemo extends BaseGameActivity {
     }
     
     @Override
-    public IGameState onLoadInitialGameState() {
-        return new GameState();
+    public IGameState onLoadInitialGameState(IGame game) {
+        return new GameState(game);
     }
 
     @Override
-    public BaseFont onLoadSystemFont() {
-        XMLResource<BMFont> fontRes = new XMLResource<BMFont>(Asset.COURIER, new BMFontXMLHandler());
+    public BaseFont onLoadSystemFont(IGame game) {
+        XMLResource<BMFont> fontRes = new XMLResource<BMFont>(Asset.COURIER, new BMFontXMLHandler(game));
         XMLResHandle<BMFont> fontHnd = fontRes.getHandle();
         return fontHnd.getContent();
     }

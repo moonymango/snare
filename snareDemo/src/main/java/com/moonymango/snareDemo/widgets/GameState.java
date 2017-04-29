@@ -2,11 +2,11 @@ package com.moonymango.snareDemo.widgets;
 
 import com.moonymango.snare.audio.SoundHandle;
 import com.moonymango.snare.audio.SoundResource;
-import com.moonymango.snareDemo.Asset;
 import com.moonymango.snare.events.EventManager.IEventListener;
 import com.moonymango.snare.events.IEvent;
 import com.moonymango.snare.events.IWidgetTouchedBeginEvent;
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.BaseSnareClass;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.IGameState;
 import com.moonymango.snare.game.IGameStateLogic;
 import com.moonymango.snare.res.texture.BaseTextureResource;
@@ -20,13 +20,17 @@ import com.moonymango.snare.ui.widgets.WidgetMotionModifier;
 import com.moonymango.snare.ui.widgets.WidgetMotionModifier.MotionSettings;
 import com.moonymango.snare.ui.widgets.WidgetRotationModifier;
 import com.moonymango.snare.util.EasingProfile;
+import com.moonymango.snareDemo.Asset;
 
-class GameState implements IGameState, IGameStateLogic, 
-        IEventListener {
-
-    private SoundResource mSoundRes;
+class GameState extends BaseSnareClass implements IGameState, IGameStateLogic, IEventListener
+{
     private SoundHandle mSoundHandle;
-    
+
+    public GameState(IGame game)
+    {
+        super(game);
+    }
+
     @Override
     public IGameState onUpdate(long realTime, float realDelta,
             float virtualDelta) {
@@ -35,19 +39,19 @@ class GameState implements IGameState, IGameStateLogic,
 
     @Override
     public void onActivate(IGameState previous) {
-        mSoundRes = new SoundResource(Asset.DRIP_SOUND);
+        SoundResource mSoundRes = new SoundResource(mGame, Asset.DRIP_SOUND);
         mSoundHandle = mSoundRes.getHandle();
         
         // just add 6 widgets
-        XMLResource<BaseTextureResource> xmlRes = new XMLResource<BaseTextureResource>
-                (Asset.XML_IMAGESET, new CEGUIImageSetXMLHandler());
+        XMLResource<BaseTextureResource> xmlRes = new XMLResource<>
+                (Asset.XML_IMAGESET, new CEGUIImageSetXMLHandler(mGame));
         XMLResHandle<BaseTextureResource> xmlHnd = xmlRes.getHandle();
         BaseTextureResource imageSet = xmlHnd.getContent();
         xmlRes.releaseHandle(xmlHnd);
                
         // static button
-        final PlayerGameView v = Game.get().getPrimaryView();
-        Rectangle r = new Rectangle(imageSet, TouchSetting.TOUCHABLE);
+        final PlayerGameView v = mGame.getPrimaryView();
+        Rectangle r = new Rectangle(mGame, imageSet, TouchSetting.TOUCHABLE);
         int x = (int) (v.getScreenWidth() * 0.2f);
         int y = (int) (v.getScreenHeight() * 0.3f);
         r.setPosition(x, y);
@@ -56,7 +60,7 @@ class GameState implements IGameState, IGameStateLogic,
         v.pushScreenElement(r); 
          
         // rotating button
-        r = new Rectangle(imageSet, TouchSetting.TOUCHABLE);
+        r = new Rectangle(mGame, imageSet, TouchSetting.TOUCHABLE);
         x = (int) (v.getScreenWidth() * 0.5f);
         y = (int) (v.getScreenHeight() * 0.3f);
         r.setPosition(x, y);
@@ -64,13 +68,13 @@ class GameState implements IGameState, IGameStateLogic,
         r.setTextureRegion("left");
         v.pushScreenElement(r);
         
-        WidgetRotationModifier m = new WidgetRotationModifier(r, 40, 0, null);
+        WidgetRotationModifier m = new WidgetRotationModifier(mGame, r, 40, 0, null);
         m.run();
 
         // moving button
         final int startX = (int) (v.getScreenWidth() * 0.2f);
         final int targetX = (int) (v.getScreenWidth() * 0.8f);
-        r = new Rectangle(imageSet, TouchSetting.TOUCHABLE);
+        r = new Rectangle(mGame, imageSet, TouchSetting.TOUCHABLE);
         y = (int) (v.getScreenHeight() * 0.7f);
         r.setPosition(startX, y);
         r.setSize(200, 200); 
@@ -86,10 +90,10 @@ class GameState implements IGameState, IGameStateLogic,
         s.targetX = targetX;
         s.targetY = y;
         s.profile = EasingProfile.BOUNCE;
-        WidgetMotionModifier toRight = new WidgetMotionModifier(s);
+        WidgetMotionModifier toRight = new WidgetMotionModifier(mGame, s);
         s.startX = targetX;
         s.targetX = startX;
-        WidgetMotionModifier toLeft = new WidgetMotionModifier(s);
+        WidgetMotionModifier toLeft = new WidgetMotionModifier(mGame, s);
         // make each other's successor to create endless animation loop
         toLeft.setNext(toRight);
         toRight.setNext(toLeft);
@@ -98,7 +102,7 @@ class GameState implements IGameState, IGameStateLogic,
         // moving and rotating button
         final int startY = (int) (v.getScreenHeight() * 0.3f);
         final int targetY = (int) (v.getScreenHeight() * 0.7f);
-        r = new Rectangle(imageSet, TouchSetting.TOUCHABLE);
+        r = new Rectangle(mGame, imageSet, TouchSetting.TOUCHABLE);
         x = (int) (v.getScreenWidth() * 0.8f);
         r.setPosition(x, startY);
         r.setSize(200, 200); 
@@ -112,18 +116,18 @@ class GameState implements IGameState, IGameStateLogic,
         s.targetX = x;
         s.targetY = targetY;
         s.profile = EasingProfile.SIN_IN;
-        WidgetMotionModifier toTop = new WidgetMotionModifier(s);
+        WidgetMotionModifier toTop = new WidgetMotionModifier(mGame, s);
         s.startY = targetY;
         s.targetY = startY;
-        WidgetMotionModifier toBottom = new WidgetMotionModifier(s);
+        WidgetMotionModifier toBottom = new WidgetMotionModifier(mGame, s);
         toBottom.setNext(toTop);
         toTop.setNext(toBottom);
         toBottom.run();
-        m = new WidgetRotationModifier(r, 60, 0, null);
+        m = new WidgetRotationModifier(mGame, r, 60, 0, null);
         m.run();
-         
-        Game.get().showToast("touch widgets to change texture region");
-        Game.get().getEventManager().addListener(IWidgetTouchedBeginEvent.EVENT_TYPE, this);
+
+        mGame.showToast("touch widgets to change texture region");
+        mGame.getEventManager().addListener(IWidgetTouchedBeginEvent.EVENT_TYPE, this);
     }
 
     @Override

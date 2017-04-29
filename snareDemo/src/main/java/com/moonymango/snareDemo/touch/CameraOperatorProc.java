@@ -2,6 +2,7 @@ package com.moonymango.snareDemo.touch;
 
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.logic.IPositionable3D;
 import com.moonymango.snare.game.logic.MotionModifier;
 import com.moonymango.snare.ui.scene3D.PerspectiveCamera;
@@ -10,9 +11,9 @@ public class CameraOperatorProc extends MotionModifier {
 
     private final PerspectiveCamera mCam;
     
-    public CameraOperatorProc(IPositionable3D obj, float speed,
-            float[] direction) {
-        super(obj, speed, direction);
+    public CameraOperatorProc(IGame game, IPositionable3D obj, float speed,
+                              float[] direction) {
+        super(game, obj, speed, direction);
         mCam = (PerspectiveCamera) ((GameObj) obj).getComponent(ComponentType.CAMERA);
     }
 

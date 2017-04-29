@@ -1,6 +1,5 @@
 package com.moonymango.snareDemo.scene;
 
-import com.moonymango.snareDemo.Asset;
 import com.moonymango.snare.events.EventManager;
 import com.moonymango.snare.events.EventManager.IEventListener;
 import com.moonymango.snare.events.IEvent;
@@ -8,8 +7,9 @@ import com.moonymango.snare.events.IFlingEvent;
 import com.moonymango.snare.events.IScaleEvent;
 import com.moonymango.snare.events.IScrollEvent;
 import com.moonymango.snare.events.ITouchEvent;
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.IGameState;
 import com.moonymango.snare.game.IGameStateLogic;
 import com.moonymango.snare.game.logic.RotationModifier;
@@ -27,8 +27,9 @@ import com.moonymango.snare.ui.scene3D.rendering.DiffuseLightingEffect;
 import com.moonymango.snare.ui.scene3D.rendering.OutlineEffect;
 import com.moonymango.snare.ui.scene3D.rendering.SceneDrawable;
 import com.moonymango.snare.util.VectorAF;
+import com.moonymango.snareDemo.Asset;
 
-class GameState implements IGameState, IGameStateLogic,
+class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
         IEventListener {
 
     private PerspectiveCamera mCam;
@@ -36,7 +37,12 @@ class GameState implements IGameState, IGameStateLogic,
     private float mFOV = 30;
     private GameObj mObj;
     private RotationModifier mProc;
-    
+
+    public GameState(IGame game)
+    {
+        super(game);
+    }
+
     @Override
     public IGameState onUpdate(long realTime, float realDelta,
             float virtualDelta) {
@@ -55,14 +61,14 @@ class GameState implements IGameState, IGameStateLogic,
     public void onActivate(IGameState previous) {
     	
     	// startup: create the scene and objects
-        final Scene3D s = new Scene3D();
+        final Scene3D s = new Scene3D(mGame);
         
         // +++ camera +++
         mCam = new PerspectiveCamera();
-        GameObj obj = new GameObj("camera");
+        GameObj obj = new GameObj(mGame, "camera");
         obj.addComponent(mCam);
         obj.setPosition(0, 0, 7);
-        Game.get().addGameObj(obj);
+        mGame.addGameObj(obj);
         
         mCam.lookAt(0, 0, 0, 0, 1, 0);
         mCam.setNearFarPlane(2, 30);
@@ -70,36 +76,36 @@ class GameState implements IGameState, IGameStateLogic,
         s.setCamera(mCam);
         
         // ++++ lights ++++
-        obj = new GameObj("directionalLight");
+        obj = new GameObj(mGame, "directionalLight");
         Light light = new Light(LightType.DIRECTIONAL);
         light.setColor(1, 1, 1, 0);
         obj.addComponent(light);
         obj.rotate(0, 1, 0, 90);
-        Game.get().addGameObj(obj);
+        mGame.addGameObj(obj);
         
-        obj = new GameObj("ambientLight");
+        obj = new GameObj(mGame, "ambientLight");
         light = new Light(LightType.AMBIENT);
         light.setColor(1, 1, 1, 0);
         obj.addComponent(light);
-        Game.get().addGameObj(obj);
+        mGame.addGameObj(obj);
                     
-        Game.get().getPrimaryView().pushScreenElement(s);
+        mGame.getPrimaryView().pushScreenElement(s);
         
         // ++++ skull ++++
         // load skull shape from asset file
-        MeshResource meshResSkull = new MeshResource(Asset.SKULL_MESH, 
+        MeshResource meshResSkull = new MeshResource(mGame, Asset.SKULL_MESH,
                 new ImportTransformCenterToOrigin(true));
         
-        mObj = new GameObj("mesh");
+        mObj = new GameObj(mGame, "mesh");
         //final SceneDrawableComponent c = new SceneDrawableComponent(new Mesh(meshResSkull), 
         //        new DiffuseLightingEffect(), RenderPass.DYNAMIC);
         //mObj.addComponent(new CelShader());
         
-        mObj.addComponent(new DiffuseLightingEffect()); 	// this effect draws the skull 
-        mObj.addComponent(new OutlineEffect());				// this effect draws black outline
+        mObj.addComponent(new DiffuseLightingEffect(mGame)); 	// this effect draws the skull
+        mObj.addComponent(new OutlineEffect(mGame));				// this effect draws black outline
         mObj.addComponent(new Mesh(meshResSkull));
-        mObj.addComponent(new SceneDrawable(RenderPass.DYNAMIC));
-        final Material mat = new Material();
+        mObj.addComponent(new SceneDrawable(mGame, RenderPass.DYNAMIC));
+        final Material mat = new Material(mGame);
         mat.setColor(Material.DIFFUSE_COLOR_IDX, 1, 0, 0, 1);
         mat.setColor(Material.AMBIENT_COLOR_IDX, 0, 0, 0.5f, 1);
         mat.setColor(Material.OUTLINE_COLOR_IDX, 0, 0, 0, 1);
@@ -107,10 +113,10 @@ class GameState implements IGameState, IGameStateLogic,
         mObj.setScale(0.04f, 0.04f, 0.04f);				// set size of skull
         mObj.setPosition(0, 0, 0);						// put skull to origin
         
-        Game.get().addGameObj(mObj);
+        mGame.addGameObj(mObj);
         
         // register for fling and scroll gestures
-        final EventManager em = Game.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         em.addListener(IScrollEvent.EVENT_TYPE, this);
         em.addListener(IFlingEvent.EVENT_TYPE, this);
         em.addListener(ITouchEvent.EVENT_TYPE, this);
@@ -187,7 +193,7 @@ class GameState implements IGameState, IGameStateLogic,
         // let object rotate based on fling velocity
         final float[] vec = {e.getVelocityY(), e.getVelocityX(), 0, 0};
         final float angle = 0.3f * VectorAF.normalize(vec);
-        mProc = new RotationModifier(mObj, vec[0], vec[1], vec[2], angle);
+        mProc = new RotationModifier(mGame, mObj, vec[0], vec[1], vec[2], angle);
         mProc.run();
         
     }

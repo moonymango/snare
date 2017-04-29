@@ -1,33 +1,33 @@
 package com.moonymango.snareDemo.physics;
 
 import com.moonymango.snare.audio.AudioComponent;
-import com.moonymango.snareDemo.physics.GameState.PongObject;
 import com.moonymango.snare.events.EventManager;
 import com.moonymango.snare.events.EventManager.IEventListener;
 import com.moonymango.snare.events.IEvent;
 import com.moonymango.snare.events.IGameObjCollisionEvent;
 import com.moonymango.snare.events.IUserEvent;
-import com.moonymango.snare.game.Game;
 import com.moonymango.snare.game.GameObj;
 import com.moonymango.snare.game.GameObj.ComponentType;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.logic.BaseComponent;
 import com.moonymango.snare.proc.DelayProc;
 import com.moonymango.snare.util.VectorAF;
+import com.moonymango.snareDemo.physics.GameState.PongObject;
 
 class BallLogic extends BaseComponent implements IEventListener {
 
     private final float[] mDirection = new float[4];
     private float mSpeed = 0.01f;
     private AudioComponent mAudio;
-    private final DelayProc mWait = new DelayProc(2000); 
+    private final DelayProc mWait = new DelayProc(mGame, 2000);
     
-    public BallLogic() {
-        super(ComponentType.LOGIC);
+    public BallLogic(IGame game) {
+        super(game, ComponentType.LOGIC);
     }
     
     @Override
     public void onInit() {
-        Game.get().getEventManager().addListener(IGameObjCollisionEvent.EVENT_TYPE, this);
+        mGame.getEventManager().addListener(IGameObjCollisionEvent.EVENT_TYPE, this);
         mAudio = (AudioComponent) getGameObj().getComponent(ComponentType.AUDIO);
         mWait.run();
         setRandomDirection();
@@ -35,7 +35,7 @@ class BallLogic extends BaseComponent implements IEventListener {
 
     @Override
     public void onShutdown() {
-        Game.get().getEventManager().removeListener(IGameObjCollisionEvent.EVENT_TYPE, this);
+        mGame.getEventManager().removeListener(IGameObjCollisionEvent.EVENT_TYPE, this);
     }
 
     @Override
@@ -62,7 +62,7 @@ class BallLogic extends BaseComponent implements IEventListener {
             mWait.run();
             
             // send event with paddle that missed the ball
-            final EventManager em = Game.get().getEventManager();
+            final EventManager em = mGame.getEventManager();
             final IUserEvent e = em.obtain(IUserEvent.EVENT_TYPE);
             e.setUserData(missed);
             em.queueEvent(e);
@@ -79,7 +79,7 @@ class BallLogic extends BaseComponent implements IEventListener {
             id = e.getOtherGameObjID();
         }
         
-        final GameObj go = Game.get().getObjById(id);
+        final GameObj go = mGame.getObjById(id);
         final PongObject po = PongObject.valueOf(go.getName());
         
         switch(po) {
@@ -108,9 +108,9 @@ class BallLogic extends BaseComponent implements IEventListener {
     }
     
     private void setRandomDirection() { 
-        mDirection[0] = Game.get().getRandomFloat(-0.5f, 0.5f);
+        mDirection[0] = mGame.getRandomFloat(-0.5f, 0.5f);
         mDirection[1] = 0;
-        mDirection[2] = Game.get().getRandomFloat(-1, 1);
+        mDirection[2] = mGame.getRandomFloat(-1, 1);
         mDirection[3] = 0;
         VectorAF.normalize(mDirection);
     }

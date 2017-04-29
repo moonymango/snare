@@ -1,7 +1,6 @@
 package com.moonymango.snare.opengl;
 
 import com.moonymango.snare.game.BaseSnareClass;
-import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.ui.PlayerGameView;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -27,9 +26,9 @@ public class FullScreenRenderer extends BaseSnareClass implements IRenderer {
     private int mSurfaceHeight;
     
            
-    public FullScreenRenderer(IGame game, PlayerGameView view)
+    public FullScreenRenderer(PlayerGameView view)
     {
-        super(game);
+        super(view.mGame);
 
         if (view == null) {
             throw new IllegalArgumentException("Missing player view");

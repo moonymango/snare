@@ -3,7 +3,8 @@ package com.moonymango.snareDemo.procedural;
 import com.moonymango.snare.events.EventManager.IEventListener;
 import com.moonymango.snare.events.IEvent;
 import com.moonymango.snare.events.IWidgetTouchedEndEvent;
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.BaseSnareClass;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.IGameState;
 import com.moonymango.snare.game.IGameStateLogic;
 import com.moonymango.snare.opengl.TextureObj.TextureSize;
@@ -23,7 +24,7 @@ import com.moonymango.snare.ui.widgets.BaseWidget.PositionAlignment;
 import com.moonymango.snare.ui.widgets.Rectangle;
 import com.moonymango.snare.ui.widgets.Text;
 
-class GameState implements IGameState, IGameStateLogic, IEventListener {
+class GameState extends BaseSnareClass implements IGameState, IGameStateLogic, IEventListener {
     
     private float mX;
     private Rectangle mShape;
@@ -32,7 +33,9 @@ class GameState implements IGameState, IGameStateLogic, IEventListener {
     private Rectangle mPerlin;
     private final ColorSamples mSamples = new ColorSamples(3, 3);
    
-    public GameState() {
+    public GameState(IGame game)
+    {
+        super(game);
         // initialize color samples: blue column in middle of texture
         mSamples.setAll(1, 1, 1, 1)
             .setColumn(1, 0, 0, 1, 1);
@@ -55,9 +58,9 @@ class GameState implements IGameState, IGameStateLogic, IEventListener {
         gen2DGradient(true);
         genPlain(true);
         genPerlin(true);
-        Game.get().showToast("touch to re-generate textures");
-        
-        Game.get().getEventManager().addListener(IWidgetTouchedEndEvent.EVENT_TYPE, this);
+        mGame.showToast("touch to re-generate textures");
+
+        mGame.getEventManager().addListener(IWidgetTouchedEndEvent.EVENT_TYPE, this);
     }
 
     @Override
@@ -82,7 +85,7 @@ class GameState implements IGameState, IGameStateLogic, IEventListener {
 		final IWidgetTouchedEndEvent e = (IWidgetTouchedEndEvent) event;
 		final BaseTouchWidget widget = e.getWidget();
     	
-        final PlayerGameView v = Game.get().getPrimaryView();
+        final PlayerGameView v = mGame.getPrimaryView();
         if (widget == mShape) {
             v.removeScreenElement(mShape);
             mShape = null;
@@ -109,19 +112,19 @@ class GameState implements IGameState, IGameStateLogic, IEventListener {
     }
     
     private void genShape(boolean text) {
-        final PlayerGameView v = Game.get().getPrimaryView();
-        final BaseFont font = Game.get().getSystemFont();
+        final PlayerGameView v = mGame.getPrimaryView();
+        final BaseFont font = mGame.getSystemFont();
         int w = (int) (v.getScreenWidth() * 0.5f);
         int h = (int) (v.getScreenHeight() * 0.4f);
         int textSize = (int) (v.getScreenHeight() * 0.025f);
         
-        final float f0 = Game.get().getRandomFloat(0, 1);
-        final float f1 = Game.get().getRandomFloat(0, 1);
+        final float f0 = mGame.getRandomFloat(0, 1);
+        final float f1 = mGame.getRandomFloat(0, 1);
         ShapeGenerator gs = new ShapeGenerator(Shape.CIRCLE, f0, f0>f1);
         
-        BitmapTextureResource bm = new BitmapTextureResource("shape" 
-                + Game.get().getRandomString(), TextureSize.S_32, gs, gs, gs);
-        mShape = new Rectangle(bm, TextureObjOptions.NEAREST_MIRRORED_REPEAT, 
+        BitmapTextureResource bm = new BitmapTextureResource(mGame, "shape"
+                + mGame.getRandomString(), TextureSize.S_32, gs, gs, gs);
+        mShape = new Rectangle(mGame, bm, TextureObjOptions.NEAREST_MIRRORED_REPEAT,
         		TouchSetting.TOUCHABLE);
         mShape.setAnimation(null)
             .setPosition(0, (int) (v.getScreenHeight() * 0.75f))
@@ -140,8 +143,8 @@ class GameState implements IGameState, IGameStateLogic, IEventListener {
     }
     
     private void gen2DGradient(boolean text) {
-        final PlayerGameView v = Game.get().getPrimaryView();
-        final BaseFont font = Game.get().getSystemFont();
+        final PlayerGameView v = mGame.getPrimaryView();
+        final BaseFont font = mGame.getSystemFont();
         int w = (int) (v.getScreenWidth() * 0.5f);
         int h = (int) (v.getScreenHeight() * 0.4f);
         int textSize = (int) (v.getScreenHeight() * 0.025f);
@@ -152,10 +155,10 @@ class GameState implements IGameState, IGameStateLogic, IEventListener {
         
         // choose random name, so that we do not get the same texture from
         // the resource cache when reloading
-        BitmapTextureResource bm = new BitmapTextureResource("gradient" 
-                + Game.get().getRandomString(), TextureSize.S_32, gg, gg, gg);
+        BitmapTextureResource bm = new BitmapTextureResource(mGame, "gradient"
+                + mGame.getRandomString(), TextureSize.S_32, gg, gg, gg);
         
-        mGradient = new Rectangle(bm, 
+        mGradient = new Rectangle(mGame, bm,
                 TextureObjOptions.LINEAR_MIRRORED_REPEAT, TouchSetting.TOUCHABLE);
         int y = (int) (v.getScreenHeight() * 0.25f);
         mGradient.setAnimation(null)
@@ -174,26 +177,27 @@ class GameState implements IGameState, IGameStateLogic, IEventListener {
         }
     }
     
-    private void genPlain(boolean text) {
-        final PlayerGameView v = Game.get().getPrimaryView();
-        final BaseFont font = Game.get().getSystemFont();
+    private void genPlain(boolean text)
+    {
+        final PlayerGameView v = mGame.getPrimaryView();
+        final BaseFont font = mGame.getSystemFont();
         int w = (int) (v.getScreenWidth() * 0.5f);
         int h = (int) (v.getScreenHeight() * 0.4f);
         int textSize = (int) (v.getScreenHeight() * 0.025f);
        
-        final float nx = Game.get().getRandomFloat();
-        final float ny = Game.get().getRandomFloat();
-        final float nw = Game.get().getRandomFloat(1, 30);
+        final float nx = mGame.getRandomFloat();
+        final float ny = mGame.getRandomFloat();
+        final float nw = mGame.getRandomFloat(1, 30);
         
         // use same generator for each color channel results in monochromatic
         // bitmap
         NoiseGenerator gr = new NoiseGenerator(NoiseFunction.PLAIN, 6, 
                 nx, ny, nw, nw / v.getScreenRatio());
-        BitmapTextureResource bm = new BitmapTextureResource("noise" 
-                    + Game.get().getRandomString(), TextureSize.S_128, 
+        BitmapTextureResource bm = new BitmapTextureResource(mGame, "noise"
+                    + mGame.getRandomString(), TextureSize.S_128,
                     gr,gr, gr);
         
-        mPlain = new Rectangle(bm, TextureObjOptions.LINEAR_MIRRORED_REPEAT,
+        mPlain = new Rectangle(mGame, bm, TextureObjOptions.LINEAR_MIRRORED_REPEAT,
                 TouchSetting.TOUCHABLE);
         int x = (int) (v.getScreenWidth() * 0.5f);
         int y = (int) (v.getScreenHeight() * 0.75f);
@@ -214,24 +218,24 @@ class GameState implements IGameState, IGameStateLogic, IEventListener {
     }
     
     private void genPerlin(boolean text) { 
-        final PlayerGameView v = Game.get().getPrimaryView();
-        final BaseFont font = Game.get().getSystemFont();
+        final PlayerGameView v = mGame.getPrimaryView();
+        final BaseFont font = mGame.getSystemFont();
         int w = (int) (v.getScreenWidth() * 0.5f);
         int h = (int) (v.getScreenHeight() * 0.4f);
         int textSize = (int) (v.getScreenHeight() * 0.025f);
         
-        final float nx = Game.get().getRandomFloat();
-        final float ny = Game.get().getRandomFloat();
-        final float nw = Game.get().getRandomFloat(1, 10);
+        final float nx = mGame.getRandomFloat();
+        final float ny = mGame.getRandomFloat();
+        final float nw = mGame.getRandomFloat(1, 10);
         
         // just specify generator for red channel to save computation time
         NoiseGenerator gr = new NoiseGenerator(NoiseFunction.PERLIN_C, 6, 
                 nx, ny, nw, nw / v.getScreenRatio());
-        BitmapTextureResource bm = new BitmapTextureResource("noise" 
-                    + Game.get().getRandomString(), TextureSize.S_128, gr, 
+        BitmapTextureResource bm = new BitmapTextureResource(mGame, "noise"
+                    + mGame.getRandomString(), TextureSize.S_128, gr,
                     null, null);
         
-        mPerlin = new Rectangle(bm, TextureObjOptions.LINEAR_MIRRORED_REPEAT,
+        mPerlin = new Rectangle(mGame, bm, TextureObjOptions.LINEAR_MIRRORED_REPEAT,
                 TouchSetting.TOUCHABLE);
         int x = (int) (v.getScreenWidth() * 0.5f);
         int y = (int) (v.getScreenHeight() * 0.25f);
@@ -256,7 +260,7 @@ class GameState implements IGameState, IGameStateLogic, IEventListener {
         for (int x = 0; x < mSamples.getWidth(); x++) {
             for (int y = 0; y < mSamples.getHeight(); y++) {
                 for (int i = 0; i < 4; i++) {
-                    c[i] = Game.get().getRandomFloat(0, 1);
+                    c[i] = mGame.getRandomFloat(0, 1);
                 }
                 mSamples.set(x, y, c);
             }

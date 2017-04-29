@@ -28,7 +28,7 @@ public class OrbitPositionModifier extends BaseProcess {
      * @param axisVector Vector of the rotation axis
      * @param degreesPerSecond Orbit speed
      */
-    public OrbitPositionModifier(IGame game, IPositionable3D obj, float[] axisPoint, float[] axisVector,
+    public OrbitPositionModifier(IGame game,IPositionable3D obj, float[] axisPoint, float[] axisVector,
                                  float degreesPerSecond)
     {
         this(game, obj, axisPoint, axisVector, degreesPerSecond, ClockType.VIRTUAL);

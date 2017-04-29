@@ -4,8 +4,13 @@ package com.moonymango.snare.game;
  * Convenience class that combines {@link IGameState} and {@link IGameStateLogic}.
  * Intended to be used when only a single game state is required.
  */
-public abstract class SimpleGameState implements IGameState, IGameStateLogic {
-    
+public abstract class SimpleGameState extends BaseSnareClass implements IGameState, IGameStateLogic
+{
+    public SimpleGameState(IGame game)
+    {
+        super(game);
+    }
+
     @Override
     public void onInit() {}
         

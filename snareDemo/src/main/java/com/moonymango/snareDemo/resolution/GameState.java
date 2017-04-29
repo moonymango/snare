@@ -1,6 +1,5 @@
 package com.moonymango.snareDemo.resolution;
 
-import com.moonymango.snareDemo.Asset;
 import com.moonymango.snare.events.EventManager;
 import com.moonymango.snare.events.EventManager.IEventListener;
 import com.moonymango.snare.events.IEvent;
@@ -8,8 +7,9 @@ import com.moonymango.snare.events.IFlingEvent;
 import com.moonymango.snare.events.IScaleEvent;
 import com.moonymango.snare.events.IScrollEvent;
 import com.moonymango.snare.events.ITouchEvent;
-import com.moonymango.snare.game.Game;
+import com.moonymango.snare.game.BaseSnareClass;
 import com.moonymango.snare.game.GameObj;
+import com.moonymango.snare.game.IGame;
 import com.moonymango.snare.game.IGameState;
 import com.moonymango.snare.game.IGameStateLogic;
 import com.moonymango.snare.game.logic.RotationModifier;
@@ -18,17 +18,17 @@ import com.moonymango.snare.res.data.MeshResource;
 import com.moonymango.snare.ui.TouchAction;
 import com.moonymango.snare.ui.scene3D.Light;
 import com.moonymango.snare.ui.scene3D.Light.LightType;
-import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Material;
 import com.moonymango.snare.ui.scene3D.PerspectiveCamera;
+import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Scene3D;
 import com.moonymango.snare.ui.scene3D.mesh.Mesh;
 import com.moonymango.snare.ui.scene3D.rendering.DiffuseLightingEffect;
 import com.moonymango.snare.ui.scene3D.rendering.SceneDrawable;
 import com.moonymango.snare.util.VectorAF;
+import com.moonymango.snareDemo.Asset;
 
-class GameState implements IGameState, IGameStateLogic,
-        IEventListener {
+class GameState extends BaseSnareClass implements IGameState, IGameStateLogic, IEventListener {
 
     private PerspectiveCamera mCam;
     private GameObj mObj;
@@ -37,7 +37,12 @@ class GameState implements IGameState, IGameStateLogic,
     private int mResXBeforeScale;
     private int mResYBeforeScale;
     private RotationModifier mProc;
-    
+
+    public GameState(IGame game)
+    {
+        super(game);
+    }
+
     @Override
     public IGameState onUpdate(long realTime, float realDelta,
             float virtualDelta) {
@@ -46,59 +51,59 @@ class GameState implements IGameState, IGameStateLogic,
 
     @Override
     public void onActivate(IGameState previous) {
-        final VarResolutionRenderer r = (VarResolutionRenderer) Game.get().getRenderer();
+        final VarResolutionRenderer r = (VarResolutionRenderer) mGame.getRenderer();
         mResX = r.getMaxResolutionX();
         mResY = r.getMaxResolutionY();
         mResXBeforeScale = mResX;
         mResYBeforeScale = mResY;
         
-        final Scene3D s = new Scene3D();
+        final Scene3D s = new Scene3D(mGame);
         
         mCam = new PerspectiveCamera();
-        GameObj obj = new GameObj("camera");
+        GameObj obj = new GameObj(mGame, "camera");
         obj.addComponent(mCam);
         obj.setPosition(0, 0, 7);
-        Game.get().addGameObj(obj);
+        mGame.addGameObj(obj);
         
         mCam.lookAt(0, 0, 0, 0, 1, 0);
         mCam.setNearFarPlane(2, 30);
         mCam.setFieldOfView(30);
         s.setCamera(mCam);
         
-        obj = new GameObj("directionalLight");
+        obj = new GameObj(mGame, "directionalLight");
         Light light = new Light(LightType.DIRECTIONAL);
         light.setColor(1, 1, 1, 0);
         obj.addComponent(light);
         obj.rotate(0, 1, 0, 90);
-        Game.get().addGameObj(obj);
+        mGame.addGameObj(obj);
         
-        obj = new GameObj("ambientLight");
+        obj = new GameObj(mGame, "ambientLight");
         light = new Light(LightType.AMBIENT);
         light.setColor(1, 1, 1, 0);
         obj.addComponent(light);
-        Game.get().addGameObj(obj);
-                    
-        Game.get().getPrimaryView().pushScreenElement(s);
+        mGame.addGameObj(obj);
+
+        mGame.getPrimaryView().pushScreenElement(s);
         
         
-        MeshResource meshResSkull = new MeshResource(Asset.MONKEY3DS_MESH);
-        mObj = new GameObj("mesh");
+        MeshResource meshResSkull = new MeshResource(mGame, Asset.MONKEY3DS_MESH);
+        mObj = new GameObj(mGame, "mesh");
         //final SceneDrawableComponent c = new SceneDrawableComponent(new Mesh(meshResSkull), 
         //        new DiffuseLightingEffect(), RenderPass.DYNAMIC);
-        mObj.addComponent(new DiffuseLightingEffect());
+        mObj.addComponent(new DiffuseLightingEffect(mGame));
         mObj.addComponent(new Mesh(meshResSkull));
-        mObj.addComponent(new SceneDrawable(RenderPass.DYNAMIC));
-        final Material mat = new Material();
+        mObj.addComponent(new SceneDrawable(mGame, RenderPass.DYNAMIC));
+        final Material mat = new Material(mGame);
         mat.setColor(Material.AMBIENT_COLOR_IDX, 0, 0, 0.5f, 1);
         mat.setColor(Material.DIFFUSE_COLOR_IDX, 1, 0, 0, 1);
         mObj.addComponent(mat);
         //mObj.setScale(0.04f, 0.04f, 0.04f);
         mObj.setPosition(0, 0, 0);
-        
-        Game.get().addGameObj(mObj);
+
+        mGame.addGameObj(mObj);
         
         // register for fling and scroll gestures
-        final EventManager em = Game.get().getEventManager();
+        final EventManager em = mGame.getEventManager();
         em.addListener(IScrollEvent.EVENT_TYPE, this);
         em.addListener(IFlingEvent.EVENT_TYPE, this);
         em.addListener(ITouchEvent.EVENT_TYPE, this);
@@ -185,7 +190,7 @@ class GameState implements IGameState, IGameStateLogic,
             mResYBeforeScale = mResY;
         }
         
-        final VarResolutionRenderer r = (VarResolutionRenderer) Game.get().getRenderer();
+        final VarResolutionRenderer r = (VarResolutionRenderer) mGame.getRenderer();
         final int tempX = mResX;
         final int tempY = mResY;
        
