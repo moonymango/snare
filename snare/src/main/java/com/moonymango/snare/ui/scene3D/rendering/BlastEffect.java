@@ -111,17 +111,17 @@ public class BlastEffect extends BaseDynamicMeshEffect {
      * @param segments No. of segments in blast ring
      * @param inner Movement profile for inner edge of blast ring.
      * @param outer Movement profile for outer edge.
-     * @param speed Effect speed.
+     * @param duration Effect duration in ms.
      * @param clock Clock to use.
      */
-    public BlastEffect(IGame game, int segments, IEasingProfile inner, IEasingProfile outer, float speed,
+    public BlastEffect(IGame game, int segments, IEasingProfile inner, IEasingProfile outer, float duration,
                        IGame.ClockType clock)
     {
         super(createRenderContext(game), new BlastVertexGenerator(segments), clock);
         mNumSegments = segments;
         mInnerEdgeProfile = inner;
         mOuterEdgeProfile = outer;
-        mSpeed = speed;
+        mSpeed = 1f/duration*1000;  //1000 to convert to seconds because mTime is counted in seconds
     }
     
     @Override
