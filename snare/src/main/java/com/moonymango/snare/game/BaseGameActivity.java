@@ -14,6 +14,7 @@ import com.moonymango.snare.physics.SimplePhysics;
 import com.moonymango.snare.res.ResourceCache;
 import com.moonymango.snare.ui.BaseFont;
 import com.moonymango.snare.ui.PlayerGameView;
+import com.moonymango.snare.ui.PlayerIOGameView;
 
 public abstract class BaseGameActivity extends Activity {
     
@@ -69,7 +70,7 @@ public abstract class BaseGameActivity extends Activity {
     
     public PlayerGameView onLoadPrimaryPlayerView(IGame game)
     {
-        return new PlayerGameView(game);
+        return new PlayerIOGameView(game);
     }
     
     public IPhysics onLoadPhysics(IGame game)

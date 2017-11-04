@@ -6,6 +6,7 @@ import com.moonymango.snare.proc.ProcessManager.IOnProcessKilledListener;
 import com.moonymango.snare.proc.ProcessManager.ProcState;
 import com.moonymango.snare.ui.IScreenElement;
 import com.moonymango.snare.ui.PlayerGameView;
+import com.moonymango.snare.ui.PlayerIOGameView;
 import com.moonymango.snare.util.EasingProfile;
 import com.moonymango.snare.util.IEasingProfile;
 
@@ -151,7 +152,7 @@ public class WidgetMotionModifier extends BaseProcess {
         /** IOnProcessKilledListener to be notified when motion is finished. */
         public IOnProcessKilledListener listener; 
         /** 
-         * Add widget to {@link PlayerGameView} before motion. 
+         * Add widget to {@link PlayerIOGameView} before motion.
          * (default = false)
          */
         public boolean addToViewBeforeMotion = false;

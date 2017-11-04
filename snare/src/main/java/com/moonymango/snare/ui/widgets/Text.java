@@ -230,7 +230,7 @@ public class Text extends BaseTouchWidget implements IBufferDataProvider {
 
     @Override
     public void onAttachToScreen(PlayerGameView view, int screenWidth,
-            int screenHeight) {
+                                 int screenHeight) {
         mProgram = (ProgramObj) mProgramDescr.getHandle();
         if (!mProgram.isConfigured()) {
             mProgram.configure(VERTEX_SHADER, FRAGMENT_SHADER_TEX, this);

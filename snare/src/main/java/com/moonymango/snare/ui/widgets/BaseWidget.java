@@ -87,7 +87,7 @@ public abstract class BaseWidget extends BaseSnareClass
     
     
     public void onAttachToScreen(PlayerGameView view, int screenWidth,
-            int screenHeight) {
+                                 int screenHeight) {
         if (mIsAttached && view != mView) {
             throw new IllegalStateException(
                     "Shape is already attached to a view.");

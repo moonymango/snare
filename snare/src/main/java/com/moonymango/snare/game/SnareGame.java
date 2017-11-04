@@ -27,6 +27,7 @@ import com.moonymango.snare.proc.ProcessManager;
 import com.moonymango.snare.res.ResourceCache;
 import com.moonymango.snare.ui.BaseFont;
 import com.moonymango.snare.ui.PlayerGameView;
+import com.moonymango.snare.ui.PlayerIOGameView;
 import com.moonymango.snare.util.Logger;
 import com.moonymango.snare.util.Logger.LogSource;
 import com.moonymango.snare.util.RandomString;
@@ -132,9 +133,14 @@ final class SnareGame implements IGame
                 mSettings.RENDER_OPTIONS.EGL_DEPTH_SIZE,
                 mSettings.RENDER_OPTIONS.EGL_STENCIL_SIZE);
         mSurfaceView.setRenderer(mRenderer);
-        mSurfaceView.setOnTouchListener(mPrimaryPlayerView);
-        mSurfaceView.setFocusableInTouchMode(true);
-        mSurfaceView.setOnKeyListener(mPrimaryPlayerView);
+
+        // register as input if primary view has input capability
+        if (mPrimaryPlayerView.onRegisterInputListeners())
+        {
+            mSurfaceView.setOnTouchListener((PlayerIOGameView)mPrimaryPlayerView);
+            mSurfaceView.setFocusableInTouchMode(true);
+            mSurfaceView.setOnKeyListener((PlayerIOGameView)mPrimaryPlayerView);
+        }
         return mSurfaceView;
     }
 
@@ -144,18 +150,14 @@ final class SnareGame implements IGame
     @Override
     public synchronized void waitForDraw()
     {
-        if (!mSettings.MULTI_THREADED)
-        {
+        if (!mSettings.MULTI_THREADED) {
             update();
             return;
         }
-        while (!mIsDrawing)
-        {
-            try
-            {
+        while (!mIsDrawing) {
+            try {
                 wait();
-            } catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 // handled by GLSurfaceView.onPause, nothing to do here
             }
         }
@@ -164,8 +166,7 @@ final class SnareGame implements IGame
     @Override
     public synchronized void notifyEndDraw()
     {
-        if (!mSettings.MULTI_THREADED)
-        {
+        if (!mSettings.MULTI_THREADED) {
             return;
         }
         mIsDrawing = false;
@@ -174,20 +175,17 @@ final class SnareGame implements IGame
 
     private synchronized void waitForUpdate() throws InterruptedException
     {
-        if (!mSettings.MULTI_THREADED)
-        {
+        if (!mSettings.MULTI_THREADED) {
             return;
         }
-        while (mIsDrawing)
-        {
+        while (mIsDrawing) {
             wait();
         }
     }
 
     private synchronized void notifyEndUpdate()
     {
-        if (!mSettings.MULTI_THREADED)
-        {
+        if (!mSettings.MULTI_THREADED) {
             return;
         }
         mIsDrawing = true;
@@ -202,8 +200,7 @@ final class SnareGame implements IGame
         mAudioManager.onResume();    // create new SoundPool
         mResourceCache.onResume();  // load sound resources to new pool
 
-        if (mSettings.MULTI_THREADED && mGameThread == null)
-        {
+        if (mSettings.MULTI_THREADED && mGameThread == null) {
             // configured for multi threading and no game thread available
             mGameThread = new GameThread();
             mGameThread.setPriority(Thread.MAX_PRIORITY);
@@ -216,14 +213,11 @@ final class SnareGame implements IGame
     @Override
     public void onPause()
     {
-        if (mSettings.MULTI_THREADED && mGameThread != null)
-        {
+        if (mSettings.MULTI_THREADED && mGameThread != null) {
             mGameThread.interrupt();
-            try
-            {
+            try {
                 mGameThread.join();
-            } catch (InterruptedException e1)
-            {
+            } catch (InterruptedException e1) {
             }
             mGameThread = null;
         }
@@ -348,11 +342,9 @@ final class SnareGame implements IGame
     @Override
     public SharedPreferences getPreferences(String name)
     {
-        if (mActivity != null)
-        {
+        if (mActivity != null) {
             return mActivity.getSharedPreferences(name, Context.MODE_PRIVATE);
-        } else
-        {
+        } else {
             return null;
         }
     }
@@ -453,8 +445,7 @@ final class SnareGame implements IGame
     @Override
     public void setVirtualTimeFactor(float factor)
     {
-        if (factor < 0)
-        {
+        if (factor < 0) {
             throw new IllegalArgumentException("Cannot turn back time.");
         }
         mVirtualTimeFactor = factor;
@@ -571,12 +562,10 @@ final class SnareGame implements IGame
 
     private void setGameState(IGameState state)
     {
-        if (state == null || state.equals(mGameState))
-        {
+        if (state == null || state.equals(mGameState)) {
             return;
         }
-        if (mGameState != null)
-        {
+        if (mGameState != null) {
             mGameState.getGameStateLogic().onDeactivate(state);
         }
         Logger.i(LogSource.GAME, "new game state: " + state.getName());
@@ -628,8 +617,7 @@ final class SnareGame implements IGame
             {
                 AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
                 alertDialog.setMessage(m);
-                if (l != null)
-                {
+                if (l != null) {
                     alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, t, l);
                 }
                 alertDialog.show();
@@ -642,21 +630,18 @@ final class SnareGame implements IGame
      */
     private void update()
     {
-        if (!mRenderer.hasSurface())
-        {
+        if (!mRenderer.hasSurface()) {
             return;
         }
 
-        if (!mInitDone)
-        {
+        if (!mInitDone) {
             Logger.i(LogSource.GAME, "*** Hello, this is SNARE ***");
 
             mSystemFont = ((BaseGameActivity) mActivity).onLoadSystemFont(this);
             mRenderer.onInit();
-            final int cnt = mRenderer.getPlayerViewCnt();
-            for (int i = 0; i < cnt; i++)
-            {
-                addGameView(mRenderer.getPlayerViewByIdx(i));
+            final PlayerGameView[] v = mRenderer.getPlayerViews();
+            for (int i = 0; i < v.length; i++) {
+                addGameView(v[i]);
             }
             mPhysics.onInit();
 
@@ -672,8 +657,7 @@ final class SnareGame implements IGame
         mMaxDelta = Math.max(delta, mMaxDelta);
         mMinDelta = Math.min(delta, mMinDelta);
         mLastMeasuredTime = t;
-        if (delta > mSettings.mRealtimeDeltaThreshold)
-        {
+        if (delta > mSettings.mRealtimeDeltaThreshold) {
             // Note: for debugging set this to delta which is equivalent to 50 fps to
             // see any time progress during debugging
             delta = Debug.isDebuggerConnected() ?
@@ -692,23 +676,19 @@ final class SnareGame implements IGame
 
         // update game objects
         // TODO prioB: what happens when new objects are added during traversal??
-        for (int i = mObjectsList.size() - 1; i >= 0; i--)
-        {
+        for (int i = mObjectsList.size() - 1; i >= 0; i--) {
             mObjectsList.get(i).onUpdateComponents(mRealtime, delta, virtualDelta);
         }
-        for (int i = mObjectsList.size() - 1; i >= 0; i--)
-        {
+        for (int i = mObjectsList.size() - 1; i >= 0; i--) {
             mObjectsList.get(i).onUpdateTransform(mRealtime, delta, virtualDelta);
         }
 
         // update views
-        for (int i = mViewsList.size() - 1; i >= 0; i--)
-        {
+        for (int i = mViewsList.size() - 1; i >= 0; i--) {
             mViewsList.get(i).onUpdate(mRealtime, delta, virtualDelta);
         }
 
-        if (mSettings.PRINT_STATS)
-        {
+        if (mSettings.PRINT_STATS) {
             printStats();
         }
 
@@ -719,8 +699,7 @@ final class SnareGame implements IGame
     {
         // artificial processor load for debugging purposes
         float mDummy = getRandomFloat(0, 10000);
-        for (int i = mSettings.mDummyLoops; i >= 0; i--)
-        {
+        for (int i = mSettings.mDummyLoops; i >= 0; i--) {
             mDummy = (int) (mDummy < 200000 ? mDummy * 3.5f : mDummy / 2.78f);
         }
     }
@@ -729,8 +708,7 @@ final class SnareGame implements IGame
     {
         final float fps = mRenderer.getFPS();
 
-        if (fps != mLastFPS)
-        {
+        if (fps != mLastFPS) {
             final int resCacheHandles = mResourceCache.getHandlesCnt();
             final int resCacheItems = mResourceCache.getItemCnt();
             final int glCacheHandles = mGLObjCache.getHandlesCnt();
@@ -747,7 +725,7 @@ final class SnareGame implements IGame
             final long alloc = heap - r.freeMemory() / div;
             final long n = Debug.getNativeHeapSize() / div;
 
-            mRenderer.clear();
+            mPrimaryPlayerView.debugPrintClear();
             String sFps = "FPS: " + fps + " " + mMaxDelta + " " + mMinDelta;
             Logger.i(LogSource.FPS, sFps);
 
@@ -758,7 +736,7 @@ final class SnareGame implements IGame
                     "\n " + procCnt + " processes" +
                     "\n " + listenerCnt + " event listeners" +
                     "\nmem: " + max + " max, " + heap + " heap, " + alloc + " alloc, " + n + " native";
-            mRenderer.print(s);
+            mPrimaryPlayerView.debugPrint(s);
 
             // distribute FPS info
             IStatsUpdateEvent e = mEventManager.obtain(IStatsUpdateEvent.EVENT_TYPE);
@@ -791,13 +769,10 @@ final class SnareGame implements IGame
         public void run()
         {
             Logger.i(LogSource.GAME, "game thread started.");
-            while (!isInterrupted())
-            {
-                try
-                {
+            while (!isInterrupted()) {
+                try {
                     waitForUpdate();
-                } catch (InterruptedException e)
-                {
+                } catch (InterruptedException e) {
                     interrupt();
                 }
                 update();

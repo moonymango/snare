@@ -28,7 +28,13 @@ public abstract class BaseGameView extends BaseSnareClass {
     public abstract void onInit();
     public abstract void onShutdown();
     public abstract void onUpdate(long realTime, float realDelta, float virtualDelta);
-    
+
+    /**
+     * Called by game when view object was given as the primary game view.
+     * @return True. (non-input game views should return false)
+     */
+    public abstract boolean onRegisterInputListeners();
+
     public int getID() {
         return mViewID;
     }

@@ -40,7 +40,7 @@ public class VirtualScreen implements IScreenElement, IPositionable2D {
 
     @Override
     public void onAttachToScreen(PlayerGameView view, int screenWidth,
-            int screenHeight) {
+                                 int screenHeight) {
         final int len = mWidgets.size();
         for (int i = 0; i < len; i++) {
             mWidgets.get(i).mWidget.onAttachToScreen(view, screenWidth, 

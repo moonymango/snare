@@ -246,7 +246,7 @@ public class Rectangle extends BaseTouchWidget implements IBufferDataProvider {
 
     @Override
     public void onAttachToScreen(PlayerGameView view, int screenWidth,
-            int screenHeight) {
+                                 int screenHeight) {
         
         if (mTextureResource != null) {
             mTextureObj = (TextureObj) mTextureObjDescr.getHandle();

@@ -3,10 +3,11 @@ package com.moonymango.snare.ui.widgets;
 import com.moonymango.snare.events.ITouchEvent;
 import com.moonymango.snare.ui.IScreenElement;
 import com.moonymango.snare.ui.PlayerGameView;
+import com.moonymango.snare.ui.PlayerIOGameView;
 
 /**
  * Screen element that draws nothing but may be used to intercept touch
- * events as they travel down the {@link PlayerGameView}'s screen element stack.
+ * events as they travel down the {@link PlayerIOGameView}'s screen element stack.
  * Intended use is to filter or block touch events before they reach lower
  * screen elements.
  */
@@ -68,7 +69,7 @@ public class TouchInterceptor implements IScreenElement {
 
     @Override
     public void onAttachToScreen(PlayerGameView view, int screenWidth,
-            int screenHeight) {
+                                 int screenHeight) {
         mView = view;
     }
 
