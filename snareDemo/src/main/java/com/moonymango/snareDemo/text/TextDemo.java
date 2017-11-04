@@ -14,34 +14,40 @@ import com.moonymango.snare.ui.BaseFont;
 import com.moonymango.snare.ui.PlayerGameView;
 import com.moonymango.snareDemo.Asset;
 
-public class TextDemo extends BaseGameActivity {
-    
+public class TextDemo extends BaseGameActivity
+{
+
     @Override
-    public String getName() {
+    public String getName()
+    {
         return TextDemo.class.getName();
     }
-    
+
     @Override
-    public GameSettings onLoadGameSettings(IGame game) {
+    public GameSettings onLoadGameSettings(IGame game)
+    {
         final GameSettings s = new GameSettings(game);
-        
+
         s.INPUT_EVENT_MASK.DOWN_ENABLED = true;
         return s;
     }
 
-   
+
     @Override
-    public IRenderer onLoadRenderer(PlayerGameView view) {
+    public IRenderer onLoadRenderer(IGame game, PlayerGameView view)
+    {
         return new FullScreenRenderer(view);
     }
-   
+
     @Override
-    public IGameState onLoadInitialGameState(IGame game) {
+    public IGameState onLoadInitialGameState(IGame game)
+    {
         return new GameState(game);
     }
 
     @Override
-    public BaseFont onLoadSystemFont(IGame game) {
+    public BaseFont onLoadSystemFont(IGame game)
+    {
         XMLResource<BMFont> fontRes = new XMLResource<BMFont>(Asset.COURIER, new BMFontXMLHandler(game));
         XMLResHandle<BMFont> fontHnd = fontRes.getHandle();
         return fontHnd.getContent();

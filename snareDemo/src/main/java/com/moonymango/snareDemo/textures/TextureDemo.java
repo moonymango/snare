@@ -15,33 +15,39 @@ import com.moonymango.snare.ui.PlayerGameView;
 import com.moonymango.snareDemo.Asset;
 
 
-public class TextureDemo extends BaseGameActivity {
-    
-    public String getName() {
+public class TextureDemo extends BaseGameActivity
+{
+
+    public String getName()
+    {
         return TextureDemo.class.getName();
     }
-    
+
     @Override
-    public GameSettings onLoadGameSettings(IGame game) {
+    public GameSettings onLoadGameSettings(IGame game)
+    {
         GameSettings s = new GameSettings(game);
         return s;
     }
 
     @Override
-    public IGameState onLoadInitialGameState(IGame game) {
+    public IGameState onLoadInitialGameState(IGame game)
+    {
         return new GameState(game);
     }
 
     @Override
-    public BaseFont onLoadSystemFont(IGame game) {
+    public BaseFont onLoadSystemFont(IGame game)
+    {
         XMLResource<BMFont> fontRes = new XMLResource<BMFont>(Asset.COURIER, new BMFontXMLHandler(game));
         XMLResHandle<BMFont> fontHnd = fontRes.getHandle();
         return fontHnd.getContent();
     }
 
     @Override
-    public IRenderer onLoadRenderer(PlayerGameView view) {
+    public IRenderer onLoadRenderer(IGame game, PlayerGameView view)
+    {
         return new FullScreenRenderer(view);
     }
-   
+
 }

@@ -17,7 +17,7 @@ import com.moonymango.snare.util.RingBuffer;
 import java.util.ArrayList;
 
 /**
- * Created by moonymango on 03.11.17.
+ * Game view which handles screen output.
  */
 
 public class PlayerGameView extends BaseGameView implements EventManager.IEventListener

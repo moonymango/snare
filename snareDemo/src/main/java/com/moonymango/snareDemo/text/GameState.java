@@ -17,19 +17,19 @@ import com.moonymango.snare.ui.widgets.Text;
 import com.moonymango.snareDemo.Asset;
 
 class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
-        IEventListener {
+        IEventListener
+{
 
+    private static final String string = "Woe to you, Oh Earth and Sea, \n" +
+            "for the Devil sends the beast with wrath, \n" +
+            "because he knows the time is short... \n" +
+            "Let him who hath understanding reckon \n" +
+            "the number of the beast for it is a human number, \n" +
+            "it's number is Six hundred and sixty six \n";
     @SuppressWarnings({"unchecked"})
     private final XMLResource<BMFont> mFontRes[] = new XMLResource[5];
     @SuppressWarnings({"unchecked"})
     private final XMLResHandle<BMFont> mFontHnd[] = new XMLResHandle[5];
-    
-    private static final String string = "Woe to you, Oh Earth and Sea, \n" +
-                                         "for the Devil sends the beast with wrath, \n" +
-                                         "because he knows the time is short... \n" +
-                                         "Let him who hath understanding reckon \n" +
-                                         "the number of the beast for it is a human number, \n" +
-                                         "it's number is Six hundred and sixty six \n";
 
 
     public GameState(IGame game)
@@ -38,78 +38,87 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
     }
 
     @Override
-    public boolean handleEvent(IEvent event) {
+    public boolean handleEvent(IEvent event)
+    {
         final ITouchEvent e = (ITouchEvent) event;
-        if (!e.getTouchAction().equals(TouchAction.DOWN)) 
+        if (!e.getTouchAction().equals(TouchAction.DOWN))
             return false;
-        
+
         //final int angle = mGame.getRandomInt(-90, 90);
         //final int size = mGame.getRandomInt(10, 40);
         //final int idx = mGame.getRandomInt(0, 4);
         final int idx = 4;
         final int size = 30;
         final int angle = 5;
-        
-        final PlayerGameView v = mGame.getPrimaryView();        
+
+        final PlayerGameView v = mGame.getPrimaryView();
         Text text = new Text(mFontHnd[idx].getContent(), string, null);
         text.setTextSize(size);
         text.setOutlineColor(0, 0, 1, 1).setColor(1, 0, 0, 1);
-        
+
         text.setPosition(e.getTouchX(), e.getTouchY());
         text.setAngle(angle);
         v.pushScreenElement(text);
-        
+
         return false;
     }
 
     @Override
     public IGameState onUpdate(long realTime, float realDelta,
-            float virtualDelta) {
+                               float virtualDelta)
+    {
         return null;
     }
 
     @Override
-    public void onActivate(IGameState previous) {
-        mFontRes[0] = new XMLResource<BMFont>(Asset.HIGHLIGHT, new BMFontXMLHandler(mGame));
-        mFontRes[1] = new XMLResource<BMFont>(Asset.BROADWAY, new BMFontXMLHandler(mGame));
-        mFontRes[2] = new XMLResource<BMFont>(Asset.COURIER, new BMFontXMLHandler(mGame));
-        mFontRes[3] = new XMLResource<BMFont>(Asset.SQUARE, new BMFontXMLHandler(mGame));
-        mFontRes[4] = new XMLResource<BMFont>(Asset.EMBOSSED, new BMFontXMLHandler(mGame));
-        
+    public void onActivate(IGameState previous)
+    {
+        mFontRes[0] = new XMLResource<>(Asset.HIGHLIGHT, new BMFontXMLHandler(mGame));
+        mFontRes[1] = new XMLResource<>(Asset.BROADWAY, new BMFontXMLHandler(mGame));
+        mFontRes[2] = new XMLResource<>(Asset.COURIER, new BMFontXMLHandler(mGame));
+        mFontRes[3] = new XMLResource<>(Asset.SQUARE, new BMFontXMLHandler(mGame));
+        mFontRes[4] = new XMLResource<>(Asset.EMBOSSED, new BMFontXMLHandler(mGame));
+
         for (int i = 0; i < 5; i++) {
             mFontHnd[i] = mFontRes[i].getHandle();
         }
-        
+
         mGame.getEventManager().addListener(ITouchEvent.EVENT_TYPE, this);
         mGame.showToast("touch to add text");
     }
 
     @Override
-    public void onDeactivate(IGameState next) {
-          
-    }
-    
-    @Override
-    public void onInit() {
-        
+    public void onDeactivate(IGameState next)
+    {
+
     }
 
     @Override
-    public void onShutdown() {
-        
+    public void onInit()
+    {
+
     }
 
     @Override
-    public IGameStateLogic getGameStateLogic() {
+    public void onShutdown()
+    {
+
+    }
+
+    @Override
+    public IGameStateLogic getGameStateLogic()
+    {
         return this;
     }
 
     @Override
-    public boolean equals(IGameState state) {
+    public boolean equals(IGameState state)
+    {
         return state == this;
     }
-    
-    public String getName() {
+
+    public String getName()
+    {
         return GameState.class.getName();
     }
 }

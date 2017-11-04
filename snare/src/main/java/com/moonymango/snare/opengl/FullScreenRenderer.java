@@ -1,7 +1,7 @@
 package com.moonymango.snare.opengl;
 
 import com.moonymango.snare.game.BaseSnareClass;
-import com.moonymango.snare.ui.PlayerIOGameView;
+import com.moonymango.snare.ui.PlayerGameView;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -18,7 +18,7 @@ import static com.moonymango.snare.opengl.GLES20Trace.glViewport;
 public class FullScreenRenderer extends BaseSnareClass implements IRenderer
 {
 
-    private final PlayerIOGameView mPlayerGameView;
+    private final PlayerGameView mPlayerGameView;
     private GLInfo mRenderInfo;
     private float mFPS;
     private long mFrameCnt;
@@ -27,21 +27,16 @@ public class FullScreenRenderer extends BaseSnareClass implements IRenderer
     private int mSurfaceHeight;
 
 
-    public FullScreenRenderer(PlayerIOGameView view)
+    public FullScreenRenderer(PlayerGameView view)
     {
         super(view.mGame);
-
-        if (view == null) {
-            throw new IllegalArgumentException("Missing player view");
-        }
         mPlayerGameView = view;
     }
 
 
-    public PlayerIOGameView[] getPlayerViews()
+    public PlayerGameView[] getPlayerViews()
     {
-        PlayerIOGameView[] v = {mPlayerGameView};
-        return v;
+        return new PlayerGameView[]{mPlayerGameView};
     }
 
     public void onDrawFrame(GL10 gl)

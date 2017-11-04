@@ -15,45 +15,51 @@ import com.moonymango.snare.ui.PlayerGameView;
 import com.moonymango.snareDemo.Asset;
 
 
-public class SceneDemo extends BaseGameActivity {
-    
+public class SceneDemo extends BaseGameActivity
+{
+
     @Override
-    public String getName() {
+    public String getName()
+    {
         return SceneDemo.class.getName();
     }
-    
+
     @Override
-    public GameSettings onLoadGameSettings(IGame game) {
+    public GameSettings onLoadGameSettings(IGame game)
+    {
         GameSettings s = new GameSettings(game);
         s.RENDER_OPTIONS.BG_COLOR_B = 1f;
         s.RENDER_OPTIONS.BG_COLOR_R = 0.5f;
         s.RENDER_OPTIONS.BG_COLOR_G = 0.5f;
         s.PRINT_STATS = true;
-        
+
         // input events
         s.INPUT_EVENT_MASK.SCROLL_ENABLED = true;
         s.INPUT_EVENT_MASK.FLING_ENABLED = true;
         s.INPUT_EVENT_MASK.SCALE_ENABLED = true;
         s.INPUT_EVENT_MASK.DOUBLE_TAP_ENABLED = true;
-        
+
         return s;
     }
 
     @Override
-    public IGameState onLoadInitialGameState(IGame game) {
+    public IGameState onLoadInitialGameState(IGame game)
+    {
         return new GameState(game);
     }
 
     @Override
-    public BaseFont onLoadSystemFont(IGame game) {
+    public BaseFont onLoadSystemFont(IGame game)
+    {
         XMLResource<BMFont> fontRes = new XMLResource<BMFont>(Asset.COURIER, new BMFontXMLHandler(game));
         XMLResHandle<BMFont> fontHnd = fontRes.getHandle();
         return fontHnd.getContent();
     }
 
     @Override
-    public IRenderer onLoadRenderer(PlayerGameView view) {
+    public IRenderer onLoadRenderer(IGame game, PlayerGameView view)
+    {
         return new FullScreenRenderer(view);
     }
-   
+
 }

@@ -1,15 +1,14 @@
 package com.moonymango.snare.game;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.opengl.GLSurfaceView;
 import android.os.Debug;
 import android.os.SystemClock;
-import android.os.Vibrator;
 import android.util.SparseArray;
 import android.widget.Toast;
 
@@ -22,6 +21,7 @@ import com.moonymango.snare.events.IStatsUpdateEvent;
 import com.moonymango.snare.game.GameObj.GameObjLayer;
 import com.moonymango.snare.opengl.GLObjCache;
 import com.moonymango.snare.opengl.IRenderer;
+import com.moonymango.snare.opengl.SnareGLSurfaceView;
 import com.moonymango.snare.physics.IPhysics;
 import com.moonymango.snare.proc.ProcessManager;
 import com.moonymango.snare.res.ResourceCache;
@@ -67,9 +67,9 @@ final class SnareGame implements IGame
     private final IPhysics mPhysics;
     private final PlayerGameView mPrimaryPlayerView;
     private final GameSettings mSettings;
-    private GLSurfaceView mSurfaceView;
+    private SnareGLSurfaceView mSurfaceView;
     private final IRenderer mRenderer;
-    private final Vibrator mVibrator;
+    //private final Vibrator mVibrator;
     private final ProcessManager mProcessManager = new ProcessManager();
     private final GLObjCache mGLObjCache;
     private final Random mRandom = new Random();
@@ -109,7 +109,7 @@ final class SnareGame implements IGame
         mActivity = activity;
         mSettings = activity.onLoadGameSettings(this);
         mPrimaryPlayerView = activity.onLoadPrimaryPlayerView(this);
-        mRenderer = activity.onLoadRenderer(mPrimaryPlayerView);
+        mRenderer = activity.onLoadRenderer(this, mPrimaryPlayerView);
         mEventManager = activity.onLoadEventManager(this);
         mPhysics = activity.onLoadPhysics(this);
 
@@ -117,14 +117,15 @@ final class SnareGame implements IGame
         mResourceCache = new ResourceCache(this, mSettings.RESOURCE_CACHE_THRESHOLD, app);
         mGLObjCache = new GLObjCache(this);
         mAudioManager = new SnareAudioManager(mSettings.SOUND_MAX_STREAMS, app);
-        mVibrator = (Vibrator) app.getSystemService(Context.VIBRATOR_SERVICE);
+        //mVibrator = (Vibrator) app.getSystemService(Context.VIBRATOR_SERVICE);
         mRandomStringGen = new RandomString(16, this);
     }
 
 
-    GLSurfaceView prepareGLSurfaceView()
+    @SuppressLint("ClickableViewAccessibility")
+    SnareGLSurfaceView prepareGLSurfaceView()
     {
-        mSurfaceView = new GLSurfaceView(mActivity.getApplication());
+        mSurfaceView = new SnareGLSurfaceView(mActivity.getApplication());
         mSurfaceView.setEGLContextClientVersion(2);
         mSurfaceView.setEGLConfigChooser(mSettings.RENDER_OPTIONS.EGL_RED_SIZE,
                 mSettings.RENDER_OPTIONS.EGL_GREEN_SIZE,
@@ -217,7 +218,7 @@ final class SnareGame implements IGame
             mGameThread.interrupt();
             try {
                 mGameThread.join();
-            } catch (InterruptedException e1) {
+            } catch (InterruptedException ignored) {
             }
             mGameThread = null;
         }
@@ -326,9 +327,6 @@ final class SnareGame implements IGame
 
     /**
      * Returns a resource string like {@link Activity}.getString()
-     *
-     * @param resId
-     * @return
      */
     @Override
     public String getResourceString(int resId)
@@ -356,7 +354,7 @@ final class SnareGame implements IGame
     }
 
     @Override
-    public GLSurfaceView getSurfaceView()
+    public SnareGLSurfaceView getSurfaceView()
     {
         return mSurfaceView;
     }
@@ -460,7 +458,7 @@ final class SnareGame implements IGame
     @Override
     public void vibrate(long time)
     {
-        mVibrator.vibrate(time);
+        //mVibrator.vibrate(time);
     }
 
     @Override
@@ -520,10 +518,6 @@ final class SnareGame implements IGame
     /**
      * Gets game object by their list index. In case the object is not covered
      * by specified layer, null is returned.
-     *
-     * @param idx
-     * @param layer
-     * @return
      */
     @Override
     public GameObj getObjByListIdx(int idx, GameObjLayer layer)
@@ -534,8 +528,6 @@ final class SnareGame implements IGame
 
     /**
      * Gets total number of game objects.
-     *
-     * @return
      */
     @Override
     public int getGameObjCnt()
@@ -637,11 +629,11 @@ final class SnareGame implements IGame
         if (!mInitDone) {
             Logger.i(LogSource.GAME, "*** Hello, this is SNARE ***");
 
-            mSystemFont = ((BaseGameActivity) mActivity).onLoadSystemFont(this);
+            mSystemFont = (mActivity).onLoadSystemFont(this);
             mRenderer.onInit();
             final PlayerGameView[] v = mRenderer.getPlayerViews();
             for (int i = 0; i < v.length; i++) {
-                addGameView(v[i]);
+                if (v[i] != null) addGameView(v[i]);
             }
             mPhysics.onInit();
 

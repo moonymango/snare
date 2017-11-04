@@ -81,25 +81,23 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
     private static int suRes;
 
     private final PlayerGameView mPlayerGameView;
+    private final PlayerGameView mOverlayView;
     private final float mScale;
+    private final GLState mGlState = new GLState();
     private int mMaxResX;
     private int mMaxResY;
     private TextureSize mSize;
     private int mResX;
     private int mResY;
-
     private GLObjDescriptor mFBODescr;
     private FramebufferObj mFBO;
     private GLObjDescriptor mProgramDescr;
     private ProgramObj mProgram;
     private GLObjDescriptor mBufferDescr;
     private BufferObj mBufferObj;
-
     private int mSurfaceWidth;
     private int mSurfaceHeight;
-
     private GLInfo mRenderInfo;
-    private final GLState mGlState = new GLState();
     private float mFPS;
     private long mFrameCnt;
     private long mLastFPSUpdateTime;
@@ -113,12 +111,17 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
      */
     public VarResolutionRenderer(PlayerGameView view)
     {
-        this(view, 0, 0, 0);
+        this(view, null, 0, 0, 0);
     }
 
     public VarResolutionRenderer(PlayerGameView view, float scale)
     {
-        this(view, 0, 0, scale);
+        this(view, null,0, 0, scale);
+    }
+
+    public VarResolutionRenderer(PlayerGameView view, PlayerGameView overlay, float scale)
+    {
+        this(view, overlay,0, 0, scale);
     }
 
     /**
@@ -130,14 +133,16 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
      */
     public VarResolutionRenderer(PlayerGameView view, int maxResX, int maxResY)
     {
-        this(view, maxResX, maxResY, 0);
+        this(view, null, maxResX, maxResY, 0);
     }
 
-    private VarResolutionRenderer(PlayerGameView view, int maxResX, int maxResY, float scale)
+    private VarResolutionRenderer(PlayerGameView view, PlayerGameView overlay, int maxResX,
+                                  int maxResY, float scale)
     {
         super(view.mGame);
 
         mPlayerGameView = view;
+        mOverlayView = overlay;
         mScale = scale;
         mMaxResX = maxResX;
         mMaxResY = maxResY;
@@ -204,11 +209,9 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
     }
 
 
-
     public PlayerGameView[] getPlayerViews()
     {
-        PlayerGameView[] v = {mPlayerGameView};
-        return v;
+        return new PlayerGameView[]{mPlayerGameView, mOverlayView};
     }
 
     public void onDrawFrame(GL10 gl)
@@ -220,9 +223,16 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
         // make sure everything is in GPU before actual drawing
         mGame.getGLObjCache().update();
         GLState.sync();
+
+        // draw player view to framebuffer, draw framebuffer to screen
         drawPlayerView(ro);
         if (!mUseNativeRes) {
             drawFBOToScreen();
+        }
+
+        // draw the overlay on top of it
+        if (mOverlayView != null) {
+            mOverlayView.draw();
         }
 
         int e = glGetError();
@@ -263,12 +273,13 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
         mResY = mResY < 1 ? mMaxResY : mResY;
 
         mPlayerGameView.onSurfaceChanged(width, height);
+        if (mOverlayView != null) mOverlayView.onSurfaceChanged(width, height);
 
         // choose color attachment texture size
         if (mSize == null) {
             mSize = TextureSize.fit(mMaxResX, mMaxResY);
             if (mSize == null) {
-                throw new IllegalArgumentException("Invalid viewport dimension.");
+                throw new IllegalArgumentException("Invalid viewport dimension. " + mMaxResY);
             }
         }
         if (mRenderInfo.getMaxRenderbufferSize() < mSize.value()

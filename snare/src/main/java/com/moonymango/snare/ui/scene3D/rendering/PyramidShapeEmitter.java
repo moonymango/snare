@@ -45,7 +45,7 @@ import static android.opengl.GLES20.glUniformMatrix4fv;
 public class PyramidShapeEmitter extends BaseDynamicMeshEffect {
     
     private static final String VERTEX_SHADER =
-            "precision mediump float;               \n" +
+            "precision highp float;               \n" +
     
             "uniform float time_0_X;                \n" +
             "uniform vec4 cameraX;                  \n" +

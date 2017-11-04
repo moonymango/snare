@@ -15,15 +15,18 @@ import com.moonymango.snare.ui.BaseFont;
 import com.moonymango.snare.ui.PlayerGameView;
 import com.moonymango.snareDemo.Asset;
 
-public class ProceduralDemo extends BaseGameActivity {
-    
+public class ProceduralDemo extends BaseGameActivity
+{
+
     @Override
-    public String getName() {
+    public String getName()
+    {
         return ProceduralDemo.class.getName();
     }
-    
+
     @Override
-    public GameSettings onLoadGameSettings(IGame game) {
+    public GameSettings onLoadGameSettings(IGame game)
+    {
         GameSettings s = new GameSettings(game);
         s.PRINT_STATS = true;
         s.INPUT_EVENT_MASK.DOWN_ENABLED = true;
@@ -31,19 +34,22 @@ public class ProceduralDemo extends BaseGameActivity {
     }
 
     @Override
-    public IGameState onLoadInitialGameState(IGame game) {
+    public IGameState onLoadInitialGameState(IGame game)
+    {
         return new GameState(game);
     }
 
     @Override
-    public BaseFont onLoadSystemFont(IGame game) {
-        XMLResource<BMFont> xmlRes = new XMLResource<BMFont>(Asset.COURIER, new BMFontXMLHandler(game));
+    public BaseFont onLoadSystemFont(IGame game)
+    {
+        XMLResource<BMFont> xmlRes = new XMLResource<>(Asset.COURIER, new BMFontXMLHandler(game));
         XMLResHandle<BMFont> xmlHnd = xmlRes.getHandle();
         return xmlHnd.getContent();
     }
 
     @Override
-    public IRenderer onLoadRenderer(PlayerGameView view) {
+    public IRenderer onLoadRenderer(IGame game, PlayerGameView view)
+    {
         return new FullScreenRenderer(view);
     }
 
