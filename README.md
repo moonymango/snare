@@ -3,11 +3,12 @@ Snare is a game engine for Android which I created to play around with 3D comput
 
 ## Features
 * component based game objects
+* event system 
 * simple physics engine providing raycasts (did not find time to integrate Bullet yet)
 * particle effects
 * rendering to framebuffer objects
 * importer for Max 3D models (.3ds)
-* event system 
+* importer for [BMFonts](http://www.angelcode.com/products/bmfont/)
 
 
 ## Installing
