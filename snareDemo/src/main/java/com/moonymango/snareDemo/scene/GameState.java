@@ -15,6 +15,11 @@ import com.moonymango.snare.game.IGameStateLogic;
 import com.moonymango.snare.game.logic.RotationModifier;
 import com.moonymango.snare.res.data.ImportTransformCenterToOrigin;
 import com.moonymango.snare.res.data.MeshResource;
+import com.moonymango.snare.res.xml.BMFont;
+import com.moonymango.snare.res.xml.BMFontXMLHandler;
+import com.moonymango.snare.res.xml.XMLResHandle;
+import com.moonymango.snare.res.xml.XMLResource;
+import com.moonymango.snare.ui.PlayerGameView;
 import com.moonymango.snare.ui.TouchAction;
 import com.moonymango.snare.ui.scene3D.Light;
 import com.moonymango.snare.ui.scene3D.Light.LightType;
@@ -26,6 +31,7 @@ import com.moonymango.snare.ui.scene3D.mesh.Mesh;
 import com.moonymango.snare.ui.scene3D.rendering.DiffuseLightingEffect;
 import com.moonymango.snare.ui.scene3D.rendering.OutlineEffect;
 import com.moonymango.snare.ui.scene3D.rendering.SceneDrawable;
+import com.moonymango.snare.ui.widgets.Text;
 import com.moonymango.snare.util.VectorAF;
 import com.moonymango.snareDemo.Asset;
 
@@ -33,8 +39,8 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
         IEventListener {
 
     private PerspectiveCamera mCam;
-    private float mFOVbeforeScale = 30;
-    private float mFOV = 30;
+    private float mFOVbeforeScale = 35;
+    private float mFOV = 35;
     private GameObj mObj;
     private RotationModifier mProc;
 
@@ -48,10 +54,10 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
             float virtualDelta) {
         
     	// get skull's current position
-        final float[] pos = mObj.getPosition();
+        //final float[] pos = mObj.getPosition();
         // change z coordinate, use delta time since last frame to get
         // smooth motion
-        mObj.setPosition(pos[0], pos[1], pos[2] - virtualDelta*0.001f);
+        //mObj.setPosition(pos[0], pos[1], pos[2] - virtualDelta*0.001f);
         
         // return null means we stay in this game state
         return null;
@@ -88,8 +94,9 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
         light.setColor(1, 1, 1, 0);
         obj.addComponent(light);
         mGame.addGameObj(obj);
-                    
-        mGame.getPrimaryView().pushScreenElement(s);
+
+        final PlayerGameView v = mGame.getPrimaryView();
+        v.pushScreenElement(s);
         
         // ++++ skull ++++
         // load skull shape from asset file
@@ -97,10 +104,6 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
                 new ImportTransformCenterToOrigin(true));
         
         mObj = new GameObj(mGame, "mesh");
-        //final SceneDrawableComponent c = new SceneDrawableComponent(new Mesh(meshResSkull), 
-        //        new DiffuseLightingEffect(), RenderPass.DYNAMIC);
-        //mObj.addComponent(new CelShader());
-        
         mObj.addComponent(new DiffuseLightingEffect(mGame)); 	// this effect draws the skull
         mObj.addComponent(new OutlineEffect(mGame));				// this effect draws black outline
         mObj.addComponent(new Mesh(meshResSkull));
@@ -114,7 +117,20 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
         mObj.setPosition(0, 0, 0);						// put skull to origin
         
         mGame.addGameObj(mObj);
-        
+
+
+        // add some text widget
+        final XMLResource<BMFont> res = new XMLResource<>(Asset.IMPACT, new BMFontXMLHandler(mGame));
+        final XMLResHandle<BMFont> hnd = res.getHandle();
+
+        Text text = new Text(hnd.getContent(), "3dm-skull.3ds  (www.3dvia.com/conn250)", null);
+        text.setTextSize(40);
+        text.setOutlineColor(0, 0, 1, 1).setColor(0, 0, 1, 1);
+
+        text.setPosition(v.getScreenCoordX(0.5f), 100);
+        v.pushScreenElement(text);
+
+
         // register for fling and scroll gestures
         final EventManager em = mGame.getEventManager();
         em.addListener(IScrollEvent.EVENT_TYPE, this);
@@ -208,7 +224,7 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
         mObj.resetRotation();
         
         // reset FOV to initial value
-        mFOV = 30;
+        mFOV = 35;
         mCam.setFieldOfView(mFOV);
         
     }

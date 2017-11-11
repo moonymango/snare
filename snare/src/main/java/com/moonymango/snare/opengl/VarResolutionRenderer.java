@@ -10,6 +10,7 @@ import com.moonymango.snare.opengl.GLObjDescriptor.GLObjType;
 import com.moonymango.snare.opengl.ProgramObj.ILocationHolder;
 import com.moonymango.snare.opengl.TextureObj.TextureSize;
 import com.moonymango.snare.ui.PlayerGameView;
+import com.moonymango.snare.util.Geometry;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -169,6 +170,22 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
         return this;
     }
 
+    public IRenderer setResolution(float factor)
+    {
+        int width = (int) (mMaxResX * factor);
+        int height = (int) (mMaxResY * factor);
+
+        // clamp resolution to allowed range
+        width = width > mMaxResX ? mMaxResX : width;
+        width = width < 1 ? 1 : width;
+        height = height > mMaxResY ? mMaxResY : height;
+        height = height < 1 ? 1 : height;
+        width = mMaxResX;
+
+        setResolution(width, height);
+        return this;
+    }
+
     /**
      * Enable/disable directly rendering to surface framebuffer. When
      * enabled everything is rendered directly to screen (exactly like
@@ -212,6 +229,16 @@ public class VarResolutionRenderer extends BaseSnareClass implements IRenderer, 
     public PlayerGameView[] getPlayerViews()
     {
         return new PlayerGameView[]{mPlayerGameView, mOverlayView};
+    }
+
+    public PlayerGameView getPixelatedView()
+    {
+        return mPlayerGameView;
+    }
+
+    public PlayerGameView getOverlayView()
+    {
+        return mOverlayView;
     }
 
     public void onDrawFrame(GL10 gl)

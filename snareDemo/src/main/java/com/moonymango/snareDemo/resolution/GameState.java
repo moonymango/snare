@@ -124,7 +124,7 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic, I
 
         final PlayerGameView[] v = mGame.getRenderer().getPlayerViews();
         final PlayerGameView overlay = v[1];
-        Text text = new Text(hnd.getContent(), "non-pixelated overlay", null);
+        Text text = new Text(hnd.getContent(), "scale to change resolution", null);
         text.setTextSize(40);
         text.setOutlineColor(0, 0, 1, 1).setColor(1, 0, 0, 1);
 

@@ -147,7 +147,7 @@ class GameState extends SimpleGameState implements IEventListener
         mat = BlastEffect.makeMaterial(bm, TextureObjOptions.NEAREST_CLAMP);
         mObj2.addComponent(mat);
         BlastEffect be = new BlastEffect(mGame, 16, EasingProfile.SQUARE_OUT,
-                EasingProfile.SQUARE_IN, 2, IGame.ClockType.VIRTUAL);
+                EasingProfile.SQUARE_IN, 0.5f, IGame.ClockType.VIRTUAL);
         mObj2.addComponent(be);
         mObj2.addComponent(new SceneDrawable(mGame, RenderPass.ALPHA));
         mObj2.setPosition(1, 0, -2).rotate(1, 0, 0, 90);
@@ -157,7 +157,7 @@ class GameState extends SimpleGameState implements IEventListener
         mat = BlastEffect.makeMaterial(bm, TextureObjOptions.LINEAR_REPEAT);
         mObj3.addComponent(mat);
         be = new BlastEffect(mGame, 16, EasingProfile.SQUARE_OUT,
-                EasingProfile.LINEAR, 2, IGame.ClockType.VIRTUAL);
+                EasingProfile.LINEAR, 0.5f, IGame.ClockType.VIRTUAL);
         mObj3.addComponent(be);
         mObj3.addComponent(new SceneDrawable(mGame, RenderPass.ALPHA));
         mObj3.setPosition(-1, 0, -2).rotate(1, 0, 0, 90);
@@ -165,14 +165,14 @@ class GameState extends SimpleGameState implements IEventListener
 
 
         // add square with logo texture
-        ETC1TextureResource etc = new ETC1TextureResource(mGame, Asset.NO_PARKING__PKM);
+        /*ETC1TextureResource etc = new ETC1TextureResource(mGame, Asset.NO_PARKING__PKM);
         mat = PlainTextureEffect.makeMaterial(etc, TextureObjOptions.LINEAR_CLAMP);
         obj = new GameObj(mGame, "square");
         obj.addComponent(mat);
         obj.addComponent(new SquareMesh(mGame));
         obj.addComponent(new PlainTextureEffect(mGame));
         obj.addComponent(new SceneDrawable(mGame, RenderPass.ALPHA));
-        mGame.addGameObj(obj);
+        mGame.addGameObj(obj); */
 
         mGame.getEventManager().addListener(ITouchEvent.EVENT_TYPE, this);
     }
@@ -181,8 +181,8 @@ class GameState extends SimpleGameState implements IEventListener
     public boolean handleEvent(IEvent event)
     {
 
-        final SceneDrawable d = (SceneDrawable) mObj.getComponent(ComponentType.RENDERING);
-        d.reset();
+        //final SceneDrawable d = (SceneDrawable) mObj.getComponent(ComponentType.RENDERING);
+        //d.reset();
         return false;
     }
 
