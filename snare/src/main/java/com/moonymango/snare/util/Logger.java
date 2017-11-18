@@ -10,7 +10,7 @@ public class Logger {
     // static
     //---------------------------------------------------------
     public static final String TAG = IGame.ENGINE_NAME;
-    public static boolean sMasterEnable = true;
+    public static boolean sMasterEnable = false;
     public static LogLevel sCurrentLevel = LogLevel.INFO; 
      
     public static void i(LogSource source, String msg) {

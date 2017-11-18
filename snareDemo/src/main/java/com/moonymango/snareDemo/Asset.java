@@ -50,7 +50,7 @@ public enum Asset implements IAssetName {
     LASER_SOUND         ("sounds/laserrocket.ogg",      null, SoundResource.class),
     DRIP_SOUND          ("sounds/drip.ogg",             null, SoundResource.class),
     
-    SURESHOT_LOOP       ("music/SureShot.mp3",         null, LoopResource.class)
+    //SURESHOT_LOOP       ("music/SureShot.mp3",         null, LoopResource.class)
     //GIANNA_SISTERS_LOOP ("music/gianna_sisters.mp3",   null, LoopResource.class)
     ;
 

@@ -50,7 +50,7 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
     private float mZPos;
     private int mXPos;
     
-    private PlayLoopAndFadeProc mMusicProc;
+    //private PlayLoopAndFadeProc mMusicProc;
 
     public GameState(IGame game)
     {
@@ -143,9 +143,9 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
         mGame.getEventManager().addListener(IDemoObjCatchedEvent.EVENT_TYPE, this);
        
         // start music process
-        final LoopResource lr = new LoopResource(mGame, Asset.SURESHOT_LOOP);
-        mMusicProc = new PlayLoopAndFadeProc(lr, 0.5f, 5, 180, 5);
-        mMusicProc.run();
+        //final LoopResource lr = new LoopResource(mGame, Asset.SURESHOT_LOOP);
+        //mMusicProc = new PlayLoopAndFadeProc(lr, 0.5f, 5, 180, 5);
+        //mMusicProc.run();
         
         
         mObjPool  = new DemoObjPool(mGame);
@@ -200,9 +200,9 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
             //mScoreText.setText("Score: " + ++mScore);
             
             // start music again if score reaches multiple of 20
-            if (mScore % 40 == 0) {
-                mMusicProc.run();
-            }
+            //if (mScore % 40 == 0) {
+              //  mMusicProc.run();
+            //}
         }  
         
         if(event.getType().equals(ICameraMoveEvent.EVENT_TYPE)) {

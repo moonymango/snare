@@ -6,7 +6,6 @@
 
     <uses-sdk android:targetSdkVersion="25" />
     <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
 	
     <application
         android:icon="@drawable/ic_launcher"
@@ -16,7 +15,6 @@
             android:name="com.moonymango.snareDemo.SnareDemoActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -31,7 +29,7 @@
         <activity android:name="com.moonymango.snareDemo.particles.ParticlesDemo" />
         <activity android:name="com.moonymango.snareDemo.touch.SceneTouchDemo" android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name="com.moonymango.snareDemo.resolution.ResolutionDemo" />
-        <activity android:name="com.moonymango.snareDemo.physics.SimplePhysicsDemo"></activity>
+        <activity android:name="com.moonymango.snareDemo.physics.SimplePhysicsDemo" />
     </application>
 
 </manifest>

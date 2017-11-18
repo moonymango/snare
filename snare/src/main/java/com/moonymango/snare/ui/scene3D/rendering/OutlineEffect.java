@@ -10,10 +10,14 @@ import com.moonymango.snare.ui.scene3D.RenderPass;
 import com.moonymango.snare.ui.scene3D.Scene3D;
 import com.moonymango.snare.util.MatrixAF;
 
+import static android.opengl.GLES20.GL_POLYGON_OFFSET_FILL;
 import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
+import static android.opengl.GLES20.glDisable;
 import static android.opengl.GLES20.glDrawElements;
+import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glGetAttribLocation;
+import static android.opengl.GLES20.glPolygonOffset;
 import static android.opengl.GLES20.glUniform4f;
 import static android.opengl.GLES20.glUniformMatrix4fv;
 import static com.moonymango.snare.opengl.GLES20Trace.glGetUniformLocation;
@@ -96,10 +100,14 @@ public class OutlineEffect extends BaseEffect {
         final float[] outlineColor = material.getColor(Material.OUTLINE_COLOR_IDX);
         glUniform4f(muColorOutline, outlineColor[0], outlineColor[1], 
                 outlineColor[2], outlineColor[3]);
-        
+
+        //glEnable(GL_POLYGON_OFFSET_FILL);
+        //glPolygonOffset(-1.0f, -5.0f);
+
         glDrawElements(GL_TRIANGLES, mesh.getIndexCount(), GL_UNSIGNED_SHORT, 
                 mesh.getIndexOffset()*Short.SIZE/8);
-    
+
+        //glDisable(GL_POLYGON_OFFSET_FILL);
 
         return true;
     }

@@ -8,11 +8,14 @@ android {
         applicationId "com.moonymango.snareDemo"
         minSdkVersion 19
         targetSdkVersion 25
+
+        versionCode 2
+        versionName "0.1"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
