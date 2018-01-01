@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
- * This file is heavily inspired by the min3d loader classes.
+ * Code in this file was taken and adapted from min3d loader classes.
+ * See Min3D on github: https://github.com/mengdd/min3d
+ *
  *****************************************************************
  * Project homepage: 	http://code.google.com/p/min3d
  * License:				MIT
@@ -16,10 +18,11 @@ import java.util.ArrayList;
  * Author: 				Dennis Ippel
  * Author blog:			http://www.rozengain.com/blog/
  *****************************************************************
- * 
- * FIXME prioD: handle multiple objects in one file (see mEnabled)
- * TODO prioD: handle materials
  */
+
+
+/* FIXME prioD: handle multiple objects in one file (see mEnabled)
+ * TODO prioD: handle materials */
 public class Max3DSParser extends BaseMeshParser {
 
    

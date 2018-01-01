@@ -121,8 +121,8 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
         MeshResource meshRes = new MeshResource(mGame, Asset.SPHERE_UV_MESH,
                 new ImportTransformBlender());
         
-        BitmapTextureResource texMoon = new BitmapTextureResource(mGame, Asset.MOON_TEX);
-        BitmapTextureResource texEarth = new BitmapTextureResource(mGame, Asset.EARTH_TEX);
+        BitmapTextureResource texMoon = new BitmapTextureResource(mGame, Asset.NEPTUNE_TEX);
+        BitmapTextureResource texEarth = new BitmapTextureResource(mGame, Asset.SUN_TEX);
         BitmapTextureResource texSpace = new BitmapTextureResource(mGame, Asset.SPACE2_TEX);
         
         

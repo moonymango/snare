@@ -88,9 +88,22 @@ public class MatrixAF extends Matrix {
     }
     
     /** 
-     * This is taken from:
-     * http://code.metager.de/source/xref/CyanogenMod/AndroidFrameworksBase/opengl/java/android/opengl/Matrix.java
-     * TODO prioC: should we do this natively?
+     * Allocation free matrix invert function, taken from:
+     * https://github.com/CyanogenMod/android_frameworks_base/blob/cm-14.1/opengl/java/android/opengl/Matrix.java
+     *
+        * Copyright (C) 2007 The Android Open Source Project
+        *
+        * Licensed under the Apache License, Version 2.0 (the "License");
+        * you may not use this file except in compliance with the License.
+        * You may obtain a copy of the License at
+        *
+        *      http://www.apache.org/licenses/LICENSE-2.0
+        *
+        * Unless required by applicable law or agreed to in writing, software
+        * distributed under the License is distributed on an "AS IS" BASIS,
+        * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        * See the License for the specific language governing permissions and
+        * limitations under the License.
      */
     public static boolean invertM(float[] mInv, int mInvOffset, float[] m, int mOffset) {    
         // Invert a 4 x 4 matrix using Cramer's Rule
