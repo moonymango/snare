@@ -1,6 +1,6 @@
 **Please see asset subfolder in snareDemo module for asset licenses.**
 
-Unless stated otherwise, code is licensed under MIT license:
+Unless stated otherwise in source files, code is licensed under MIT license:
 
 Copyright 2017 moonymango
 
