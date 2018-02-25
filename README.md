@@ -1,5 +1,7 @@
 # snare
-Snare is a game engine for Android which I created to play around with 3D computer graphics.
+Snare is a game engine for Android which I created to play around with 3D computer graphics. A demo is available in the Playstore.
+
+![QR](/doc/qrcode.png)
 
 ## Features
 * component based game objects
