@@ -37,6 +37,8 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
         super(game);
     }
 
+    private int idx = 0;
+
     @Override
     public boolean handleEvent(IEvent event)
     {
@@ -44,15 +46,12 @@ class GameState extends BaseSnareClass implements IGameState, IGameStateLogic,
         if (!e.getTouchAction().equals(TouchAction.DOWN))
             return false;
 
-        //final int angle = mGame.getRandomInt(-90, 90);
-        //final int size = mGame.getRandomInt(10, 40);
-        //final int idx = mGame.getRandomInt(0, 4);
-        final int idx = 4;
         final int size = 30;
         final int angle = 5;
 
         final PlayerGameView v = mGame.getPrimaryView();
-        Text text = new Text(mFontHnd[idx].getContent(), string, null);
+        Text text = new Text(mFontHnd[idx++].getContent(), string, null);
+        if (idx >= mFontHnd.length) idx = 0;
         text.setTextSize(size);
         text.setOutlineColor(0, 0, 1, 1).setColor(1, 0, 0, 1);
 

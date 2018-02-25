@@ -23,7 +23,7 @@ public enum Demo {
     SCENE_PLAYGROUND        ("Playground",                          Playground.class),
     SCENE_TOUCH             ("Kill the Blender monkey",             SceneTouchDemo.class),
     SCENE_TEXTURE           ("Textured objects",                    TextureDemo.class),
-    PHYSICS_AND_AI          ("Simple pong",                         SimplePhysicsDemo.class),
+    //PHYSICS_AND_AI          ("Simple pong",                         SimplePhysicsDemo.class),
     RESOLUTION              ("Rendering resolution",                ResolutionDemo.class);
     
     public final String mMSG;
