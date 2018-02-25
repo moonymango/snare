@@ -1,5 +1,5 @@
-# snare   ![logo](/doc/sn_96.png)   
-Snare is a game engine for Android which I created to play around with 3D computer graphics. A demo is available in the [Playstore](https://play.google.com/store/apps/details?id=com.moonymango.snareDemo).
+# snare   
+![logo](/doc/sn_96.png) Snare is a game engine for Android which I created to play around with 3D computer graphics. A demo is available in the [Playstore](https://play.google.com/store/apps/details?id=com.moonymango.snareDemo).
 
 ![QR](/doc/qrcode.png)
 
