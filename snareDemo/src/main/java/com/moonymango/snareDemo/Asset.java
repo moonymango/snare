@@ -18,7 +18,7 @@ public enum Asset implements IAssetName {
     SPACE2_TEX           ("textures/space2.png",           null, BitmapTextureResource.class),
     
     XML_IMAGESET        ("textures/texture_atlas.xml", "texture_atlas", XMLResource.class),
-    
+
     COURIER             ("fonts/courier.fnt",           null, XMLResource.class),
     BROADWAY            ("fonts/broadway.fnt",          null, XMLResource.class),
     HIGHLIGHT           ("fonts/highlightLET.fnt",      null, XMLResource.class),
